@@ -1,18 +1,19 @@
-# Pi Zero — servo MG996R
+# Pi Zero
 
-Program Python untuk menggerakkan **satu servo MG996R** dari Raspberry Pi Zero.
-
-Wiring ada di [docs/wiring.md](docs/wiring.md).
+Program Python untuk Raspberry Pi Zero. Wiring lengkap ada di [docs/wiring.md](docs/wiring.md).
 
 ## Kabel
 
-| Servo | Kabel | Tujuan |
+| Komponen | Dari | Ke |
 | --- | --- | --- |
+| OLED | SDA / SCL | GPIO 2 / pin 3, GPIO 3 / pin 5 |
+| HC-SR04 | TRIG / ECHO | GPIO 17 / pin 11, GPIO 27 / pin 13 lewat pembagi |
 | Servo | Signal | GPIO 18 / pin 12 |
-| Servo | Merah | +5 V eksternal (minimal 3 A) |
-| Servo | Cokelat/hitam | GND bersama (pin 6 Pi dan negatif catu) |
+| Servo | Merah | +5 V eksternal |
+| LED hijau / merah | Anoda | GPIO 22 / pin 15, GPIO 23 / pin 16 |
+| Buzzer | Signal | GPIO 5 / pin 29 |
 
-Kabel merah tidak disambungkan ke pin 5 V Pi. MG996R bisa menarik arus sampai sekitar 2,5 A saat poros tertahan.
+Kabel komponen masuk ke header Pi, bukan ke port USB komputer. Kabel merah servo tidak disambungkan ke pin 5 V Pi.
 
 ## Menjalankan di Pi
 

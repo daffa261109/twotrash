@@ -6,7 +6,7 @@ import argparse
 import time
 
 from servo.controller import ServoController
-from servo.pins import SIGNAL_PIN
+from servo.pins import SERVO_PIN
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -82,7 +82,7 @@ def _sweep(servo: ServoController, step: float, delay: float) -> None:
 def main(argv: list[str] | None = None) -> None:
     args = build_parser().parse_args(argv)
     dry_run = True if args.dry_run else None
-    with ServoController(SIGNAL_PIN, dry_run=dry_run) as servo:
+    with ServoController(SERVO_PIN, dry_run=dry_run) as servo:
         try:
             if args.command == "off":
                 servo.detach()

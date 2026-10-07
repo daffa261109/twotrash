@@ -1,75 +1,64 @@
-# Wiring MG996R ke Raspberry Pi Zero
+# Wiring Pi Zero
 
-Servo yang dipakai **TowerPro MG996R** (atau klon sejenis): servo posisi, tiga kabel, torsi besar. Sudut diatur lebar pulsa dari GPIO. Tidak memakai driver L298N.
+Semua komponen berikut terpasang pada header **Raspberry Pi Zero**, bukan pada port USB komputer. Komputer hanya dipakai untuk SSH ke Pi.
 
-Daya servo **wajib dari +5 V eksternal**. MG996R menarik sekitar 0,5–0,9 A saat bergerak dan bisa sampai **2,5 A** jika poros tertahan. Pin 5 V Pi Zero tidak kuat memasok arus itu dan Pi bisa restart.
-
-Raspberry Pi Zero, Zero W, dan Zero 2 W memakai header 40 pin yang sama. Sebagian papan datang tanpa pin header; solder header dulu sebelum memasang kabel.
+Ground Pi, ground catu servo, dan kaki GND setiap komponen disatukan.
 
 ## Sambungan
 
-| Servo | Kabel | Tujuan |
+| Komponen | Dari | Ke |
 | --- | --- | --- |
-| Servo | Signal (biasanya oranye) | GPIO 18 / pin 12 |
+| OLED | VCC | 5 V (pin 2) |
+| OLED | GND | GND |
+| OLED | SDA | GPIO 2 / pin 3 |
+| OLED | SCL | GPIO 3 / pin 5 |
+| HC-SR04 | VCC | 5 V (pin 4) |
+| HC-SR04 | GND | GND |
+| HC-SR04 | TRIG | GPIO 17 / pin 11 |
+| HC-SR04 | ECHO | resistor 1 kΩ → GPIO 27 / pin 13 |
+| Pembagi tegangan | resistor 2 kΩ | GND |
+| Servo | Signal | GPIO 18 / pin 12 |
 | Servo | Merah | +5 V eksternal |
 | Servo | Cokelat/hitam | GND bersama |
+| LED hijau | Anoda | resistor → GPIO 22 / pin 15 |
+| LED hijau | Katoda | GND |
+| LED merah | Anoda | resistor → GPIO 23 / pin 16 |
+| LED merah | Katoda | GND |
+| Buzzer | Signal | GPIO 5 / pin 29 |
+| Buzzer | − | GND |
+| LED illumination | + | sumber 5 V yang sesuai |
+| LED illumination | − | GND |
 
-Sinyal GPIO 3,3 V diterima MG996R. Tidak perlu level shifter. Jangan sambungkan kabel merah ke pin 5 V atau pin 3,3 V Pi.
+Pin di kode ada di `servo/pins.py`.
 
-Catu eksternal: **5 V, minimal 3 A**. Ground catu, ground servo, dan ground Pi harus jadi satu.
+## Pembagi ECHO
+
+Kaki ECHO sensor HC-SR04 mengeluarkan 5 V. GPIO Pi hanya tahan 3,3 V. Sambungannya:
 
 ```
- Raspberry Pi Zero                  MG996R                Catu +5 V eksternal
- +------------------------+         +------------------+  +------------------+
- | pin 12  GPIO 18        |-------->| Signal           |  |                  |
- | pin 6   GND            |----+--->| Cokelat/Hitam    |  |                  |
- +------------------------+    |    | Merah            |<-+ +5 V             |
-                               +--------------------------| GND              |
-                                                          +------------------+
+ECHO ---- 1 kΩ ---- GPIO 27 / pin 13
+                      |
+                     2 kΩ
+                      |
+                     GND
 ```
 
-Jangan menyambungkan +5 V catu eksternal ke pin 2 Pi.
+Jangan menyambungkan ECHO langsung ke pin 13.
 
-Pin sinyal ada di `servo/pins.py` (`SIGNAL_PIN = 18`).
+## Daya
 
-## Urutan yang aman
+Pin 5 V Pi (pin 2 dan pin 4) untuk OLED dan HC-SR04.
+
+Kabel merah servo **tidak** masuk ke pin 5 V Pi. Servo MG996R mengambil +5 V dari catu eksternal minimal 3 A. Negatif catu itu ikut ke GND bersama.
+
+LED illumination memakai sumber 5 V yang sesuai arusnya. Lampu yang menarik arus besar tidak diambil dari pin 5 V Pi.
+
+Resistor pada LED hijau dan LED merah diperlukan. Nilai yang aman untuk LED indikator biasa adalah 330 Ω.
+
+## Urutan
 
 1. Matikan Pi dan catu servo.
-2. Pasang sinyal ke pin 12, cokelat/hitam ke pin 6 dan ke negatif catu, merah hanya ke +5 V catu.
-3. Nyalakan Pi, tunggu sampai siap login.
-4. Baru nyalakan catu 5 V servo.
-5. Jalankan `center` dulu, baru sudut lain.
-6. Hentikan program sebelum mencabut kabel. Ctrl+C melepas pulsa.
-
-Posisi ditahan hanya selama program masih berjalan. Setelah program selesai, pulsa berhenti dan servo tidak lagi menahan sudut.
-
-## Menjalankan
-
-Di Raspberry Pi OS:
-
-```bash
-sudo apt update
-sudo apt install python3-gpiozero python3-pigpio
-sudo systemctl enable --now pigpiod
-cd /path/ke/pizero
-python3 -m servo center
-python3 -m servo angle --degrees 0 --seconds 1
-python3 -m servo angle --degrees 180 --seconds 1
-python3 -m servo sweep
-python3 -m servo off
-```
-
-`pigpio` membuat pulsa lebih stabil sehingga MG996R tidak bergetar. Tanpa itu program tetap jalan memakai software PWM.
-
-Di komputer lain, perintah yang sama hanya mencetak sudut dan tidak menggerakkan pin.
-
-## Pulsa MG996R
-
-Frekuensi 50 Hz. Kode mengirim pulsa **0,5 ms** untuk 0 derajat, **1,5 ms** untuk 90 derajat, dan **2,5 ms** untuk 180 derajat. Kalau di ujung servo berdengung atau gigi mentok, jangan ditahan lama di sudut itu.
-
-## Kalau servo tidak bergerak
-
-- Kabel merah belum ke +5 V eksternal, atau catu belum dinyalakan.
-- Signal belum ke GPIO 18 / pin 12.
-- GND bersama belum tersambung: negatif catu, cokelat/hitam servo, dan pin 6 Pi.
-- Program dijalankan di mesin yang bukan Pi, jadi yang keluar hanya baris `[dry-run]`.
+2. Pasang kabel sesuai tabel. Cek ECHO sudah lewat pembagi, dan kabel merah servo hanya ke catu eksternal.
+3. Nyalakan Pi.
+4. Nyalakan catu servo setelah Pi hidup.
+5. Hentikan program sebelum mencabut kabel.
