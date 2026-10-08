@@ -15,17 +15,52 @@ Program Python untuk Raspberry Pi Zero. Wiring lengkap ada di [docs/wiring.md](d
 
 Kabel komponen masuk ke header Pi, bukan ke port USB komputer. Kabel merah servo tidak disambungkan ke pin 5 V Pi.
 
-## Menjalankan di Pi
+## Dua Pi
 
-```bash
-sudo apt install python3-gpiozero python3-pigpio
-sudo systemctl enable --now pigpiod
-python3 -m servo center
-python3 -m servo angle --degrees 45
-python3 -m servo sweep
-python3 -m servo off
+Setiap Pi menjalankan program yang sama. Bedanya hanya flap, lewat file `station.txt`.
+
+Di Pi atas:
+
+```text
+flap1
 ```
 
-`center` dan `angle` menahan posisi sampai Ctrl+C. Tambah `--seconds 2` kalau hanya ingin menahan sebentar.
+Di Pi bawah:
 
-Di luar Raspberry Pi, perintah yang sama berjalan sebagai dry-run dan hanya mencetak sudut.
+```text
+flap2
+```
+
+Sudut servo ada di `trash2trace/settings.py`. Organik ke kiri (`-60`), nonorganik ke kanan (`+60`), other di tengah (`0`). Ubah angka itu kalau posisi flap di mekanik berbeda.
+
+Kamera mengirim foto ke LLM. Salin `.env.example` menjadi `.env`, lalu isi empat nilai ini:
+
+```text
+LLM_PROVIDER=openai
+LLM_ENDPOINT=https://api.openai.com/v1
+LLM_API_KEY=kunci-dari-penyedia
+LLM_MODEL=gpt-4.1-mini
+```
+
+`LLM_ENDPOINT` harus menerima permintaan gaya OpenAI ke `/chat/completions`. Foto hanya dikirim saat sensor melihat sampah.
+
+## Menjalankan
+
+Di tiap Pi, sekali saja:
+
+```bash
+sudo ./install.sh
+sudo reboot
+```
+
+Setelah reboot, pemilah menyala sendiri. `station.txt` menentukan flap Pi itu. Cek statusnya dengan:
+
+```bash
+systemctl status trash2trace
+```
+
+Untuk menjalankan manual dari folder proyek:
+
+```bash
+python3 -m trash2trace
+```

@@ -1,6 +1,8 @@
 # Wiring Pi Zero
 
-Semua komponen berikut terpasang pada header **Raspberry Pi Zero**, bukan pada port USB komputer. Komputer hanya dipakai untuk SSH ke Pi.
+Mesin memakai **dua Raspberry Pi Zero**. Keduanya dikabel sama. Pi pertama mengurus Flap 1 (kamera dan servo atas). Pi kedua mengurus Flap 2 (kamera dan servo di atas tong kuning dan hijau).
+
+Komponen terpasang pada header Pi, bukan pada port USB komputer.
 
 Ground Pi, ground catu servo, dan kaki GND setiap komponen disatukan.
 
