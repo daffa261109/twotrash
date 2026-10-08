@@ -36,7 +36,6 @@ class Sorter:
             trigger=TRIG_PIN,
             max_distance=2.0,
             queue_len=5,
-            sample_rate=20,
             partial=True,
         )
         self.servo = AngularServo(
