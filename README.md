@@ -36,10 +36,10 @@ Sudut servo ada di `trash2trace/settings.py`. Organik ke kiri (`-60`), nonorgani
 Kamera mengirim foto ke LLM. Salin `.env.example` menjadi `.env`, lalu isi empat nilai ini:
 
 ```text
-LLM_PROVIDER=openai
-LLM_ENDPOINT=https://api.openai.com/v1
-LLM_API_KEY=kunci-dari-penyedia
-LLM_MODEL=gpt-4.1-mini
+LLM_PROVIDER=sumopod
+LLM_ENDPOINT=https://ai.sumopod.com/v1
+LLM_API_KEY=kunci-dari-sumopod
+LLM_MODEL=gpt-4o-mini
 ```
 
 `LLM_ENDPOINT` harus menerima permintaan gaya OpenAI ke `/chat/completions`. Foto hanya dikirim saat sensor melihat sampah.
@@ -74,7 +74,7 @@ sudo systemctl stop trash2trace
 python3 -m trash2trace.preview
 ```
 
-Buka `http://<nama-pi>.local:8080` dari komputer yang satu Wi-Fi dengan Pi. Ctrl+C menghentikan tes. Nyalakan pemilah lagi dengan:
+Buka `http://<nama-pi>.local:8080` dari komputer yang satu Wi-Fi dengan Pi. Gambar ada di kiri. Jenis sampah dari Sumopod ada di kanan dan diperbarui setiap beberapa detik. Isi `.env` dulu. Ctrl+C menghentikan tes. Nyalakan pemilah lagi dengan:
 
 ```bash
 sudo systemctl start trash2trace
