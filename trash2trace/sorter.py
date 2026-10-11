@@ -3,17 +3,21 @@
 from __future__ import annotations
 
 import time
+from datetime import datetime
 
+import cv2
 from gpiozero import AngularServo, Buzzer, Device, DistanceSensor, LED
 from picamera2 import Picamera2
 
 from trash2trace.display import Display
 from trash2trace.settings import (
     CAMERA_SIZE,
+    CAPTURE_DIR,
     CLEAR_DISTANCE_M,
     DETECT_DISTANCE_M,
     FRAME_GAP_S,
     FRAMES_PER_DECISION,
+    MOVE_FLAP,
     PREVIEW_EVERY_S,
     SERVO_HOLD_S,
     SETTLE_AFTER_DETECT_S,
@@ -96,15 +100,36 @@ class Sorter:
         for _ in range(FRAMES_PER_DECISION):
             frames.append(self.camera.capture_array())
             time.sleep(FRAME_GAP_S)
+        path = self._save_frame(frames[-1])
         try:
-            decision = self.classifier.decide(frames)
+            decision = self.classifier.predict_file(path)
         except Exception as exc:
-            print(f"[WARN] LLM: {exc}")
-            decision = Prediction("other", 0.0)
-        self._actuate(decision.label, decision.confidence)
+            print(f"[WARN] Model: {exc}")
+            decision = Prediction("other", 0.0, "gagal")
+        self._log_model(decision, path)
+        if MOVE_FLAP:
+            self._actuate(decision.label, decision.confidence)
+        else:
+            print("[FLAP] servo tidak digerakkan")
+            self.display.show(decision.raw_label[:20], f"{decision.confidence * 100:.0f}%", "flap diam")
         self._wait_until_clear()
         self._armed = True
         self._rest("Menunggu sampah")
+
+    def _save_frame(self, frame_rgb) -> str:
+        CAPTURE_DIR.mkdir(parents=True, exist_ok=True)
+        path = CAPTURE_DIR / f"{datetime.now():%Y%m%d-%H%M%S}.jpg"
+        ok = cv2.imwrite(str(path), cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR))
+        if not ok:
+            raise RuntimeError(f"Gagal menyimpan {path}")
+        print(f"[FOTO] {path}")
+        return path
+
+    def _log_model(self, decision: Prediction, path) -> None:
+        print(
+            f"[MODEL] {self.station.title} mentah={decision.raw_label} "
+            f"golongan={decision.label} yakin={decision.confidence:.2f} foto={path.name}"
+        )
 
     def _actuate(self, label: str, confidence: float) -> None:
         angle = self.station.angle_for(label)

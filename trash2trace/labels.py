@@ -4,6 +4,25 @@ from __future__ import annotations
 
 from pathlib import Path
 
+_NONORGANIC = (
+    "nonorganic",
+    "non organic",
+    "anorganik",
+    "inorganic",
+    "plastic",
+    "plastik",
+    "paper",
+    "kertas",
+    "glass",
+    "kaca",
+    "metal",
+    "logam",
+    "kaleng",
+    "botol",
+    "cardboard",
+    "kardus",
+)
+
 
 def load_labels(path: Path) -> list[str]:
     if not path.exists():
@@ -20,14 +39,14 @@ def load_labels(path: Path) -> list[str]:
         else:
             labels.append(line)
 
-    if len(labels) < 3:
-        raise ValueError("labels.txt perlu minimal 3 kelas: organic, nonorganic, other")
+    if not labels:
+        raise ValueError("labels.txt kosong")
     return labels
 
 
 def canonical_class(label: str) -> str:
     text = label.strip().lower().replace("_", " ").replace("-", " ")
-    if any(word in text for word in ("nonorganic", "non organic", "anorganik", "inorganic")):
+    if any(word in text for word in _NONORGANIC):
         return "nonorganic"
     if "organic" in text or "organik" in text:
         return "organic"

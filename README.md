@@ -33,16 +33,13 @@ flap2
 
 Sudut servo ada di `trash2trace/settings.py`. Organik ke kiri (`-60`), nonorganik ke kanan (`+60`), other di tengah (`0`). Ubah angka itu kalau posisi flap di mekanik berbeda.
 
-Kamera mengirim foto ke LLM. Salin `.env.example` menjadi `.env`, lalu isi empat nilai ini:
+Satu foto dianalisis di Pi dengan **MobileNetV3-Small**. Unduh berkasnya sekali:
 
-```text
-LLM_PROVIDER=sumopod
-LLM_ENDPOINT=https://ai.sumopod.com/v1
-LLM_API_KEY=kunci-dari-sumopod
-LLM_MODEL=gpt-4o-mini
+```bash
+python3 scripts/download_models.py
 ```
 
-`LLM_ENDPOINT` harus menerima permintaan gaya OpenAI ke `/chat/completions`. Foto hanya dikirim saat sensor melihat sampah.
+Hasil bacaan model ditulis ke log sebagai `[MODEL]`. Servo belum ikut bergerak. Plastik, kertas, dan kaca dihitung nonorganik bila nama kelasnya ada di label model.
 
 ## Menjalankan
 
@@ -74,7 +71,7 @@ sudo systemctl stop trash2trace
 python3 -m trash2trace.preview
 ```
 
-Buka `http://<nama-pi>.local:8080` dari komputer yang satu Wi-Fi dengan Pi. Gambar kamera ada di kiri. Tekan **Ambil dan analisis** untuk menyimpan satu foto lalu mengirimnya ke Sumopod. Hasilnya muncul di kanan. Isi `.env` dulu. Ctrl+C menghentikan tes. Nyalakan pemilah lagi dengan:
+Buka `http://<nama-pi>.local:8080` dari komputer yang satu Wi-Fi dengan Pi. Gambar kamera ada di kiri. Tekan **Ambil dan analisis** untuk menyimpan satu foto dan membacanya dengan MobileNet di Pi. Hasilnya muncul di kanan. Ctrl+C menghentikan tes. Nyalakan pemilah lagi dengan:
 
 ```bash
 sudo systemctl start trash2trace

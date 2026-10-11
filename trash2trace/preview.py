@@ -1,4 +1,4 @@
-"""Pratinjau kamera. Foto diambil sekali, disimpan, lalu dikirim ke Sumopod."""
+"""Pratinjau kamera. Satu foto disimpan, lalu dibaca MobileNet di Pi."""
 
 from __future__ import annotations
 
@@ -13,8 +13,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import cv2
 from picamera2 import Picamera2
 
-from trash2trace.llm import LlmVision
 from trash2trace.settings import ROOT
+from trash2trace.vision import Classifier
 
 PREVIEW_SIZE = (640, 480)
 CAPTURE_DIR = ROOT / "captures"
@@ -60,7 +60,7 @@ PAGE = """<!DOCTYPE html>
       <img src="/stream" alt="Gambar kamera">
       <aside>
         <p class="kind" id="kind">Belum diambil</p>
-        <p class="detail" id="detail">Arahkan benda, lalu ambil foto.</p>
+        <p class="detail" id="detail">Arahkan benda, lalu ambil satu foto.</p>
         <button id="shoot" type="button">Ambil dan analisis</button>
       </aside>
     </div>
@@ -70,7 +70,7 @@ PAGE = """<!DOCTYPE html>
     button.addEventListener("click", async () => {
       button.disabled = true;
       document.getElementById("kind").textContent = "Menganalisis...";
-      document.getElementById("detail").textContent = "Foto disimpan, menunggu Sumopod";
+      document.getElementById("detail").textContent = "Foto disimpan, model sedang membaca";
       try {
         const data = await fetch("/capture", { method: "POST" }).then((response) => response.json());
         document.getElementById("kind").textContent = data.text;
@@ -124,7 +124,7 @@ class Camera:
 class Capture:
     def __init__(self, camera: Camera) -> None:
         self._camera = camera
-        self._llm = LlmVision()
+        self._classifier = Classifier()
         self._lock = threading.Lock()
 
     def take(self) -> dict[str, str]:
@@ -135,15 +135,15 @@ class Capture:
             path.write_bytes(image)
             print(f"[FOTO] {path}")
             try:
-                label, confidence = self._llm.classify(path.read_bytes())
+                prediction = self._classifier.predict_file(path)
             except Exception as exc:
-                print(f"[WARN] Analisis Sumopod: {exc}")
+                print(f"[WARN] Model: {exc}")
                 return {"text": "Gagal", "detail": str(exc)[:180]}
-            text = _LABELS.get(label, label.upper())
-            print(f"[HASIL] {text} {confidence:.2f}")
+            text = _LABELS.get(prediction.label, prediction.label.upper())
+            print(f"[HASIL] {text} {prediction.confidence:.2f}")
             return {
                 "text": text,
-                "detail": f"{confidence * 100:.0f}% · {path.name}",
+                "detail": f"{prediction.confidence * 100:.0f}% · {path.name}",
             }
 
 

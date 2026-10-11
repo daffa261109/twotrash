@@ -9,13 +9,18 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 ENV_PATH = ROOT / ".env"
 STATION_PATH = ROOT / "station.txt"
+MODEL_PATH = ROOT / "models" / "mobilenet_v3_small.tflite"
+LABEL_PATH = ROOT / "models" / "imagenet_labels.txt"
+CAPTURE_DIR = ROOT / "captures"
+# Flap tidak digerakkan. Hasil model hanya ditulis ke log dulu.
+MOVE_FLAP = False
 
 CAMERA_SIZE = (320, 240)
 MIN_CONFIDENCE = 0.60
 DETECT_DISTANCE_M = 0.18
 CLEAR_DISTANCE_M = 0.28
 SETTLE_AFTER_DETECT_S = 0.18
-# Satu foto per sampah. Tiap foto adalah satu permintaan ke LLM.
+# Satu foto per sampah, dibaca model di Pi.
 FRAMES_PER_DECISION = 1
 FRAME_GAP_S = 0.07
 SERVO_HOLD_S = 1.45

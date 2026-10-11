@@ -1,5 +1,6 @@
 .env
 captures/
+models/*.tflite
 __pycache__/
 *.py[cod]
 .venv/

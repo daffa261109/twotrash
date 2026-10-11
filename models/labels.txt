@@ -1,3 +1,4 @@
+# urutan baris harus sama dengan urutan kelas pada model
 organic
 nonorganic
 other
