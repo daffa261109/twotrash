@@ -14,7 +14,8 @@ from trash2trace.settings import (
     CAMERA_SIZE,
     CAPTURE_DIR,
     CLEAR_DISTANCE_M,
-    DETECT_DISTANCE_M,
+    DETECT_MAX_M,
+    DETECT_MIN_M,
     FRAME_GAP_S,
     FRAMES_PER_DECISION,
     MOVE_FLAP,
@@ -88,7 +89,8 @@ class Sorter:
         self.display.clear()
 
     def _item_arrived(self) -> bool:
-        return self._armed and self.distance.distance <= DETECT_DISTANCE_M
+        distance_m = self.distance.distance
+        return self._armed and DETECT_MIN_M <= distance_m <= DETECT_MAX_M
 
     def _sort_one_item(self) -> None:
         self._armed = False
@@ -107,12 +109,12 @@ class Sorter:
         except Exception as exc:
             print(f"[WARN] Model: {exc}")
             decision = Prediction("other", 0.0, "gagal")
-        self._log_model(decision, path)
+        self._log_model(decision, path, distance_m)
         if MOVE_FLAP:
             self._actuate(decision.label, decision.confidence)
         else:
             print("[FLAP] servo tidak digerakkan")
-            self.display.show(decision.raw_label[:20], f"{decision.confidence * 100:.0f}%", "flap diam")
+            self.display.show(decision.label, f"{decision.confidence * 100:.0f}%", "flap diam")
         self._wait_until_clear()
         self._armed = True
         self._rest("Menunggu sampah")
@@ -126,10 +128,10 @@ class Sorter:
         print(f"[FOTO] {path}")
         return path
 
-    def _log_model(self, decision: Prediction, path) -> None:
+    def _log_model(self, decision: Prediction, path, distance_m: float) -> None:
         print(
-            f"[MODEL] {self.station.title} mentah={decision.raw_label} "
-            f"golongan={decision.label} yakin={decision.confidence:.2f} foto={path.name}"
+            f"[HASIL] {decision.label} | jarak={distance_m * 100:.1f} cm | "
+            f"mentah={decision.raw_label} | yakin={decision.confidence:.2f} | foto={path.name}"
         )
 
     def _actuate(self, label: str, confidence: float) -> None:

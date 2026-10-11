@@ -17,8 +17,10 @@ MOVE_FLAP = False
 
 CAMERA_SIZE = (320, 240)
 MIN_CONFIDENCE = 0.60
-DETECT_DISTANCE_M = 0.18
-CLEAR_DISTANCE_M = 0.28
+# HC-SR04 memicu hanya saat benda ada di 1–3 cm.
+DETECT_MIN_M = 0.01
+DETECT_MAX_M = 0.03
+CLEAR_DISTANCE_M = 0.05
 SETTLE_AFTER_DETECT_S = 0.18
 # Satu foto per sampah, dibaca model di Pi.
 FRAMES_PER_DECISION = 1
