@@ -14,6 +14,7 @@ SERVO_PIN = 18
 # LED indikator. Anoda lewat resistor, katoda ke GND.
 LED_GREEN_PIN = 22  # physical pin 15
 LED_RED_PIN = 23  # physical pin 16
+ILLUMINATION_PIN = 24  # physical pin 18
 
 # Buzzer, kaki sinyal. Physical pin 29.
 BUZZER_PIN = 5

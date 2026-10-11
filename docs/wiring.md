@@ -28,8 +28,8 @@ Ground Pi, ground catu servo, dan kaki GND setiap komponen disatukan.
 | LED merah | Katoda | GND |
 | Buzzer | Signal | GPIO 5 / pin 29 |
 | Buzzer | − | GND |
-| LED illumination | + | sumber 5 V yang sesuai |
-| LED illumination | − | GND |
+| LED illumination | Anoda | resistor → GPIO 24 / pin 18 |
+| LED illumination | Katoda | GND |
 
 Pin di kode ada di `servo/pins.py`.
 
@@ -53,7 +53,7 @@ Pin 5 V Pi (pin 2 dan pin 4) untuk OLED dan HC-SR04.
 
 Kabel merah servo **tidak** masuk ke pin 5 V Pi. Servo MG996R mengambil +5 V dari catu eksternal minimal 3 A. Negatif catu itu ikut ke GND bersama.
 
-LED illumination memakai sumber 5 V yang sesuai arusnya. Lampu yang menarik arus besar tidak diambil dari pin 5 V Pi.
+LED illumination menyala dari GPIO 24 lewat resistor 330 Ω, sama seperti LED indikator. Lampu yang menarik arus besar tidak diambil dari pin GPIO.
 
 Resistor pada LED hijau dan LED merah diperlukan. Nilai yang aman untuk LED indikator biasa adalah 330 Ω.
 

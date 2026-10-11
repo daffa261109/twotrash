@@ -25,7 +25,15 @@ from trash2trace.settings import (
     Station,
 )
 from trash2trace.vision import Classifier, Prediction
-from servo.pins import BUZZER_PIN, ECHO_PIN, LED_GREEN_PIN, LED_RED_PIN, SERVO_PIN, TRIG_PIN
+from servo.pins import (
+    BUZZER_PIN,
+    ECHO_PIN,
+    ILLUMINATION_PIN,
+    LED_GREEN_PIN,
+    LED_RED_PIN,
+    SERVO_PIN,
+    TRIG_PIN,
+)
 
 
 class Sorter:
@@ -53,6 +61,7 @@ class Sorter:
         )
         self.led_green = LED(LED_GREEN_PIN)
         self.led_red = LED(LED_RED_PIN)
+        self.illumination = LED(ILLUMINATION_PIN)
         self.buzzer = Buzzer(BUZZER_PIN)
         self.camera = Picamera2()
         self.camera.configure(
@@ -69,7 +78,7 @@ class Sorter:
 
     def run(self) -> None:
         print(f"[INFO] {self.station.title} jalan.")
-        self.display.show(self.station.title, "AI aktif", "Menunggu sampah")
+        self.display.clear()
         while self.running:
             if self._item_arrived():
                 self._sort_one_item()
@@ -95,27 +104,10 @@ class Sorter:
     def _sort_one_item(self) -> None:
         self._armed = False
         distance_m = self.distance.distance
-        print(f"[TRIGGER] {self.station.title} sampah terdeteksi: {distance_m:.3f} m")
-        self._beep()
-        time.sleep(SETTLE_AFTER_DETECT_S)
-
-        frames = []
-        for _ in range(FRAMES_PER_DECISION):
-            frames.append(self.camera.capture_array())
-            time.sleep(FRAME_GAP_S)
-        path = self._save_frame(frames[-1])
-        try:
-            decision = self.classifier.predict_file(path)
-        except Exception as exc:
-            print(f"[WARN] Model: {exc}")
-            decision = Prediction("other", 0.0, "gagal")
-        self._log_model(decision, path, distance_m)
-        if MOVE_FLAP:
-            self._actuate(decision.label, decision.confidence)
-        else:
-            print("[FLAP] servo tidak digerakkan")
-            self.display.show(decision.label, f"{decision.confidence * 100:.0f}%", "flap diam")
+        print(f"[TRIGGER] {self.station.title} benda terdeteksi: {distance_m * 100:.1f} cm")
+        self._alert_on(distance_m)
         self._wait_until_clear()
+        self._alert_off()
         self._armed = True
         self._rest("Menunggu sampah")
 
@@ -165,6 +157,16 @@ class Sorter:
         else:
             self.led_red.on()
 
+    def _alert_on(self, distance_m: float) -> None:
+        print("[ALERT] buzzer, lampu penerangan, OLED")
+        self._safe(self.buzzer.on)
+        self._safe(self.illumination.on)
+        self.display.show("BENDA", f"{distance_m * 100:.1f} cm", self.station.title)
+
+    def _alert_off(self) -> None:
+        self._safe(self.buzzer.off)
+        self._safe(self.illumination.off)
+
     def _beep(self) -> None:
         try:
             self.buzzer.on()
@@ -176,12 +178,15 @@ class Sorter:
     def _rest(self, message: str) -> None:
         self.led_green.off()
         self.led_red.off()
+        self._alert_off()
         self.servo.angle = 0
-        self.display.show(self.station.title, message, "")
+        print(f"[AI] {self.station.title} {message}")
+        self.display.clear()
 
     def _release_outputs(self) -> None:
         self.led_green.off()
         self.led_red.off()
+        self.illumination.off()
         self.buzzer.off()
         self.servo.angle = 0
         time.sleep(0.2)

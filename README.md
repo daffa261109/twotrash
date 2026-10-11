@@ -11,6 +11,7 @@ Program Python untuk Raspberry Pi Zero. Wiring lengkap ada di [docs/wiring.md](d
 | Servo | Signal | GPIO 18 / pin 12 |
 | Servo | Merah | +5 V eksternal |
 | LED hijau / merah | Anoda | GPIO 22 / pin 15, GPIO 23 / pin 16 |
+| LED illumination | Anoda | GPIO 24 / pin 18 |
 | Buzzer | Signal | GPIO 5 / pin 29 |
 
 Kabel komponen masuk ke header Pi, bukan ke port USB komputer. Kabel merah servo tidak disambungkan ke pin 5 V Pi.
