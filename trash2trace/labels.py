@@ -19,6 +19,9 @@ _NONORGANIC = (
     "logam",
     "kaleng",
     "botol",
+    "bottle",
+    "jug",
+    "jar",
     "cardboard",
     "kardus",
 )

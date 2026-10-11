@@ -112,17 +112,28 @@ def _load_interpreter(path):
 
 
 def _prepare(frame_rgb: np.ndarray, details: dict) -> np.ndarray:
-    _, height, width, _ = details["shape"]
-    image = cv2.resize(_crop(frame_rgb), (int(width), int(height)), interpolation=cv2.INTER_AREA)
+    shape = details["shape"]
+    # Model PyTorch memakai [1, 3, 224, 224]. Model Keras memakai [1, 224, 224, 3].
+    channels_first = len(shape) == 4 and int(shape[1]) in (1, 3) and int(shape[-1]) > 4
+    if channels_first:
+        height, width = int(shape[2]), int(shape[3])
+    else:
+        height, width = int(shape[1]), int(shape[2])
+    image = cv2.resize(_crop(frame_rgb), (width, height), interpolation=cv2.INTER_AREA)
     if details["dtype"] == np.uint8:
         tensor = image.astype(np.uint8)
     else:
         scale, zero_point = details["quantization"]
         if scale:
             tensor = image.astype(np.float32) / scale + zero_point
+        elif channels_first:
+            mean = np.array([0.485, 0.456, 0.406], dtype=np.float32)
+            std = np.array([0.229, 0.224, 0.225], dtype=np.float32)
+            tensor = (image.astype(np.float32) / 255.0 - mean) / std
         else:
-            # Standar Keras MobileNetV3: piksel 0..255 menjadi -1..1.
             tensor = image.astype(np.float32) / 127.5 - 1.0
+    if channels_first:
+        tensor = np.transpose(tensor, (2, 0, 1))
     return np.expand_dims(tensor, 0)
 
 

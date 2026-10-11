@@ -155,7 +155,7 @@ class Sorter:
 
     def _log_preview(self) -> None:
         self._last_preview = time.monotonic()
-        print(f"[AI] {self.station.title} menunggu | jarak={self.distance.distance:.2f} m")
+        print(f"[AI] {self.station.title} menunggu | jarak={self.distance.distance * 100:.1f} cm")
 
     def _set_leds(self, label: str) -> None:
         self.led_green.off()
@@ -168,7 +168,7 @@ class Sorter:
     def _beep(self) -> None:
         try:
             self.buzzer.on()
-            time.sleep(0.08)
+            time.sleep(0.4)
             self.buzzer.off()
         except Exception as exc:
             print(f"[WARN] Buzzer: {exc}")
