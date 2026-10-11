@@ -66,17 +66,45 @@ class Classifier:
         return Prediction(winner, confidence, raw_label)
 
 
+def _load_libatomic() -> None:
+    import ctypes
+    import ctypes.util
+
+    candidates = [
+        "/usr/lib/arm-linux-gnueabihf/libatomic.so.1",
+        "/usr/lib/aarch64-linux-gnu/libatomic.so.1",
+        "/lib/arm-linux-gnueabihf/libatomic.so.1",
+    ]
+    found = ctypes.util.find_library("atomic")
+    if found:
+        candidates.append(found)
+    for path in candidates:
+        try:
+            ctypes.CDLL(path, mode=ctypes.RTLD_GLOBAL)
+            return
+        except OSError:
+            continue
+
+
 def _load_interpreter(path):
+    _load_libatomic()
     try:
         from tflite_runtime.interpreter import Interpreter
-    except ImportError:
+    except ImportError as first_error:
+        if "atomic" in str(first_error):
+            raise SystemExit(
+                "Interpreter butuh libatomic. Jalankan:\n"
+                "  sudo apt install libatomic1\n"
+                "  LD_PRELOAD=/usr/lib/arm-linux-gnueabihf/libatomic.so.1 "
+                "python3 -c \"from tflite_runtime.interpreter import Interpreter\""
+            ) from first_error
         try:
             import tensorflow as tf
 
             Interpreter = tf.lite.Interpreter
         except ImportError as exc:
             raise SystemExit(
-                "Pasang interpreter di Pi: sudo apt install python3-tflite-runtime"
+                "Pasang interpreter: python3 -m pip install --break-system-packages tflite-runtime"
             ) from exc
     interpreter = Interpreter(model_path=str(path))
     interpreter.allocate_tensors()

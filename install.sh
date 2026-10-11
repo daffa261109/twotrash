@@ -11,7 +11,13 @@ ROOT="$(cd "$(dirname "$0")" && pwd)"
 RUN_USER="${SUDO_USER:-pi}"
 
 apt-get update
-apt-get install -y python3-gpiozero python3-pigpio python3-opencv python3-picamera2 python3-pil python3-tflite-runtime || apt-get install -y python3-gpiozero python3-pigpio python3-opencv python3-picamera2 python3-pil
+apt-get install -y python3-gpiozero python3-pigpio python3-opencv python3-picamera2 python3-pil libatomic1
+ATOMIC=""
+if [[ -e /usr/lib/arm-linux-gnueabihf/libatomic.so.1 ]]; then
+  ATOMIC=/usr/lib/arm-linux-gnueabihf/libatomic.so.1
+elif [[ -e /usr/lib/aarch64-linux-gnu/libatomic.so.1 ]]; then
+  ATOMIC=/usr/lib/aarch64-linux-gnu/libatomic.so.1
+fi
 systemctl enable --now pigpiod
 raspi-config nonint do_i2c 0 || true
 usermod -aG video,i2c,gpio "$RUN_USER"
@@ -31,6 +37,7 @@ ExecStart=/usr/bin/python3 -m trash2trace
 Restart=on-failure
 RestartSec=10
 Environment=PYTHONUNBUFFERED=1
+${ATOMIC:+Environment=LD_PRELOAD=${ATOMIC}}
 EnvironmentFile=-${ROOT}/.env
 
 [Install]
