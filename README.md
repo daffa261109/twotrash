@@ -64,3 +64,18 @@ Untuk menjalankan manual dari folder proyek:
 ```bash
 python3 -m trash2trace
 ```
+
+## Tes kamera di browser
+
+Pemilah harus dimatikan dulu, karena kamera hanya bisa dipakai satu program.
+
+```bash
+sudo systemctl stop trash2trace
+python3 -m trash2trace.preview
+```
+
+Buka `http://<nama-pi>.local:8080` dari komputer yang satu Wi-Fi dengan Pi. Ctrl+C menghentikan tes. Nyalakan pemilah lagi dengan:
+
+```bash
+sudo systemctl start trash2trace
+```
