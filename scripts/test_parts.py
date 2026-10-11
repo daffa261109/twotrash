@@ -6,6 +6,7 @@
     python3 scripts/test_parts.py led
     python3 scripts/test_parts.py lamp
     python3 scripts/test_parts.py servo
+    python3 scripts/test_parts.py oled
 """
 
 from __future__ import annotations
@@ -130,9 +131,29 @@ def test_servo() -> None:
     print("Selesai.")
 
 
+def test_oled() -> None:
+    from trash2trace.display import Display
+
+    print("OLED SSD1306, SDA GPIO 2 / pin 3, SCL GPIO 3 / pin 5, alamat 0x3C.")
+    display = Display()
+    if display._panel is None:
+        print("Layar tidak menyala. Pasang library, lalu uji lagi:")
+        print("  sudo apt install python3-pil i2c-tools")
+        print("  python3 -m pip install --break-system-packages adafruit-circuitpython-ssd1306 adafruit-blinka")
+        return
+    try:
+        for lines in (("OLED", "0x3C", "nyala"), ("TRASH2TRACE", "FLAP", "siap")):
+            print(f"  tampil {' / '.join(lines)}")
+            display.show(*lines)
+            time.sleep(2)
+    finally:
+        display.clear()
+    print("Selesai.")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Uji satu komponen.")
-    parser.add_argument("bagian", choices=("buzzer", "hc", "led", "lamp", "servo"))
+    parser.add_argument("bagian", choices=("buzzer", "hc", "led", "lamp", "servo", "oled"))
     args = parser.parse_args()
     {
         "buzzer": test_buzzer,
@@ -140,6 +161,7 @@ def main() -> None:
         "led": test_led,
         "lamp": test_lamp,
         "servo": test_servo,
+        "oled": test_oled,
     }[args.bagian]()
 
 
