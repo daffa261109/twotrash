@@ -94,6 +94,7 @@ class Sorter:
         self._armed = False
         distance_m = self.distance.distance
         print(f"[TRIGGER] {self.station.title} sampah terdeteksi: {distance_m:.3f} m")
+        self._beep()
         time.sleep(SETTLE_AFTER_DETECT_S)
 
         frames = []
