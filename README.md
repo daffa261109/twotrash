@@ -74,7 +74,7 @@ sudo systemctl stop trash2trace
 python3 -m trash2trace.preview
 ```
 
-Buka `http://<nama-pi>.local:8080` dari komputer yang satu Wi-Fi dengan Pi. Gambar ada di kiri. Jenis sampah dari Sumopod ada di kanan dan diperbarui setiap beberapa detik. Isi `.env` dulu. Ctrl+C menghentikan tes. Nyalakan pemilah lagi dengan:
+Buka `http://<nama-pi>.local:8080` dari komputer yang satu Wi-Fi dengan Pi. Gambar kamera ada di kiri. Tekan **Ambil dan analisis** untuk menyimpan satu foto lalu mengirimnya ke Sumopod. Hasilnya muncul di kanan. Isi `.env` dulu. Ctrl+C menghentikan tes. Nyalakan pemilah lagi dengan:
 
 ```bash
 sudo systemctl start trash2trace

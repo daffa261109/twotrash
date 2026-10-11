@@ -1,4 +1,4 @@
-"""Pratinjau kamera di browser, dengan jenis sampah dari LLM Sumopod."""
+"""Pratinjau kamera. Foto diambil sekali, disimpan, lalu dikirim ke Sumopod."""
 
 from __future__ import annotations
 
@@ -7,15 +7,17 @@ import json
 import socket
 import threading
 import time
+from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import cv2
 from picamera2 import Picamera2
 
-from trash2trace.vision import Classifier, Prediction
+from trash2trace.llm import LlmVision
+from trash2trace.settings import ROOT
 
 PREVIEW_SIZE = (640, 480)
-ANALYZE_EVERY_S = 4.0
+CAPTURE_DIR = ROOT / "captures"
 
 PAGE = """<!DOCTYPE html>
 <html lang="id">
@@ -36,7 +38,16 @@ PAGE = """<!DOCTYPE html>
       padding: 20px;
     }
     .kind { font-size: 42px; margin: 0 0 8px; }
-    .detail { color: #bbb; margin: 0; }
+    .detail { color: #bbb; margin: 0 0 16px; }
+    button {
+      background: #2f6fed;
+      color: white;
+      border: 0;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 16px;
+    }
+    button:disabled { background: #555; }
     @media (max-width: 700px) {
       .row { flex-direction: column; }
     }
@@ -48,23 +59,28 @@ PAGE = """<!DOCTYPE html>
     <div class="row">
       <img src="/stream" alt="Gambar kamera">
       <aside>
-        <p class="kind" id="kind">Menganalisis...</p>
-        <p class="detail" id="detail">Menunggu jawaban Sumopod</p>
+        <p class="kind" id="kind">Belum diambil</p>
+        <p class="detail" id="detail">Arahkan benda, lalu ambil foto.</p>
+        <button id="shoot" type="button">Ambil dan analisis</button>
       </aside>
     </div>
   </main>
   <script>
-    async function refresh() {
+    const button = document.getElementById("shoot");
+    button.addEventListener("click", async () => {
+      button.disabled = true;
+      document.getElementById("kind").textContent = "Menganalisis...";
+      document.getElementById("detail").textContent = "Foto disimpan, menunggu Sumopod";
       try {
-        const data = await fetch("/result").then((response) => response.json());
+        const data = await fetch("/capture", { method: "POST" }).then((response) => response.json());
         document.getElementById("kind").textContent = data.text;
         document.getElementById("detail").textContent = data.detail;
       } catch (error) {
-        document.getElementById("detail").textContent = "Gagal membaca hasil";
+        document.getElementById("kind").textContent = "Gagal";
+        document.getElementById("detail").textContent = "Permintaan tidak selesai";
       }
-    }
-    refresh();
-    setInterval(refresh, 2000);
+      button.disabled = false;
+    });
   </script>
 </body>
 </html>
@@ -89,15 +105,13 @@ class Camera:
         self._camera.start()
         time.sleep(1.0)
 
-    def frame(self):
-        with self._lock:
-            return self._camera.capture_array()
-
     def jpeg(self) -> bytes:
+        with self._lock:
+            frame = self._camera.capture_array()
         ok, encoded = cv2.imencode(
             ".jpg",
-            cv2.cvtColor(self.frame(), cv2.COLOR_RGB2BGR),
-            [int(cv2.IMWRITE_JPEG_QUALITY), 60],
+            cv2.cvtColor(frame, cv2.COLOR_RGB2BGR),
+            [int(cv2.IMWRITE_JPEG_QUALITY), 80],
         )
         if not ok:
             raise RuntimeError("Gagal membuat JPEG dari kamera")
@@ -107,56 +121,48 @@ class Camera:
         self._camera.stop()
 
 
-class Analysis:
-    def __init__(self) -> None:
+class Capture:
+    def __init__(self, camera: Camera) -> None:
+        self._camera = camera
+        self._llm = LlmVision()
         self._lock = threading.Lock()
-        self.text = "Menganalisis..."
-        self.detail = "Menunggu jawaban Sumopod"
 
-    def update(self, prediction: Prediction) -> None:
-        text = _LABELS.get(prediction.label, prediction.label.upper())
-        detail = f"{prediction.confidence * 100:.0f}% menurut model"
+    def take(self) -> dict[str, str]:
         with self._lock:
-            self.text = text
-            self.detail = detail
-
-    def fail(self, message: str) -> None:
-        with self._lock:
-            self.text = "Gagal"
-            self.detail = message[:180]
-
-    def snapshot(self) -> dict[str, str]:
-        with self._lock:
-            return {"text": self.text, "detail": self.detail}
-
-
-def _watch(camera: Camera, analysis: Analysis, stop: threading.Event) -> None:
-    classifier = Classifier()
-    while not stop.is_set():
-        started = time.monotonic()
-        try:
-            analysis.update(classifier.predict(camera.frame()))
-        except Exception as exc:
-            print(f"[WARN] Analisis Sumopod: {exc}")
-            analysis.fail(str(exc))
-        remaining = ANALYZE_EVERY_S - (time.monotonic() - started)
-        if remaining > 0:
-            stop.wait(remaining)
+            image = self._camera.jpeg()
+            CAPTURE_DIR.mkdir(parents=True, exist_ok=True)
+            path = CAPTURE_DIR / f"{datetime.now():%Y%m%d-%H%M%S}.jpg"
+            path.write_bytes(image)
+            print(f"[FOTO] {path}")
+            try:
+                label, confidence = self._llm.classify(path.read_bytes())
+            except Exception as exc:
+                print(f"[WARN] Analisis Sumopod: {exc}")
+                return {"text": "Gagal", "detail": str(exc)[:180]}
+            text = _LABELS.get(label, label.upper())
+            print(f"[HASIL] {text} {confidence:.2f}")
+            return {
+                "text": text,
+                "detail": f"{confidence * 100:.0f}% · {path.name}",
+            }
 
 
-def make_handler(camera: Camera, analysis: Analysis):
+def make_handler(camera: Camera, capture: Capture):
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self) -> None:
             if self.path.startswith("/stream"):
                 self._stream()
                 return
-            if self.path.startswith("/result"):
-                self._json(analysis.snapshot())
-                return
             self._bytes(PAGE, "text/html; charset=utf-8")
 
-        def _json(self, payload: dict[str, str]) -> None:
-            self._bytes(json.dumps(payload).encode("utf-8"), "application/json")
+        def do_POST(self) -> None:
+            if self.path.startswith("/capture"):
+                self._bytes(
+                    json.dumps(capture.take()).encode("utf-8"),
+                    "application/json",
+                )
+                return
+            self.send_error(404)
 
         def _bytes(self, body: bytes, content_type: str) -> None:
             self.send_response(200)
@@ -193,21 +199,17 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     camera = Camera()
-    analysis = Analysis()
-    stop = threading.Event()
-    worker = threading.Thread(target=_watch, args=(camera, analysis, stop), daemon=True)
-    worker.start()
-
-    server = ThreadingHTTPServer(("0.0.0.0", args.port), make_handler(camera, analysis))
+    capture = Capture(camera)
+    server = ThreadingHTTPServer(("0.0.0.0", args.port), make_handler(camera, capture))
     name = socket.gethostname()
     print(f"Kamera siap. Buka http://{name}.local:{args.port}")
+    print(f"Foto disimpan di {CAPTURE_DIR}")
     print("Ctrl+C untuk berhenti.")
     try:
         server.serve_forever()
     except KeyboardInterrupt:
         print("\nBerhenti.")
     finally:
-        stop.set()
         server.server_close()
         camera.close()
     return 0
