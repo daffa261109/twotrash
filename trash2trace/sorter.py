@@ -42,6 +42,7 @@ class Sorter:
         self.station = station
         self.running = True
         print(f"[INFO] Menyala sebagai {station.title}")
+        lamp_pins = Device.pin_factory
         _use_pigpio_if_available()
 
         self.display = Display()
@@ -62,7 +63,7 @@ class Sorter:
         )
         self.led_green = LED(LED_GREEN_PIN)
         self.led_red = LED(LED_RED_PIN)
-        self.illumination = LED(ILLUMINATION_PIN)
+        self.illumination = LED(ILLUMINATION_PIN, pin_factory=lamp_pins)
         self.buzzer = Buzzer(BUZZER_PIN)
         self.camera = Picamera2()
         self.camera.configure(
@@ -75,6 +76,7 @@ class Sorter:
         self.classifier = Classifier()
         self._armed = True
         self._lamp_on = False
+        self._lamp_hold = False
         self._last_preview = 0.0
         self._rest("Menunggu sampah")
 
@@ -84,7 +86,11 @@ class Sorter:
         while self.running:
             distance_m = self.distance.distance
             ada_barang = DETECT_MIN_M <= distance_m <= DETECT_MAX_M
-            self._set_illumination(ada_barang)
+            if ada_barang:
+                self._lamp_hold = True
+            elif distance_m > CLEAR_DISTANCE_M:
+                self._lamp_hold = False
+            self._set_illumination(self._lamp_hold)
             if ada_barang and self._armed:
                 self._sort_one_item(distance_m)
             elif distance_m > CLEAR_DISTANCE_M and not self._armed:
@@ -121,13 +127,16 @@ class Sorter:
     def _set_illumination(self, ada_barang: bool) -> None:
         if ada_barang == self._lamp_on:
             return
-        self._lamp_on = ada_barang
-        if ada_barang:
-            print("[LAMPU] nyala")
-            self._safe(self.illumination.on)
+        try:
+            if ada_barang:
+                self.illumination.on()
+            else:
+                self.illumination.off()
+        except Exception as exc:
+            print(f"[WARN] Lampu: {exc}")
             return
-        print("[LAMPU] mati")
-        self._safe(self.illumination.off)
+        self._lamp_on = ada_barang
+        print("[LAMPU] nyala" if ada_barang else "[LAMPU] mati")
 
     def _save_frame(self, frame_rgb) -> str:
         CAPTURE_DIR.mkdir(parents=True, exist_ok=True)
@@ -176,7 +185,6 @@ class Sorter:
 
     def _alert_off(self) -> None:
         self._safe(self.buzzer.off)
-        self._safe(self.illumination.off)
 
     def _beep(self) -> None:
         try:
