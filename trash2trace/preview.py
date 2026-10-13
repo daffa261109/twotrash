@@ -11,8 +11,10 @@ from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import cv2
+from gpiozero import LED
 from picamera2 import Picamera2
 
+from servo.pins import ILLUMINATION_PIN
 from trash2trace.settings import ROOT
 from trash2trace.vision import Classifier
 
@@ -104,6 +106,7 @@ class Camera:
         )
         self._camera.start()
         _tune_colour(self._camera)
+        self._lamp = _lamp_on()
         time.sleep(1.0)
 
     def jpeg(self) -> bytes:
@@ -119,7 +122,21 @@ class Camera:
         return encoded.tobytes()
 
     def close(self) -> None:
+        if self._lamp is not None:
+            self._lamp.off()
+            self._lamp.close()
         self._camera.stop()
+
+
+def _lamp_on() -> LED | None:
+    try:
+        lamp = LED(ILLUMINATION_PIN)
+        lamp.on()
+        print("Lampu penerangan nyala.")
+        return lamp
+    except Exception as exc:
+        print(f"[WARN] Lampu penerangan: {exc}")
+        return None
 
 
 def _tune_colour(camera) -> None:
