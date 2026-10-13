@@ -11,6 +11,7 @@ from picamera2 import Picamera2
 
 from trash2trace.display import Display
 from trash2trace.settings import (
+    BUZZER_FROM_M,
     CAMERA_SIZE,
     CAPTURE_DIR,
     CLEAR_DISTANCE_M,
@@ -73,6 +74,7 @@ class Sorter:
         time.sleep(1.2)
         self.classifier = Classifier()
         self._armed = True
+        self._lamp_on = False
         self._last_preview = 0.0
         self._rest("Menunggu sampah")
 
@@ -80,10 +82,14 @@ class Sorter:
         print(f"[INFO] {self.station.title} jalan.")
         self.display.clear()
         while self.running:
-            if self._item_arrived():
-                self._sort_one_item()
-            elif self._preview_due():
-                self._log_preview()
+            distance_m = self.distance.distance
+            ada_barang = DETECT_MIN_M <= distance_m <= DETECT_MAX_M
+            self._set_illumination(ada_barang)
+            if ada_barang and self._armed:
+                self._sort_one_item(distance_m)
+            elif distance_m > CLEAR_DISTANCE_M and not self._armed:
+                self._rest("Menunggu sampah")
+                self._armed = True
             time.sleep(0.05)
 
     def stop(self) -> None:
@@ -101,15 +107,27 @@ class Sorter:
         distance_m = self.distance.distance
         return self._armed and DETECT_MIN_M <= distance_m <= DETECT_MAX_M
 
-    def _sort_one_item(self) -> None:
+    def _sort_one_item(self, distance_m: float) -> None:
         self._armed = False
-        distance_m = self.distance.distance
-        print(f"[TRIGGER] {self.station.title} benda terdeteksi: {distance_m * 100:.1f} cm")
-        self._alert_on(distance_m)
-        self._wait_until_clear()
-        self._alert_off()
-        self._armed = True
-        self._rest("Menunggu sampah")
+        pertama_cm = distance_m * 100
+        time.sleep(0.12)
+        kedua_cm = self.distance.distance * 100
+        print(f"[HC] {self.station.title} barang: {pertama_cm:.1f} cm, {kedua_cm:.1f} cm")
+        self.display.show("BENDA", f"{pertama_cm:.1f} / {kedua_cm:.1f}", self.station.title)
+        if pertama_cm >= BUZZER_FROM_M * 100 or kedua_cm >= BUZZER_FROM_M * 100:
+            print("[BUZZER] sekali")
+            self._beep()
+
+    def _set_illumination(self, ada_barang: bool) -> None:
+        if ada_barang == self._lamp_on:
+            return
+        self._lamp_on = ada_barang
+        if ada_barang:
+            print("[LAMPU] nyala")
+            self._safe(self.illumination.on)
+            return
+        print("[LAMPU] mati")
+        self._safe(self.illumination.off)
 
     def _save_frame(self, frame_rgb) -> str:
         CAPTURE_DIR.mkdir(parents=True, exist_ok=True)
@@ -147,7 +165,6 @@ class Sorter:
 
     def _log_preview(self) -> None:
         self._last_preview = time.monotonic()
-        print(f"[AI] {self.station.title} menunggu | jarak={self.distance.distance * 100:.1f} cm")
 
     def _set_leds(self, label: str) -> None:
         self.led_green.off()
@@ -157,12 +174,6 @@ class Sorter:
         else:
             self.led_red.on()
 
-    def _alert_on(self, distance_m: float) -> None:
-        print("[ALERT] buzzer, lampu penerangan, OLED")
-        self._safe(self.buzzer.on)
-        self._safe(self.illumination.on)
-        self.display.show("BENDA", f"{distance_m * 100:.1f} cm", self.station.title)
-
     def _alert_off(self) -> None:
         self._safe(self.buzzer.off)
         self._safe(self.illumination.off)
@@ -170,7 +181,7 @@ class Sorter:
     def _beep(self) -> None:
         try:
             self.buzzer.on()
-            time.sleep(0.4)
+            time.sleep(0.2)
             self.buzzer.off()
         except Exception as exc:
             print(f"[WARN] Buzzer: {exc}")

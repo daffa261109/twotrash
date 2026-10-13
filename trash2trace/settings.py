@@ -21,6 +21,8 @@ MIN_CONFIDENCE = 0.60
 DETECT_MIN_M = 0.01
 DETECT_MAX_M = 0.06
 CLEAR_DISTANCE_M = 0.10
+# Buzzer sekali jika salah satu bacaan bukan di bawah angka ini.
+BUZZER_FROM_M = 0.045
 SETTLE_AFTER_DETECT_S = 0.18
 # Satu foto per sampah, dibaca model di Pi.
 FRAMES_PER_DECISION = 1
