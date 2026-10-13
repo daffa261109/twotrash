@@ -119,7 +119,13 @@ class Sorter:
         time.sleep(0.12)
         kedua_cm = self.distance.distance * 100
         print(f"[HC] {self.station.title} barang: {pertama_cm:.1f} cm, {kedua_cm:.1f} cm")
-        self.display.show("BENDA", f"{pertama_cm:.1f} / {kedua_cm:.1f}", self.station.title)
+        nama_foto = ""
+        try:
+            path = self._save_frame(self.camera.capture_array())
+            nama_foto = path.name
+        except Exception as exc:
+            print(f"[WARN] Foto: {exc}")
+        self.display.show("BENDA", f"{pertama_cm:.1f} / {kedua_cm:.1f}", nama_foto)
         if pertama_cm >= BUZZER_FROM_M * 100 or kedua_cm >= BUZZER_FROM_M * 100:
             print("[BUZZER] sekali")
             self._beep()
