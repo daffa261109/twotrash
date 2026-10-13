@@ -103,6 +103,7 @@ class Camera:
             )
         )
         self._camera.start()
+        _tune_colour(self._camera)
         time.sleep(1.0)
 
     def jpeg(self) -> bytes:
@@ -119,6 +120,14 @@ class Camera:
 
     def close(self) -> None:
         self._camera.stop()
+
+
+def _tune_colour(camera) -> None:
+    try:
+        # Daylight menekan warna merah dari lampu di dalam mesin.
+        camera.set_controls({"AwbEnable": True, "AwbMode": 4})
+    except Exception as exc:
+        print(f"[WARN] Warna kamera: {exc}")
 
 
 class Capture:

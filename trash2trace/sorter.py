@@ -72,6 +72,10 @@ class Sorter:
             )
         )
         self.camera.start()
+        try:
+            self.camera.set_controls({"AwbEnable": True, "AwbMode": 4})
+        except Exception as exc:
+            print(f"[WARN] Warna kamera: {exc}")
         time.sleep(1.2)
         self.classifier = Classifier()
         self._armed = True
