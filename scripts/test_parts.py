@@ -50,6 +50,7 @@ def test_buzzer() -> None:
 
 def test_hc() -> None:
     print("HC-SR04, TRIG GPIO 17 / pin 11, ECHO GPIO 27 / pin 13. Ctrl+C berhenti.")
+    print("Kalau ada barang, jarak dibaca dua kali. Buzzer bunyi sekali jika bukan di bawah 4,5 cm.")
     sensor = DistanceSensor(
         echo=ECHO_PIN,
         trigger=TRIG_PIN,
@@ -57,13 +58,30 @@ def test_hc() -> None:
         queue_len=5,
         partial=True,
     )
+    buzzer = Buzzer(BUZZER_PIN)
+    print("Menunggu barang.")
     try:
         while True:
-            print(f"jarak={sensor.distance * 100:.1f} cm")
-            time.sleep(0.3)
+            jarak_cm = sensor.distance * 100
+            if jarak_cm < 1 or jarak_cm > 6:
+                time.sleep(0.05)
+                continue
+            time.sleep(0.12)
+            kedua = sensor.distance * 100
+            print(f"barang: {jarak_cm:.1f} cm, {kedua:.1f} cm")
+            if jarak_cm >= 4.5 or kedua >= 4.5:
+                print("  buzzer")
+                buzzer.on()
+                time.sleep(0.2)
+                buzzer.off()
+            while sensor.distance * 100 <= 10:
+                time.sleep(0.08)
+            print("Menunggu barang.")
     except KeyboardInterrupt:
         print()
     finally:
+        buzzer.off()
+        buzzer.close()
         sensor.close()
 
 
