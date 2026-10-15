@@ -52,6 +52,31 @@ Cincin yang dibeli adalah **WS2812 12 LED**. Pasang mengelilingi lensa kamera. L
 
 Pin sinyal ada di `servo/pins.py`.
 
+## Isi PCB 2 × 8 cm
+
+Papan ini berbaring di dasar kotak, di samping Pi, sisi panjang 8 cm menghadap header Pi. Jangan menaruh Pi, kamera, cincin, badan HC-SR04, atau modul OLED di atas papan. Bagian itu menempel di dinding kotak. Yang masuk ke lubang PCB hanya resistor, buzzer kecil, dan pin header.
+
+Tiga jalur disolder memanjang, tidak saling tersambung:
+
+| Jalur | Isi | Tidak disambung ke |
+| --- | --- | --- |
+| GND | semua ground di kotak, termasuk GND Pi dan GND kabel 80 cm dari catu bawah | — |
+| 5 V Pi | VCC OLED dan VCC HC-SR04, dari pin 2 atau pin 4 | jalur 5 V catu |
+| 5 V catu | hanya kaki 5 V cincin, dari kabel 80 cm | pin 5 V Pi |
+
+Ground memang berkumpul di jalur GND pada PCB ini. Satu kawat dari situ ke pin GND Pi. Satu kawat 80 cm dari situ ke −V catu di bawah. Itulah sambungan ground bersama.
+
+Urutan dari kiri ke kanan pada papan:
+
+1. Header dupont ke Pi.
+2. Pembagi ECHO: 1 kΩ lalu 2 kΩ. Ujung bawah 2 kΩ ke jalur GND.
+3. Dua resistor 330 Ω untuk LED hijau dan LED merah. Katoda LED ke jalur GND.
+4. Satu resistor 330 Ω untuk data cincin. Keluar ke DIN.
+5. Buzzer, kaki negatif ke jalur GND.
+6. Di ujung kanan, tiga sekrup atau header untuk kabel 80 cm: sinyal servo, GND, dan 5 V catu.
+
+LED hijau, LED merah, dan buzzer boleh menempel di dinding kotak. Kakinya yang masuk ke PCB, bukan badannya, jika tempat di papan sudah penuh.
+
 ## Pembagi ECHO
 
 ECHO HC-SR04 mengeluarkan 5 V. GPIO hanya tahan 3,3 V.
