@@ -2,9 +2,24 @@
 
 Mesin punya dua tingkat. Kotak atas memegang elektronik yang dekat kamera. Rak bawah memegang listrik PLN, catu 5 V, dan dua servo.
 
-Masih ada **dua Raspberry Pi Zero**, satu untuk tiap flap. Keduanya dikabel sama. Tiap Pi punya kotak atas sendiri. Kedua servo duduk berdampingan di tengah rak bawah, diikat dengan braket MG996. Kalau Pi ada di atas, kabel ke servo dipotong **80 cm** (jalur terpakai sekitar 70 cm).
+Mesin memakai **satu Raspberry Pi Zero** dan **dua servo MG996R**:
+
+- **Servo 1** memutar flap 360° untuk memilih jalur sampah (GPIO 18).
+- **Servo 2** memiringkan flap ke atas dan ke bawah untuk membuang sampah (GPIO 13).
+
+Kedua servo duduk di tengah rak bawah, diikat dengan braket MG996. Kabel dari Pi di atas ke servo dipotong **80 cm** (jalur terpakai sekitar 70 cm).
 
 ![Susunan kotak atas dan rak bawah](rangkaian.jpg)
+
+## Diagram rangkaian
+
+Diagram daya: alur listrik PLN, catu 5 V, dua servo, dan kabel naik 80 cm ke kotak atas.
+
+![Diagram daya](diagram-daya.svg)
+
+Diagram sinyal: sambungan tiap pin Pi Zero ke OLED, HC-SR04, LED, buzzer, cincin, dua servo, dan kamera.
+
+![Diagram sinyal](diagram-sinyal.svg)
 
 ## Rak bawah
 
@@ -15,10 +30,10 @@ Dari kiri ke kanan: soket AC, catu switching 5 V, lalu dua servo di tengah.
 | Soket AC | L | sekring, lalu saklar, lalu L catu |
 | Soket AC | N | N catu |
 | Soket AC | PE | baut rangka logam, atau diisolasi jika kotak semua plastik |
-| Catu 5 V | +V | kabel merah kedua servo, dan kabel 5 V naik ke tiap cincin LED |
-| Catu 5 V | −V | kabel cokelat kedua servo, GND tiap Pi, dan GND tiap cincin |
-| Servo flap 1 | sinyal | GPIO 18 / pin 12 pada Pi atas, kabel 80 cm |
-| Servo flap 2 | sinyal | GPIO 18 / pin 12 pada Pi bawah, kabel 80 cm |
+| Catu 5 V | +V | kabel merah kedua servo, dan kabel 5 V naik ke cincin LED |
+| Catu 5 V | −V | kabel cokelat kedua servo, GND Pi, dan GND cincin |
+| Servo 1 (putar 360°) | sinyal | GPIO 18 / pin 12 pada Pi, kabel 80 cm |
+| Servo 2 (miring atas-bawah) | sinyal | GPIO 13 / pin 33 pada Pi, kabel 80 cm |
 
 Kabel merah servo tidak masuk ke pin 5 V Pi. Pi tetap makan dari kabel USB-nya sendiri.
 
@@ -48,7 +63,8 @@ Cincin yang dibeli adalah **WS2812 12 LED**. Pasang mengelilingi lensa kamera. L
 | Cincin 12 LED | 5 V | +V catu bawah, kabel 80 cm |
 | Cincin 12 LED | GND | −V catu bawah |
 | Cincin 12 LED | DIN | 330 Ω → GPIO 21 / pin 40 |
-| Servo Pi ini | sinyal | GPIO 18 / pin 12, kabel 80 cm turun |
+| Servo 1 (putar 360°) | sinyal | GPIO 18 / pin 12, kabel 80 cm turun |
+| Servo 2 (miring atas-bawah) | sinyal | GPIO 13 / pin 33, kabel 80 cm turun |
 
 Pin sinyal ada di `servo/pins.py`.
 
@@ -73,7 +89,7 @@ Urutan dari kiri ke kanan pada papan:
 3. Dua resistor 330 Ω untuk LED hijau dan LED merah. Katoda LED ke jalur GND.
 4. Satu resistor 330 Ω untuk data cincin. Keluar ke DIN.
 5. Buzzer, kaki negatif ke jalur GND.
-6. Di ujung kanan, tiga sekrup atau header untuk kabel 80 cm: sinyal servo, GND, dan 5 V catu.
+6. Di ujung kanan, header untuk kabel 80 cm: dua sinyal servo, GND, dan 5 V catu.
 
 LED hijau, LED merah, dan buzzer boleh menempel di dinding kotak. Kakinya yang masuk ke PCB, bukan badannya, jika tempat di papan sudah penuh.
 
@@ -107,12 +123,13 @@ Panjang di bawah sudah termasuk sedikit lebih untuk dilipat di ujung. Kabel 80 c
 
 ### Naik ke kotak atas
 
-Tiap Pi punya satu set. Untuk dua Pi, gandakan baris ini.
+Satu Pi, satu set kabel.
 
-| Kabel | Jumlah per Pi | Panjang | Kawat | Sambungan |
+| Kabel | Jumlah | Panjang | Kawat | Sambungan |
 | --- | --- | --- | --- | --- |
-| Sinyal servo | 1 | 80 cm | 0,25 mm² | GPIO 18 ke kabel oranye/kuning servo |
-| GND pasangan servo | 1 | 80 cm | 0,5 mm² | GND Pi ke −V catu, dipilin dengan sinyal |
+| Sinyal servo 1 (putar) | 1 | 80 cm | 0,25 mm² | GPIO 18 ke kabel oranye/kuning servo 1 |
+| Sinyal servo 2 (miring) | 1 | 80 cm | 0,25 mm² | GPIO 13 ke kabel oranye/kuning servo 2 |
+| GND pasangan servo | 1 | 80 cm | 0,5 mm² | GND Pi ke −V catu, dipilin dengan kedua sinyal |
 | 5 V cincin | 1 | 80 cm | 0,5 mm² | +V catu ke 5 V cincin |
 | GND cincin | 1 | 80 cm | 0,5 mm² | −V catu ke GND cincin |
 
@@ -122,7 +139,7 @@ Jangan memakai kabel dupont tipis untuk 5 V cincin sepanjang 80 cm. Dua belas LE
 
 | Kabel | Jumlah per kotak | Kawat | Catatan |
 | --- | --- | --- | --- |
-| Dupont ke header Pi | 12 | 0,25 mm² | OLED, sensor, LED, buzzer, data cincin, sinyal servo |
+| Dupont ke header Pi | 13 | 0,25 mm² | OLED, sensor, LED, buzzer, data cincin, dua sinyal servo |
 | Kabel pita kamera | 1 | pita CSI | dari kamera ke soket kamera Pi, pendek |
 | Data cincin | 1 | 0,25 mm² | DIN cincin, lewat 330 Ω, ke GPIO 21 |
 
@@ -131,7 +148,7 @@ Jangan memakai kabel dupont tipis untuk 5 V cincin sepanjang 80 cm. Dua belas LE
 1. Cabut PLN dan USB Pi.
 2. Ikat dua servo di tengah rak bawah dengan braket. Merah dan cokelat hanya ke catu 5 V.
 3. Pasang soket AC. Fasa wajib lewat sekring dulu, baru saklar, baru ke catu. Tutup semua sambungan PLN sebelum kotak ditutup.
-4. Naikkan sinyal servo, GND, serta 5 V dan GND cincin sepanjang 80 cm.
+4. Naikkan dua sinyal servo, GND, serta 5 V dan GND cincin sepanjang 80 cm.
 5. Di kotak atas, solder pembagi ECHO, resistor LED, dan header pada PCB 2 × 8 cm. Baru kemudian colok ke Pi.
 6. Nyalakan USB Pi dulu. Catu 5 V bawah dinyalakan setelah Pi hidup.
 7. Hentikan program sebelum melepas kabel.
