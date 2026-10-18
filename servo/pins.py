@@ -4,7 +4,7 @@
 OLED_SDA_PIN = 2
 OLED_SCL_PIN = 3
 
-# HC-SR04. ECHO masuk lewat pembagi 1 kΩ / 2 kΩ, bukan langsung ke GPIO.
+# HC-SR04. ECHO masuk lewat pembagi 2,2 kΩ / 2,7 kΩ, bukan langsung ke GPIO.
 TRIG_PIN = 17  # physical pin 11
 ECHO_PIN = 27  # physical pin 13
 

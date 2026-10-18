@@ -77,20 +77,19 @@
 <polyline points="119,547 141,547" fill="none" stroke="#222222" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="123,552 137,552" fill="none" stroke="#222222" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="127,557 133,557" fill="none" stroke="#222222" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="270,460 340,460" fill="none" stroke="#2a9d3f" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="270,460 600,460" fill="none" stroke="#2a9d3f" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 <rect x="340" y="450" width="70" height="20" rx="3" fill="#fff" stroke="#333" stroke-width="2"/>
-<text x="375.0" y="444" font-size="13" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif" stroke="#ffffff" stroke-width="5" paint-order="stroke">1 kΩ</text>
-<polyline points="410,460 600,460" fill="none" stroke="#2a9d3f" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
-<circle cx="500" cy="460" r="5" fill="#2a9d3f"/>
-<polyline points="500,460 500,500" fill="none" stroke="#2a9d3f" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
-<rect x="492" y="500" width="16" height="44" rx="3" fill="#ffffff" stroke="#333" stroke-width="2"/>
-<text x="520" y="526" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif" stroke="#ffffff" stroke-width="5" paint-order="stroke">2 kΩ</text>
-<polyline points="500,544 500,560" fill="none" stroke="#222222" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="500,560 500,570" fill="none" stroke="#222222" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="489,570 511,570" fill="none" stroke="#222222" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="493,575 507,575" fill="none" stroke="#222222" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="497,580 503,580" fill="none" stroke="#222222" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-<text x="500" y="440" font-size="12" text-anchor="middle" fill="#1c6a2c" font-weight="normal" font-family="Helvetica, Arial, sans-serif" stroke="#ffffff" stroke-width="5" paint-order="stroke">pembagi: ECHO 5 V → 3,3 V</text>
+<text x="375" y="444" font-size="13" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif" stroke="#ffffff" stroke-width="5" paint-order="stroke">2,2 kΩ</text>
+<circle cx="520" cy="460" r="5" fill="#2a9d3f"/>
+<polyline points="520,460 520,500" fill="none" stroke="#2a9d3f" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="512" y="500" width="16" height="44" rx="3" fill="#ffffff" stroke="#333" stroke-width="2"/>
+<text x="540" y="526" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif" stroke="#ffffff" stroke-width="5" paint-order="stroke">2,7 kΩ</text>
+<polyline points="520,544 520,560" fill="none" stroke="#222222" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="520,560 520,570" fill="none" stroke="#222222" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="509,570 531,570" fill="none" stroke="#222222" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="513,575 527,575" fill="none" stroke="#222222" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="517,580 523,580" fill="none" stroke="#222222" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="440" y="424" font-size="12" text-anchor="middle" fill="#1c6a2c" font-weight="normal" font-family="Helvetica, Arial, sans-serif" stroke="#ffffff" stroke-width="5" paint-order="stroke">pembagi 2,2 kΩ + 2,7 kΩ → 2,75 V</text>
 <rect x="260" y="598" width="120" height="44" rx="6" fill="#ffffff" stroke="#333333" stroke-width="2"/>
 <text x="320" y="618" font-size="14" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">LED hijau</text>
 <text x="320" y="636" font-size="11" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">anoda →</text>
@@ -149,7 +148,7 @@
 <circle cx="1000" cy="360" r="5" fill="#7b3fc4" stroke="#333" stroke-width="2"/>
 <polyline points="860,330 880,330 880,360 1000,360" fill="none" stroke="#7b3fc4" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 <rect x="920" y="350" width="60" height="20" rx="3" fill="#fff" stroke="#333" stroke-width="2"/>
-<text x="950.0" y="344" font-size="13" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif" stroke="#ffffff" stroke-width="5" paint-order="stroke">330 Ω</text>
+<text x="950.0" y="344" font-size="13" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif" stroke="#ffffff" stroke-width="5" paint-order="stroke">100 Ω</text>
 <circle cx="1060" cy="420" r="5" fill="#d62728" stroke="#333" stroke-width="2"/>
 <circle cx="1220" cy="420" r="5" fill="#222222" stroke="#333" stroke-width="2"/>
 <polyline points="1060,420 1060,465" fill="none" stroke="#d62728" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>

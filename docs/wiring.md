@@ -56,13 +56,13 @@ Cincin yang dibeli adalah **WS2812 12 LED**. Pasang mengelilingi lensa kamera. L
 | HC-SR04 | VCC | 5 V Pi (pin 4) |
 | HC-SR04 | GND | GND |
 | HC-SR04 | TRIG | GPIO 17 / pin 11 |
-| HC-SR04 | ECHO | 1 kΩ → GPIO 27 / pin 13, lalu 2 kΩ ke GND |
+| HC-SR04 | ECHO | 2,2 kΩ → GPIO 27 / pin 13, lalu 2,7 kΩ ke GND |
 | LED hijau | anoda | 330 Ω → GPIO 22 / pin 15 |
 | LED merah | anoda | 330 Ω → GPIO 23 / pin 16 |
 | Buzzer | sinyal | GPIO 5 / pin 29 |
 | Cincin 12 LED | 5 V | +V catu bawah, kabel 80 cm |
 | Cincin 12 LED | GND | −V catu bawah |
-| Cincin 12 LED | DIN | 330 Ω → GPIO 21 / pin 40 |
+| Cincin 12 LED | DIN | 100 Ω → GPIO 21 / pin 40 |
 | Servo 1 (putar 360°) | sinyal | GPIO 18 / pin 12, kabel 80 cm turun |
 | Servo 2 (miring atas-bawah) | sinyal | GPIO 13 / pin 33, kabel 80 cm turun |
 
@@ -85,25 +85,45 @@ Ground memang berkumpul di jalur GND pada PCB ini. Satu kawat dari situ ke pin G
 Urutan dari kiri ke kanan pada papan:
 
 1. Header dupont ke Pi.
-2. Pembagi ECHO: 1 kΩ lalu 2 kΩ. Ujung bawah 2 kΩ ke jalur GND.
+2. Pembagi ECHO: 2,2 kΩ lalu 2,7 kΩ. Ujung bawah 2,7 kΩ ke jalur GND.
 3. Dua resistor 330 Ω untuk LED hijau dan LED merah. Katoda LED ke jalur GND.
-4. Satu resistor 330 Ω untuk data cincin. Keluar ke DIN.
+4. Satu resistor 100 Ω untuk data cincin. Keluar ke DIN.
 5. Buzzer, kaki negatif ke jalur GND.
 6. Di ujung kanan, header untuk kabel 80 cm: dua sinyal servo, GND, dan 5 V catu.
 
 LED hijau, LED merah, dan buzzer boleh menempel di dinding kotak. Kakinya yang masuk ke PCB, bukan badannya, jika tempat di papan sudah penuh.
+
+## Tata letak resistor di PCB lubang 6 × 28
+
+Versi ini memakai papan dengan 6 baris (A sampai F) dan 28 kolom. Baris A jadi jalur 5 V Pi, baris F jadi jalur GND, semua resistor ada di baris C. Jalur 5 V catu tidak lewat papan ini. Kabel merah servo dan 5 V cincin datang langsung dari catu bawah.
+
+![Tata letak PCB 6 × 28](diagram-pcb.svg)
+
+| Resistor | Lubang | Sambungan |
+| --- | --- | --- |
+| 2,2 kΩ | C2 ↔ C5 | ECHO HC-SR04 masuk di C2. Simpul C5 ke Pi pin 13 |
+| 2,7 kΩ | C5 ↕ F5 | Dari simpul C5 ke jalur GND |
+| 330 Ω | C8 ↔ C11 | Pi pin 15 masuk di C8. C11 ke anoda LED hijau |
+| 330 Ω | C13 ↔ C16 | Pi pin 16 masuk di C13. C16 ke anoda LED merah |
+| 100 Ω | C18 ↔ C21 | Pi pin 40 masuk di C18. C21 ke DIN cincin |
+
+Hanya ada satu resistor 100 Ω, jadi dipakai untuk data cincin dan kedua LED memakai 330 Ω.
+
+Stok yang dibutuhkan: satu 2,2 kΩ, satu 2,7 kΩ, dua 330 Ω, dan satu 100 Ω. Resistor 1 kΩ dan 4,7 kΩ tidak dipakai.
 
 ## Pembagi ECHO
 
 ECHO HC-SR04 mengeluarkan 5 V. GPIO hanya tahan 3,3 V.
 
 ```
-ECHO ---- 1 kΩ ---- GPIO 27 / pin 13
+ECHO ---- 2,2 kΩ ----+---- GPIO 27 / pin 13
                       |
-                     2 kΩ
+                    2,7 kΩ
                       |
                      GND
 ```
+
+Tegangan ke GPIO: 5 V × 2,7 / (2,2 + 2,7) = 2,75 V. Itu di bawah batas 3,3 V dan jauh di atas ambang HIGH Pi (sekitar 1,3 V).
 
 Resistor ini duduk di PCB lubang. Jangan menyambung ECHO langsung ke pin 13.
 
@@ -141,7 +161,7 @@ Jangan memakai kabel dupont tipis untuk 5 V cincin sepanjang 80 cm. Dua belas LE
 | --- | --- | --- | --- |
 | Dupont ke header Pi | 13 | 0,25 mm² | OLED, sensor, LED, buzzer, data cincin, dua sinyal servo |
 | Kabel pita kamera | 1 | pita CSI | dari kamera ke soket kamera Pi, pendek |
-| Data cincin | 1 | 0,25 mm² | DIN cincin, lewat 330 Ω, ke GPIO 21 |
+| Data cincin | 1 | 0,25 mm² | DIN cincin, lewat 100 Ω, ke GPIO 21 |
 
 ## Urutan pasang
 
