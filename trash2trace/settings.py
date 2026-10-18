@@ -33,6 +33,8 @@ PREVIEW_EVERY_S = 1.0
 OLED_WIDTH = 128
 OLED_HEIGHT = 64
 OLED_ADDR = 0x3C
+# True kalau OLED terpasang terbalik: tampilan diputar 180 derajat.
+OLED_FLIP = True
 # Layar sambutan setelah Wi-Fi terhubung. Teks bawah berjalan dari kanan ke kiri.
 WELCOME_TITLE = "TRASH2TRACE"
 WELCOME_SCROLL = "Buang sampah pada tempatnya"

@@ -7,6 +7,7 @@ import time
 
 from trash2trace.settings import (
     OLED_ADDR,
+    OLED_FLIP,
     OLED_HEIGHT,
     OLED_WIDTH,
     WELCOME_SCROLL,
@@ -74,8 +75,13 @@ class Display:
         for text, y, font in rows:
             _draw_centered(draw, text, y, font)
         with self._lock:
-            self._panel.image(image)
-            self._panel.show()
+            self._push(image)
+
+    def _push(self, image) -> None:
+        if OLED_FLIP:
+            image = image.rotate(180)
+        self._panel.image(image)
+        self._panel.show()
 
     def start_idle(self) -> None:
         """Layar sambutan: Welcome, nama mesin, Ready, lalu teks berjalan."""
@@ -119,8 +125,7 @@ class Display:
                 with self._lock:
                     if self._busy:
                         continue
-                    self._panel.image(image)
-                    self._panel.show()
+                    self._push(image)
             except Exception as exc:
                 print(f"[WARN] OLED: {exc}")
                 time.sleep(1.0)
