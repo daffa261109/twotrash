@@ -72,6 +72,17 @@ sudo systemctl stop trash2trace
 python3 -m trash2trace.preview
 ```
 
+Untuk menyalakan cincin LED putih selama pratinjau, jalankan dengan sudo dan hentikan `pigpiod` dulu (cincin dan pigpio sama-sama memakai PCM). Pasang library cincin sekali:
+
+```bash
+sudo apt install python3-dev gcc
+sudo python3 -m pip install --break-system-packages rpi-ws281x
+sudo systemctl stop pigpiod
+sudo python3 -m trash2trace.preview
+```
+
+Uji cepat tanpa browser: `sudo python3 scripts/test_parts.py camera` menyalakan cincin putih, menyimpan satu foto di `captures/`, lalu mematikan cincin.
+
 Buka `http://<nama-pi>.local:8080` dari komputer yang satu Wi-Fi dengan Pi. Gambar kamera ada di kiri. Tekan **Ambil dan analisis** untuk menyimpan satu foto dan membacanya dengan MobileNet di Pi. Hasilnya muncul di kanan. Ctrl+C menghentikan tes. Nyalakan pemilah lagi dengan:
 
 ```bash

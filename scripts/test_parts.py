@@ -9,6 +9,7 @@
     python3 scripts/test_parts.py servo2
     python3 scripts/test_parts.py oled
     sudo python3 scripts/test_parts.py ring
+    sudo python3 scripts/test_parts.py camera
 """
 
 from __future__ import annotations
@@ -235,9 +236,49 @@ def test_ring() -> None:
     print("Selesai.")
 
 
+def test_camera() -> None:
+    from datetime import datetime
+
+    from picamera2 import Picamera2
+
+    from trash2trace.ring import Ring
+    from trash2trace.settings import CAPTURE_DIR
+
+    print("Kamera Pi dengan cincin LED putih. Satu foto disimpan di captures/.")
+    ring = None
+    try:
+        ring = Ring()
+        ring.white()
+        print("  cincin putih nyala")
+    except Exception as exc:
+        print(f"  cincin tidak menyala ({exc}). Foto tetap diambil tanpa cincin.")
+        print("  Untuk cincin: sudo systemctl stop pigpiod, lalu sudo python3 scripts/test_parts.py camera")
+
+    camera = Picamera2()
+    try:
+        camera.configure(camera.create_still_configuration(main={"size": (1280, 960)}))
+        camera.start()
+        try:
+            camera.set_controls({"AwbEnable": True, "AwbMode": 4})
+        except Exception as exc:
+            print(f"  [WARN] Warna kamera: {exc}")
+        time.sleep(2.0)
+        CAPTURE_DIR.mkdir(parents=True, exist_ok=True)
+        path = CAPTURE_DIR / f"test-kamera-{datetime.now():%Y%m%d-%H%M%S}.jpg"
+        camera.capture_file(str(path))
+        print(f"  foto: {path}")
+        print(f"  ambil ke Mac: scp zero@hosttrashid.local:{path} ~/Desktop/")
+    finally:
+        camera.stop()
+        camera.close()
+        if ring is not None:
+            ring.close()
+    print("Selesai.")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Uji satu komponen.")
-    parser.add_argument("bagian", choices=("buzzer", "hc", "led", "lamp", "servo", "servo1", "servo2", "oled", "ring"))
+    parser.add_argument("bagian", choices=("buzzer", "hc", "led", "lamp", "servo", "servo1", "servo2", "oled", "ring", "camera"))
     args = parser.parse_args()
     {
         "buzzer": test_buzzer,
@@ -249,6 +290,7 @@ def main() -> None:
         "servo2": test_servo2,
         "oled": test_oled,
         "ring": test_ring,
+        "camera": test_camera,
     }[args.bagian]()
 
 

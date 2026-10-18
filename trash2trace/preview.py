@@ -15,6 +15,7 @@ from gpiozero import LED
 from picamera2 import Picamera2
 
 from servo.pins import ILLUMINATION_PIN
+from trash2trace.ring import Ring
 from trash2trace.settings import ROOT
 from trash2trace.vision import Classifier
 
@@ -123,16 +124,27 @@ class Camera:
 
     def close(self) -> None:
         if self._lamp is not None:
-            self._lamp.off()
-            self._lamp.close()
+            try:
+                self._lamp.off()
+                self._lamp.close()
+            except Exception as exc:
+                print(f"[WARN] Mematikan lampu: {exc}")
         self._camera.stop()
 
 
-def _lamp_on() -> LED | None:
+def _lamp_on():
+    """Nyalakan cincin putih. Kalau cincin tidak bisa, pakai lampu satu LED lama."""
+    try:
+        ring = Ring()
+        ring.white()
+        print("Cincin LED putih nyala.")
+        return ring
+    except Exception as exc:
+        print(f"[WARN] Cincin LED: {exc}")
     try:
         lamp = LED(ILLUMINATION_PIN)
         lamp.on()
-        print("Lampu penerangan nyala.")
+        print("Lampu penerangan GPIO 24 nyala.")
         return lamp
     except Exception as exc:
         print(f"[WARN] Lampu penerangan: {exc}")
