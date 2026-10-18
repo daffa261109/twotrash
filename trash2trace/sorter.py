@@ -6,11 +6,12 @@ import time
 from datetime import datetime
 
 import cv2
-from gpiozero import AngularServo, Buzzer, Device, DistanceSensor, LED
+from gpiozero import Buzzer, Device, DistanceSensor, LED
 from picamera2 import Picamera2
 
 from trash2trace.display import Display
 from trash2trace.network import wifi_connected
+from trash2trace.servo_driver import StableServo, connect_pigpio
 from trash2trace.settings import (
     BUZZER_FROM_M,
     CAMERA_SIZE,
@@ -35,6 +36,7 @@ from servo.pins import (
     LED_GREEN_PIN,
     LED_RED_PIN,
     SERVO_PIN,
+    SERVO_TILT_PIN,
     TRIG_PIN,
 )
 
@@ -62,14 +64,11 @@ class Sorter:
             queue_len=5,
             partial=True,
         )
-        self.servo = AngularServo(
-            SERVO_PIN,
-            min_angle=-90,
-            max_angle=90,
-            initial_angle=0,
-            min_pulse_width=0.001,
-            max_pulse_width=0.002,
-        )
+        self._pi = connect_pigpio()
+        self.servo = StableServo(self._pi, SERVO_PIN)
+        self.tilt = StableServo(self._pi, SERVO_TILT_PIN)
+        self.servo.angle = 0
+        self.tilt.angle = 0
         self.illumination = LED(ILLUMINATION_PIN, pin_factory=lamp_pins)
         self.buzzer = Buzzer(BUZZER_PIN)
         self.camera = Picamera2()
@@ -229,6 +228,7 @@ class Sorter:
     def _rest(self, message: str) -> None:
         self._alert_off()
         self.servo.angle = 0
+        self.tilt.angle = 0
         print(f"[AI] {self.station.title} {message}")
         self._show_idle()
 
@@ -237,8 +237,12 @@ class Sorter:
         self.illumination.off()
         self.buzzer.off()
         self.servo.angle = 0
+        self.tilt.angle = 0
         time.sleep(0.2)
         self.servo.detach()
+        self.tilt.detach()
+        if self._pi is not None:
+            self._pi.stop()
 
     @staticmethod
     def _safe(action) -> None:

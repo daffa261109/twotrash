@@ -6,6 +6,7 @@
     python3 scripts/test_parts.py led
     python3 scripts/test_parts.py lamp
     python3 scripts/test_parts.py servo1
+    python3 scripts/test_parts.py servo1_kanan90
     python3 scripts/test_parts.py servo2
     python3 scripts/test_parts.py oled
     sudo python3 scripts/test_parts.py ring
@@ -23,8 +24,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from gpiozero import AngularServo, Buzzer, Device, DistanceSensor, LED
+from gpiozero import Buzzer, Device, DistanceSensor, LED
 
+from trash2trace.servo_driver import StableServo, connect_pigpio
 from servo.pins import (
     BUZZER_PIN,
     ECHO_PIN,
@@ -122,31 +124,23 @@ def test_lamp() -> None:
     print("Selesai.")
 
 
-def _test_servo(title: str, pin: int, physical: int, steps: tuple[tuple[str, int], ...]) -> None:
+def _test_servo(
+    title: str, pin: int, physical: int, steps: tuple[tuple[str, int], ...], hold_s: float = 1.5
+) -> None:
     print(f"{title}, sinyal GPIO {pin} / pin {physical}. Catu 5 V bawah harus nyala.")
     print("Hanya servo ini yang digerakkan. Servo lain diam.")
-    try:
-        from gpiozero.pins.pigpio import PiGPIOFactory
-
-        Device.pin_factory = PiGPIOFactory()
-    except Exception as exc:
-        print(f"pigpio tidak aktif (sudo pigpiod), servo bisa sedikit bergetar: {exc}")
-    servo = AngularServo(
-        pin,
-        min_angle=-90,
-        max_angle=90,
-        initial_angle=0,
-        min_pulse_width=0.001,
-        max_pulse_width=0.002,
-    )
+    pi = connect_pigpio()
+    if pi is None:
+        return
+    servo = StableServo(pi, pin)
     try:
         for label, angle in steps:
             print(f"  {label} {angle:+d}°")
             servo.angle = angle
-            time.sleep(1.5)
+            time.sleep(hold_s)
     finally:
         servo.detach()
-        servo.close()
+        pi.stop()
     print("Selesai.")
 
 
@@ -156,6 +150,16 @@ def test_servo1() -> None:
         SERVO_PIN,
         12,
         (("tengah", 0), ("kiri", -60), ("tengah", 0), ("kanan", 60), ("tengah", 0)),
+    )
+
+
+def test_servo1_kanan90() -> None:
+    _test_servo(
+        "Servo 1 (putar), kanan 90°",
+        SERVO_PIN,
+        12,
+        (("tengah", 0), ("kanan", 90), ("tengah", 0)),
+        hold_s=3.0,
     )
 
 
@@ -278,7 +282,7 @@ def test_camera() -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Uji satu komponen.")
-    parser.add_argument("bagian", choices=("buzzer", "hc", "led", "lamp", "servo", "servo1", "servo2", "oled", "ring", "camera"))
+    parser.add_argument("bagian", choices=("buzzer", "hc", "led", "lamp", "servo", "servo1", "servo1_kanan90", "servo2", "oled", "ring", "camera"))
     args = parser.parse_args()
     {
         "buzzer": test_buzzer,
@@ -287,6 +291,7 @@ def main() -> None:
         "lamp": test_lamp,
         "servo": test_servo1,
         "servo1": test_servo1,
+        "servo1_kanan90": test_servo1_kanan90,
         "servo2": test_servo2,
         "oled": test_oled,
         "ring": test_ring,
