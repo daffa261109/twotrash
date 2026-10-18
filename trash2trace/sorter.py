@@ -10,6 +10,7 @@ from gpiozero import AngularServo, Buzzer, Device, DistanceSensor, LED
 from picamera2 import Picamera2
 
 from trash2trace.display import Display
+from trash2trace.network import wifi_connected
 from trash2trace.settings import (
     BUZZER_FROM_M,
     CAMERA_SIZE,
@@ -23,6 +24,7 @@ from trash2trace.settings import (
     PREVIEW_EVERY_S,
     SERVO_HOLD_S,
     SETTLE_AFTER_DETECT_S,
+    WELCOME_TITLE,
     Station,
 )
 from trash2trace.vision import Classifier, Prediction
@@ -43,6 +45,13 @@ class Sorter:
         self.running = True
         print(f"[INFO] Menyala sebagai {station.title}")
         lamp_pins = Device.pin_factory
+        # LED status dibuat pertama: merah menyala segera, hijau menunggu Wi-Fi.
+        self.led_red = LED(LED_RED_PIN, pin_factory=lamp_pins)
+        self.led_green = LED(LED_GREEN_PIN, pin_factory=lamp_pins)
+        self.led_green.off()
+        self.led_red.on()
+        self._net_ok = False
+        self._last_net_check = 0.0
         _use_pigpio_if_available()
 
         self.display = Display()
@@ -61,8 +70,6 @@ class Sorter:
             min_pulse_width=0.001,
             max_pulse_width=0.002,
         )
-        self.led_green = LED(LED_GREEN_PIN)
-        self.led_red = LED(LED_RED_PIN)
         self.illumination = LED(ILLUMINATION_PIN, pin_factory=lamp_pins)
         self.buzzer = Buzzer(BUZZER_PIN)
         self.camera = Picamera2()
@@ -86,8 +93,9 @@ class Sorter:
 
     def run(self) -> None:
         print(f"[INFO] {self.station.title} jalan.")
-        self.display.clear()
+        self._show_idle()
         while self.running:
+            self._check_network()
             distance_m = self.distance.distance
             ada_barang = DETECT_MIN_M <= distance_m <= DETECT_MAX_M
             if ada_barang:
@@ -111,6 +119,7 @@ class Sorter:
         self._safe(self._release_outputs)
         self._safe(self.distance.close)
         self._safe(self.camera.stop)
+        self._safe(self.display.stop_idle)
         self.display.clear()
 
     def _item_arrived(self) -> bool:
@@ -168,7 +177,6 @@ class Sorter:
         text = self.station.text_for(label)
         print(f"[SORT] {self.station.title} {label} | yakin={confidence:.2f} | servo={angle:+.0f}°")
         self.display.show(text, f"AI {confidence * 100:.0f}%", self.station.title)
-        self._set_leds(label)
         self._beep()
         self.servo.angle = angle
         time.sleep(SERVO_HOLD_S)
@@ -185,13 +193,27 @@ class Sorter:
     def _log_preview(self) -> None:
         self._last_preview = time.monotonic()
 
-    def _set_leds(self, label: str) -> None:
-        self.led_green.off()
+    def _check_network(self) -> None:
+        """Merah menyala sampai Wi-Fi terhubung, lalu hijau menyala terus."""
+        if self._net_ok:
+            return
+        now = time.monotonic()
+        if now - self._last_net_check < 1.0:
+            return
+        self._last_net_check = now
+        if not wifi_connected():
+            return
+        self._net_ok = True
         self.led_red.off()
-        if label == "organic":
-            self.led_green.on()
+        self.led_green.on()
+        print("[WIFI] terhubung, LED hijau menyala")
+        self.display.start_idle()
+
+    def _show_idle(self) -> None:
+        if self._net_ok:
+            self.display.idle()
         else:
-            self.led_red.on()
+            self.display.show(WELCOME_TITLE, "Menunggu Wi-Fi")
 
     def _alert_off(self) -> None:
         self._safe(self.buzzer.off)
@@ -205,16 +227,13 @@ class Sorter:
             print(f"[WARN] Buzzer: {exc}")
 
     def _rest(self, message: str) -> None:
-        self.led_green.off()
-        self.led_red.off()
         self._alert_off()
         self.servo.angle = 0
         print(f"[AI] {self.station.title} {message}")
-        self.display.clear()
+        self._show_idle()
 
     def _release_outputs(self) -> None:
-        self.led_green.off()
-        self.led_red.off()
+        # LED hijau/merah dibiarkan menyala sampai proses berhenti.
         self.illumination.off()
         self.buzzer.off()
         self.servo.angle = 0

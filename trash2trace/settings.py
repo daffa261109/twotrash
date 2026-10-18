@@ -33,6 +33,10 @@ PREVIEW_EVERY_S = 1.0
 OLED_WIDTH = 128
 OLED_HEIGHT = 64
 OLED_ADDR = 0x3C
+# Layar sambutan setelah Wi-Fi terhubung. Teks bawah berjalan dari kanan ke kiri.
+WELCOME_TITLE = "TRASH2TRACE"
+WELCOME_SCROLL = "Buang sampah pada tempatnya"
+WIFI_INTERFACE = "wlan0"
 ROI = (0.08, 0.05, 0.84, 0.90)
 
 
