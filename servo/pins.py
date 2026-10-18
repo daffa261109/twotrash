@@ -9,7 +9,8 @@ TRIG_PIN = 17  # physical pin 11
 ECHO_PIN = 27  # physical pin 13
 
 # MG996R, kabel sinyal. Physical pin 12. Daya merah dari 5 V eksternal.
-SERVO_PIN = 18
+SERVO_PIN = 18  # servo 1, putar 360°, physical pin 12
+SERVO_TILT_PIN = 13  # servo 2, miring atas-bawah, physical pin 33
 
 # LED indikator. Anoda lewat resistor, katoda ke GND.
 LED_GREEN_PIN = 22  # physical pin 15
