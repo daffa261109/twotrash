@@ -162,7 +162,14 @@ def _tune_colour(camera) -> None:
 class Capture:
     def __init__(self, camera: Camera) -> None:
         self._camera = camera
-        self._classifier = Classifier()
+        self._model_error = ""
+        try:
+            self._classifier = Classifier()
+        except Exception as exc:
+            # Pratinjau tetap jalan walau model belum bisa dimuat.
+            self._classifier = None
+            self._model_error = str(exc)
+            print(f"[WARN] Model belum siap, hanya foto yang disimpan: {exc}")
         self._lock = threading.Lock()
 
     def take(self) -> dict[str, str]:
@@ -172,6 +179,11 @@ class Capture:
             path = CAPTURE_DIR / f"{datetime.now():%Y%m%d-%H%M%S}.jpg"
             path.write_bytes(image)
             print(f"[FOTO] {path}")
+            if self._classifier is None:
+                return {
+                    "text": "Foto disimpan",
+                    "detail": f"{path.name} · model belum siap: {self._model_error[:120]}",
+                }
             try:
                 prediction = self._classifier.predict_file(path)
             except Exception as exc:
