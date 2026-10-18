@@ -7,11 +7,13 @@
     python3 scripts/test_parts.py lamp
     python3 scripts/test_parts.py servo
     python3 scripts/test_parts.py oled
+    sudo python3 scripts/test_parts.py ring
 """
 
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 import time
 from pathlib import Path
@@ -27,6 +29,7 @@ from servo.pins import (
     ILLUMINATION_PIN,
     LED_GREEN_PIN,
     LED_RED_PIN,
+    RING_DIN_PIN,
     SERVO_PIN,
     TRIG_PIN,
 )
@@ -169,9 +172,57 @@ def test_oled() -> None:
     print("Selesai.")
 
 
+RING_LED_COUNT = 12
+RING_BRIGHTNESS = 40  # 0 sampai 255. Rendah supaya catu dan mata aman.
+
+
+def test_ring() -> None:
+    print(f"Cincin WS2812 {RING_LED_COUNT} LED, data GPIO {RING_DIN_PIN} / pin 40.")
+    if os.geteuid() != 0:
+        print("Butuh root. Jalankan dengan sudo:")
+        print("  sudo python3 scripts/test_parts.py ring")
+        return
+    try:
+        from rpi_ws281x import Color, PixelStrip
+    except ImportError:
+        print("Library rpi_ws281x belum ada. Pasang dulu:")
+        print("  sudo apt install python3-dev gcc")
+        print("  sudo python3 -m pip install --break-system-packages rpi-ws281x")
+        return
+    print("Kalau pigpiod jalan, hentikan dulu: sudo systemctl stop pigpiod")
+    strip = PixelStrip(RING_LED_COUNT, RING_DIN_PIN, 800000, 10, False, RING_BRIGHTNESS, 0)
+    strip.begin()
+
+    def isi(color) -> None:
+        for index in range(RING_LED_COUNT):
+            strip.setPixelColor(index, color)
+        strip.show()
+
+    try:
+        for name, color in (
+            ("merah", Color(255, 0, 0)),
+            ("hijau", Color(0, 255, 0)),
+            ("biru", Color(0, 0, 255)),
+            ("putih", Color(255, 255, 255)),
+        ):
+            print(f"  semua {name}")
+            isi(color)
+            time.sleep(1.2)
+        print("  satu titik berputar")
+        for _ in range(2):
+            for index in range(RING_LED_COUNT):
+                isi(Color(0, 0, 0))
+                strip.setPixelColor(index, Color(255, 255, 255))
+                strip.show()
+                time.sleep(0.1)
+    finally:
+        isi(Color(0, 0, 0))
+    print("Selesai.")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Uji satu komponen.")
-    parser.add_argument("bagian", choices=("buzzer", "hc", "led", "lamp", "servo", "oled"))
+    parser.add_argument("bagian", choices=("buzzer", "hc", "led", "lamp", "servo", "oled", "ring"))
     args = parser.parse_args()
     {
         "buzzer": test_buzzer,
@@ -180,6 +231,7 @@ def main() -> None:
         "lamp": test_lamp,
         "servo": test_servo,
         "oled": test_oled,
+        "ring": test_ring,
     }[args.bagian]()
 
 
