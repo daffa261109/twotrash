@@ -328,10 +328,11 @@ class Capture:
 
 
 class ApiCheck:
-    """Kirim gambar kamera saat ini ke Sumopod dan lapor hasilnya."""
+    """Kirim gambar kamera saat ini ke Sumopod, lapor hasilnya, lalu gerakkan servo."""
 
-    def __init__(self, camera: Camera) -> None:
+    def __init__(self, camera: Camera, motion: SortMotion) -> None:
         self._camera = camera
+        self._motion = motion
         self._lock = threading.Lock()
 
     def run(self) -> dict[str, str]:
@@ -353,9 +354,10 @@ class ApiCheck:
             took = time.monotonic() - started
             text = _LABELS.get(label, label.upper())
             print(f"[API] {text} {confidence:.2f} ({took:.1f} detik)")
+            motion = self._motion.start(label)
             return {
                 "text": text,
-                "detail": f"{confidence * 100:.0f}% · {config.model} · {took:.1f} detik{note}",
+                "detail": f"{confidence * 100:.0f}% · {config.model} · {took:.1f} detik · {motion}{note}",
             }
 
 
@@ -431,7 +433,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     motion = SortMotion()
     capture = Capture(camera, motion)
-    server = ThreadingHTTPServer(("0.0.0.0", args.port), make_handler(camera, capture, ApiCheck(camera)))
+    server = ThreadingHTTPServer(("0.0.0.0", args.port), make_handler(camera, capture, ApiCheck(camera, motion)))
     name = socket.gethostname()
     print(f"Kamera siap. Buka http://{name}.local:{args.port}")
     print(f"Foto disimpan di {CAPTURE_DIR}")
