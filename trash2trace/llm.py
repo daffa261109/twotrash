@@ -63,6 +63,22 @@ class LlmVision:
         return _parse_reply(body)
 
 
+def list_models(config: LlmConfig) -> list[str]:
+    """Cek koneksi dan kunci ke Sumopod. Mengembalikan daftar model."""
+    request = urllib.request.Request(
+        config.endpoint.rstrip("/") + "/models",
+        headers={"Authorization": f"Bearer {config.api_key}"},
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=20) as response:
+            data = json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as exc:
+        raise RuntimeError(f"Server menjawab {exc.code}. Cek LLM_API_KEY di .env.") from exc
+    except urllib.error.URLError as exc:
+        raise RuntimeError(f"Server tidak terjangkau: {exc.reason}") from exc
+    return [str(item.get("id")) for item in data.get("data", [])]
+
+
 def _chat_url(endpoint: str) -> str:
     endpoint = endpoint.rstrip("/")
     if endpoint.endswith("/chat/completions"):

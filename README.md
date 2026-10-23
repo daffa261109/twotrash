@@ -83,7 +83,11 @@ sudo python3 -m trash2trace.preview
 
 Uji cepat tanpa browser: `sudo python3 scripts/test_parts.py camera` menyalakan cincin putih, menyimpan satu foto di `captures/`, lalu mematikan cincin.
 
-Buka `http://<nama-pi>.local:8080` dari komputer yang satu Wi-Fi dengan Pi. Gambar kamera ada di kiri. Tekan **Ambil dan analisis** untuk menyimpan satu foto dan membacanya dengan MobileNet di Pi. Hasilnya muncul di kanan. Ctrl+C menghentikan tes. Nyalakan pemilah lagi dengan:
+Buka `http://<nama-pi>.local:8080` dari komputer yang satu Wi-Fi dengan Pi. Gambar kamera ada di kiri. Panel di kanan punya tiga bagian:
+
+- **Ambil dan analisis**: menyimpan satu foto dan membacanya dengan MobileNet di Pi.
+- **Cincin LED**: tombol Putih, Merah, Hijau, Biru dan Mati. Butuh sudo dan pigpiod berhenti, kalau tidak panel memberi tahu bahwa cincin tidak aktif.
+- **API Sumopod**: mengecek koneksi dan kunci, lalu mengirim gambar kamera saat ini ke Sumopod dan menampilkan label, keyakinan dan waktu respons. Butuh `LLM_API_KEY` di `.env`. Ctrl+C menghentikan tes. Nyalakan pemilah lagi dengan:
 
 ```bash
 sudo systemctl start trash2trace

@@ -17,6 +17,7 @@ trash2trace jalan. Mode "atur" menggerakkan servo, hentikan trash2trace dulu:
 from __future__ import annotations
 
 import argparse
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -49,9 +50,32 @@ def describe(pi, number: int) -> str:
     return f"{name}  GPIO{pin} / pin {physical}:  {state}"
 
 
+def service_active() -> bool:
+    try:
+        result = subprocess.run(
+            ["systemctl", "is-active", "trash2trace"], capture_output=True, text=True, timeout=5
+        )
+    except (OSError, subprocess.SubprocessError):
+        return False
+    return result.stdout.strip() == "active"
+
+
 def show_status(pi) -> None:
+    silent = 0
     for number in SERVOS:
+        _, pin, _ = SERVOS[number]
+        silent += pi.get_servo_pulsewidth(pin) == 0
         print(describe(pi, number))
+    if silent == len(SERVOS):
+        print()
+        if service_active():
+            print("Service trash2trace jalan tetapi tidak mengirim sinyal servo.")
+            print("Biasanya Pi belum memakai kode terbaru: git pull, lalu sudo systemctl restart trash2trace.")
+            print("Lihat juga: journalctl -u trash2trace -n 30 --no-pager")
+        else:
+            print("Tidak ada program yang menahan servo (trash2trace berhenti).")
+            print("Untuk memberi sinyal dan melihat posisinya:")
+            print("  python3 scripts/cek_servo.py atur   lalu ketik: tengah")
 
 
 def run_live(pi) -> None:

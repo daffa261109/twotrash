@@ -1,4 +1,4 @@
-"""Pratinjau kamera. Satu foto disimpan, lalu dibaca MobileNet di Pi."""
+"""Pratinjau kamera di browser: gambar langsung, cincin LED, MobileNet dan tes API Sumopod."""
 
 from __future__ import annotations
 
@@ -15,8 +15,9 @@ from gpiozero import LED
 from picamera2 import Picamera2
 
 from servo.pins import ILLUMINATION_PIN
+from trash2trace.llm import LlmVision, list_models
 from trash2trace.ring import Ring
-from trash2trace.settings import ROOT
+from trash2trace.settings import ROOT, load_llm_config
 from trash2trace.vision import Classifier
 
 PREVIEW_SIZE = (640, 480)
@@ -51,6 +52,10 @@ PAGE = """<!DOCTYPE html>
       font-size: 16px;
     }
     button:disabled { background: #555; }
+    h2 { font-size: 16px; margin: 20px 0 8px; color: #ddd; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chips button { padding: 8px 12px; font-size: 14px; background: #3a3a3a; }
+    .small { font-size: 24px; }
     @media (max-width: 700px) {
       .row { flex-direction: column; }
     }
@@ -65,6 +70,19 @@ PAGE = """<!DOCTYPE html>
         <p class="kind" id="kind">Belum diambil</p>
         <p class="detail" id="detail">Arahkan benda, lalu ambil satu foto.</p>
         <button id="shoot" type="button">Ambil dan analisis</button>
+        <h2>Cincin LED</h2>
+        <div class="chips" id="ring-buttons">
+          <button type="button" data-mode="putih">Putih</button>
+          <button type="button" data-mode="merah">Merah</button>
+          <button type="button" data-mode="hijau">Hijau</button>
+          <button type="button" data-mode="biru">Biru</button>
+          <button type="button" data-mode="mati">Mati</button>
+        </div>
+        <p class="detail" id="ring-state">Memeriksa...</p>
+        <h2>API Sumopod</h2>
+        <button id="api" type="button">Tes API dengan gambar ini</button>
+        <p class="kind small" id="api-kind">Belum dites</p>
+        <p class="detail" id="api-detail"></p>
       </aside>
     </div>
   </main>
@@ -83,6 +101,31 @@ PAGE = """<!DOCTYPE html>
         document.getElementById("detail").textContent = "Permintaan tidak selesai";
       }
       button.disabled = false;
+    });
+
+    const ringState = document.getElementById("ring-state");
+    document.querySelectorAll("#ring-buttons button").forEach((chip) => {
+      chip.addEventListener("click", async () => {
+        const data = await fetch("/ring/" + chip.dataset.mode, { method: "POST" }).then((r) => r.json());
+        ringState.textContent = data.detail;
+      });
+    });
+    fetch("/status").then((r) => r.json()).then((data) => { ringState.textContent = data.ring; });
+
+    const apiButton = document.getElementById("api");
+    apiButton.addEventListener("click", async () => {
+      apiButton.disabled = true;
+      document.getElementById("api-kind").textContent = "Menghubungi Sumopod...";
+      document.getElementById("api-detail").textContent = "Bisa sampai 45 detik";
+      try {
+        const data = await fetch("/api", { method: "POST" }).then((r) => r.json());
+        document.getElementById("api-kind").textContent = data.text;
+        document.getElementById("api-detail").textContent = data.detail;
+      } catch (error) {
+        document.getElementById("api-kind").textContent = "Gagal";
+        document.getElementById("api-detail").textContent = "Permintaan tidak selesai";
+      }
+      apiButton.disabled = false;
     });
   </script>
 </body>
@@ -107,8 +150,35 @@ class Camera:
         )
         self._camera.start()
         _tune_colour(self._camera)
+        self._lamp_lock = threading.Lock()
         self._lamp = _lamp_on()
         time.sleep(1.0)
+
+    def ring_status(self) -> str:
+        if isinstance(self._lamp, Ring):
+            return "Cincin LED siap, putih menyala"
+        if self._lamp is not None:
+            return "Cincin tidak aktif, lampu GPIO 24 yang menyala (jalankan dengan sudo untuk cincin)"
+        return "Cincin tidak aktif: jalankan dengan sudo dan hentikan pigpiod"
+
+    def set_ring(self, mode: str) -> str:
+        colours = {
+            "putih": (255, 255, 255),
+            "merah": (255, 0, 0),
+            "hijau": (0, 255, 0),
+            "biru": (0, 0, 255),
+            "mati": (0, 0, 0),
+        }
+        if mode not in colours:
+            return "Warna tidak dikenal"
+        with self._lamp_lock:
+            if isinstance(self._lamp, Ring):
+                self._lamp.fill(*colours[mode])
+                return f"Cincin {mode}"
+            if self._lamp is not None:
+                (self._lamp.off if mode == "mati" else self._lamp.on)()
+                return f"Lampu GPIO 24 {'mati' if mode == 'mati' else 'nyala'}. Warna butuh cincin."
+        return self.ring_status()
 
     def jpeg(self) -> bytes:
         with self._lock:
@@ -197,22 +267,64 @@ class Capture:
             }
 
 
-def make_handler(camera: Camera, capture: Capture):
+class ApiCheck:
+    """Kirim gambar kamera saat ini ke Sumopod dan lapor hasilnya."""
+
+    def __init__(self, camera: Camera) -> None:
+        self._camera = camera
+        self._lock = threading.Lock()
+
+    def run(self) -> dict[str, str]:
+        with self._lock:
+            try:
+                config = load_llm_config()
+            except BaseException as exc:
+                return {"text": "Belum diatur", "detail": str(exc)[:180]}
+            try:
+                models = list_models(config)
+            except Exception as exc:
+                return {"text": "Gagal terhubung", "detail": str(exc)[:180]}
+            note = "" if config.model in models else f" · model {config.model} tidak ada di daftar"
+            started = time.monotonic()
+            try:
+                label, confidence = LlmVision(config).classify(self._camera.jpeg())
+            except Exception as exc:
+                return {"text": "Gagal klasifikasi", "detail": str(exc)[:180]}
+            took = time.monotonic() - started
+            text = _LABELS.get(label, label.upper())
+            print(f"[API] {text} {confidence:.2f} ({took:.1f} detik)")
+            return {
+                "text": text,
+                "detail": f"{confidence * 100:.0f}% · {config.model} · {took:.1f} detik{note}",
+            }
+
+
+def make_handler(camera: Camera, capture: Capture, api: ApiCheck):
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self) -> None:
             if self.path.startswith("/stream"):
                 self._stream()
                 return
+            if self.path.startswith("/status"):
+                self._json({"ring": camera.ring_status()})
+                return
             self._bytes(PAGE, "text/html; charset=utf-8")
 
         def do_POST(self) -> None:
             if self.path.startswith("/capture"):
-                self._bytes(
-                    json.dumps(capture.take()).encode("utf-8"),
-                    "application/json",
-                )
+                self._json(capture.take())
+                return
+            if self.path.startswith("/api"):
+                self._json(api.run())
+                return
+            if self.path.startswith("/ring/"):
+                mode = self.path.rsplit("/", 1)[-1]
+                self._json({"detail": camera.set_ring(mode)})
                 return
             self.send_error(404)
+
+        def _json(self, data: dict) -> None:
+            self._bytes(json.dumps(data).encode("utf-8"), "application/json")
 
         def _bytes(self, body: bytes, content_type: str) -> None:
             self.send_response(200)
@@ -250,7 +362,7 @@ def main(argv: list[str] | None = None) -> int:
 
     camera = Camera()
     capture = Capture(camera)
-    server = ThreadingHTTPServer(("0.0.0.0", args.port), make_handler(camera, capture))
+    server = ThreadingHTTPServer(("0.0.0.0", args.port), make_handler(camera, capture, ApiCheck(camera)))
     name = socket.gethostname()
     print(f"Kamera siap. Buka http://{name}.local:{args.port}")
     print(f"Foto disimpan di {CAPTURE_DIR}")
