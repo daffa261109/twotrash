@@ -39,6 +39,9 @@ OLED_FLIP = True
 WELCOME_TITLE = "TRASH2TRACE"
 WELCOME_SCROLL = "Buang sampah pada tempatnya"
 WIFI_INTERFACE = "wlan0"
+# Foto ke Sumopod dikecilkan dulu supaya unggahan dan balasan lebih cepat.
+LLM_IMAGE_WIDTH = 320
+LLM_IMAGE_QUALITY = 70
 ROI = (0.08, 0.05, 0.84, 0.90)
 
 

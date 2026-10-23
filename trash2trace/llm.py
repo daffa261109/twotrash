@@ -9,7 +9,7 @@ import urllib.error
 import urllib.request
 
 from trash2trace.labels import canonical_class
-from trash2trace.settings import LlmConfig, load_llm_config
+from trash2trace.settings import LLM_IMAGE_QUALITY, LLM_IMAGE_WIDTH, LlmConfig, load_llm_config
 
 _PROMPT = (
     "Classify the waste in this photo as exactly one label: "
@@ -27,6 +27,7 @@ class LlmVision:
         )
 
     def classify(self, jpeg: bytes) -> tuple[str, float]:
+        jpeg = _shrink(jpeg)
         payload = {
             "model": self.config.model,
             "temperature": 0,
@@ -37,7 +38,7 @@ class LlmVision:
                         {"type": "text", "text": _PROMPT},
                         {
                             "type": "image_url",
-                            "image_url": {"url": _data_url(jpeg)},
+                            "image_url": {"url": _data_url(jpeg), "detail": "low"},
                         },
                     ],
                 }
@@ -84,6 +85,28 @@ def _chat_url(endpoint: str) -> str:
     if endpoint.endswith("/chat/completions"):
         return endpoint
     return endpoint + "/chat/completions"
+
+
+def _shrink(jpeg: bytes) -> bytes:
+    """Kecilkan foto sebelum dikirim. Unggahan kecil lebih cepat di Pi Zero."""
+    try:
+        import cv2
+        import numpy as np
+
+        image = cv2.imdecode(np.frombuffer(jpeg, dtype=np.uint8), cv2.IMREAD_COLOR)
+        if image is None:
+            return jpeg
+        height, width = image.shape[:2]
+        if width > LLM_IMAGE_WIDTH:
+            image = cv2.resize(
+                image,
+                (LLM_IMAGE_WIDTH, round(height * LLM_IMAGE_WIDTH / width)),
+                interpolation=cv2.INTER_AREA,
+            )
+        ok, encoded = cv2.imencode(".jpg", image, [int(cv2.IMWRITE_JPEG_QUALITY), LLM_IMAGE_QUALITY])
+        return encoded.tobytes() if ok else jpeg
+    except Exception:
+        return jpeg
 
 
 def _data_url(jpeg: bytes) -> str:
