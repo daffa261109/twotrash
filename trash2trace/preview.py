@@ -434,6 +434,10 @@ def main(argv: list[str] | None = None) -> int:
     motion = SortMotion()
     capture = Capture(camera, motion)
     server = ThreadingHTTPServer(("0.0.0.0", args.port), make_handler(camera, capture, ApiCheck(camera, motion)))
+    # Aliran gambar di browser tidak pernah selesai sendiri. Tanpa dua baris ini,
+    # server_close() menunggu aliran itu dan Ctrl+C tidak pernah berhenti.
+    server.daemon_threads = True
+    server.block_on_close = False
     name = socket.gethostname()
     print(f"Kamera siap. Buka http://{name}.local:{args.port}")
     print(f"Foto disimpan di {CAPTURE_DIR}")
@@ -446,6 +450,7 @@ def main(argv: list[str] | None = None) -> int:
         server.server_close()
         motion.close()
         camera.close()
+        print("Kamera dan servo dilepas.")
     return 0
 
 
