@@ -420,7 +420,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--port", type=int, default=8080)
     args = parser.parse_args(argv)
 
-    camera = Camera()
+    try:
+        camera = Camera()
+    except RuntimeError as exc:
+        print(f"\n[GAGAL] Kamera tidak bisa dibuka: {exc}")
+        print("Kamera dipakai program lain (biasanya trash2trace atau preview lama). Bebaskan dulu:")
+        print("  sudo systemctl stop trash2trace")
+        print("  sudo pkill -f trash2trace.preview")
+        print("  sudo fuser -v /dev/media0 /dev/media1   # lihat siapa yang masih memakai")
+        return 1
     motion = SortMotion()
     capture = Capture(camera, motion)
     server = ThreadingHTTPServer(("0.0.0.0", args.port), make_handler(camera, capture, ApiCheck(camera)))
