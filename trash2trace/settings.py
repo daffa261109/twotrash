@@ -41,6 +41,15 @@ WELCOME_SCROLL = "Buang sampah pada tempatnya"
 WIFI_INTERFACE = "wlan0"
 # Foto ke Sumopod dikecilkan dulu supaya unggahan dan balasan lebih cepat.
 LLM_IMAGE_WIDTH = 320
+# Gerakan setelah AI membaca sampah (dipakai preview). Jenis "other" tidak menggerakkan servo.
+# Servo 1 memutar ke sudut ini dan menunggu. Servo 2 turun, naik lagi ke tegak (0),
+# lalu setelah jeda servo 1 kembali ke 0.
+SORT_ANGLES = {"organic": -45.0, "nonorganic": 45.0}
+SORT_SETTLE_S = 1.0
+TILT_DOWN_DEG = -45.0
+TILT_HOLD_S = 1.5
+TILT_UP_SETTLE_S = 1.0
+SORT_WAIT_S = 3.0
 LLM_IMAGE_QUALITY = 70
 ROI = (0.08, 0.05, 0.84, 0.90)
 

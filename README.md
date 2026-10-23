@@ -66,12 +66,25 @@ sudo systemctl stop trash2trace
 python3 -m trash2trace.preview
 ```
 
-Untuk menyalakan cincin LED putih selama pratinjau, jalankan dengan sudo dan hentikan `pigpiod` dulu (cincin dan pigpio sama-sama memakai PCM). Pasang library cincin sekali:
+Untuk menyalakan cincin LED putih selama pratinjau, jalankan dengan sudo. Cincin dan pigpio sama-sama memakai PCM, sedangkan servo butuh `pigpiod` tetap aktif. Supaya keduanya jalan bersamaan, jalankan `pigpiod` dengan timer PWM (`-t 0`) sekali saja:
+
+```bash
+sudo systemctl edit pigpiod
+```
+
+Isi dengan:
+
+```ini
+[Service]
+ExecStart=
+ExecStart=/usr/bin/pigpiod -l -t 0
+```
+
+Lalu `sudo systemctl restart pigpiod`. Pasang library cincin sekali:
 
 ```bash
 sudo apt install python3-dev gcc
 sudo python3 -m pip install --break-system-packages rpi-ws281x
-sudo systemctl stop pigpiod
 sudo python3 -m trash2trace.preview
 ```
 
@@ -79,8 +92,8 @@ Uji cepat tanpa browser: `sudo python3 scripts/test_parts.py camera` menyalakan 
 
 Buka `http://<nama-pi>.local:8080` dari komputer yang satu Wi-Fi dengan Pi. Gambar kamera ada di kiri. Panel di kanan punya tiga bagian:
 
-- **Ambil dan analisis**: menyimpan satu foto dan membacanya dengan Sumopod AI.
-- **Cincin LED**: tombol Putih, Merah, Hijau, Biru dan Mati. Butuh sudo dan pigpiod berhenti, kalau tidak panel memberi tahu bahwa cincin tidak aktif.
+- **Ambil dan analisis**: menyimpan satu foto dan membacanya dengan Sumopod AI. Setelah hasilnya muncul, servo bergerak: servo 1 memutar ke -45° (organik) atau +45° (nonorganik) dan tetap di sana, servo 2 turun lalu naik lagi ke tegak, dan setelah jeda beberapa detik servo 1 kembali ke titik awal. Jenis LAINNYA tidak menggerakkan servo. Sudut dan jeda ada di `trash2trace/settings.py` (`SORT_ANGLES`, `TILT_DOWN_DEG`, `SORT_WAIT_S`). Butuh `pigpiod` aktif.
+- **Cincin LED**: tombol Putih, Merah, Hijau, Biru dan Mati. Butuh sudo. Kalau cincin tidak bisa dipakai, panel memberi tahu bahwa cincin tidak aktif.
 - **API Sumopod**: mengecek koneksi dan kunci, lalu mengirim gambar kamera saat ini ke Sumopod dan menampilkan label, keyakinan dan waktu respons. Butuh `LLM_API_KEY` di `.env`. Ctrl+C menghentikan tes. Nyalakan pemilah lagi dengan:
 
 ```bash

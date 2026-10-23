@@ -17,7 +17,18 @@ from picamera2 import Picamera2
 from servo.pins import ILLUMINATION_PIN
 from trash2trace.llm import LlmVision, list_models
 from trash2trace.ring import Ring
-from trash2trace.settings import ROOT, load_llm_config
+from servo.pins import SERVO_PIN, SERVO_TILT_PIN
+from trash2trace.servo_driver import StableServo, connect_pigpio
+from trash2trace.settings import (
+    ROOT,
+    SORT_ANGLES,
+    SORT_SETTLE_S,
+    SORT_WAIT_S,
+    TILT_DOWN_DEG,
+    TILT_HOLD_S,
+    TILT_UP_SETTLE_S,
+    load_llm_config,
+)
 
 PREVIEW_SIZE = (640, 480)
 CAPTURE_DIR = ROOT / "captures"
@@ -228,11 +239,69 @@ def _tune_colour(camera) -> None:
         print(f"[WARN] Warna kamera: {exc}")
 
 
-class Capture:
-    """Simpan satu foto, lalu minta Sumopod AI membacanya."""
+class SortMotion:
+    """Gerakan servo setelah sampah terbaca. Butuh pigpiod aktif.
 
-    def __init__(self, camera: Camera) -> None:
+    Servo 1 memutar ke sudut jenis sampah dan tetap di sana. Servo 2 turun lalu naik
+    lagi ke tegak. Setelah jeda, servo 1 kembali ke titik awal.
+    """
+
+    def __init__(self) -> None:
+        self._pi = connect_pigpio()
+        self._busy = threading.Lock()
+        self._servo1 = StableServo(self._pi, SERVO_PIN)
+        self._servo2 = StableServo(self._pi, SERVO_TILT_PIN)
+        self._servo1.angle = 0
+        self._servo2.angle = 0
+
+    def start(self, label: str) -> str:
+        if self._pi is None:
+            return "servo mati (pigpiod tidak aktif)"
+        angle = SORT_ANGLES.get(label)
+        if angle is None:
+            return "servo diam"
+        if not self._busy.acquire(blocking=False):
+            return "servo masih bergerak"
+        threading.Thread(target=self._sequence, args=(angle,), daemon=True).start()
+        return f"servo 1 ke {angle:+.0f}°, servo 2 turun-naik"
+
+    def _sequence(self, angle: float) -> None:
+        try:
+            print(f"[SERVO] servo 1 ke {angle:+.0f}°")
+            self._servo1.angle = angle
+            time.sleep(SORT_SETTLE_S)
+            print(f"[SERVO] servo 2 turun {TILT_DOWN_DEG:+.0f}°")
+            self._servo2.angle = TILT_DOWN_DEG
+            time.sleep(TILT_HOLD_S)
+            print("[SERVO] servo 2 naik, tegak")
+            self._servo2.angle = 0
+            time.sleep(TILT_UP_SETTLE_S + SORT_WAIT_S)
+            print("[SERVO] servo 1 kembali ke titik awal")
+            self._servo1.angle = 0
+            time.sleep(SORT_SETTLE_S)
+        except Exception as exc:
+            print(f"[WARN] Gerakan servo: {exc}")
+        finally:
+            self._busy.release()
+            print("[SERVO] selesai")
+
+    def close(self) -> None:
+        if self._pi is None:
+            return
+        self._servo1.angle = 0
+        self._servo2.angle = 0
+        time.sleep(0.4)
+        self._servo1.detach()
+        self._servo2.detach()
+        self._pi.stop()
+
+
+class Capture:
+    """Simpan satu foto, minta Sumopod AI membacanya, lalu gerakkan servo."""
+
+    def __init__(self, camera: Camera, motion: SortMotion) -> None:
         self._camera = camera
+        self._motion = motion
         self._lock = threading.Lock()
 
     def take(self) -> dict[str, str]:
@@ -251,9 +320,10 @@ class Capture:
             took = time.monotonic() - started
             text = _LABELS.get(label, label.upper())
             print(f"[HASIL] {text} {confidence:.2f} ({took:.1f} detik)")
+            motion = self._motion.start(label)
             return {
                 "text": text,
-                "detail": f"{confidence * 100:.0f}% · {took:.1f} detik · {path.name}",
+                "detail": f"{confidence * 100:.0f}% · {took:.1f} detik · {motion}",
             }
 
 
@@ -351,7 +421,8 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     camera = Camera()
-    capture = Capture(camera)
+    motion = SortMotion()
+    capture = Capture(camera, motion)
     server = ThreadingHTTPServer(("0.0.0.0", args.port), make_handler(camera, capture, ApiCheck(camera)))
     name = socket.gethostname()
     print(f"Kamera siap. Buka http://{name}.local:{args.port}")
@@ -363,6 +434,7 @@ def main(argv: list[str] | None = None) -> int:
         print("\nBerhenti.")
     finally:
         server.server_close()
+        motion.close()
         camera.close()
     return 0
 
