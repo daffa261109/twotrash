@@ -34,13 +34,7 @@ flap2
 
 Sudut servo ada di `trash2trace/settings.py`. Organik ke kiri (`-60`), nonorganik ke kanan (`+60`), other di tengah (`0`). Ubah angka itu kalau posisi flap di mekanik berbeda.
 
-Satu foto dianalisis di Pi dengan **MobileNetV3-Small**. Unduh berkasnya sekali:
-
-```bash
-python3 scripts/download_models.py
-```
-
-Hasil bacaan model ditulis ke log sebagai `[MODEL]`. Servo belum ikut bergerak. Plastik, kertas, dan kaca dihitung nonorganik bila nama kelasnya ada di label model.
+Sampah dibaca oleh **Sumopod AI** lewat internet. Model lokal MobileNet tidak dipakai lagi. Isi `.env` dari `.env.example` dengan `LLM_API_KEY` Sumopod. Saat HC-SR04 melihat benda, mesin mengambil satu foto, mengirimnya ke Sumopod, lalu menampilkan ORGANIK, NONORGANIK atau LAINNYA di OLED dan mencatatnya di log sebagai `[AI] Sumopod`. Servo belum ikut bergerak. Tanpa kunci atau tanpa internet, foto tetap disimpan dan OLED menampilkan "AI GAGAL".
 
 ## Menjalankan
 
@@ -85,7 +79,7 @@ Uji cepat tanpa browser: `sudo python3 scripts/test_parts.py camera` menyalakan 
 
 Buka `http://<nama-pi>.local:8080` dari komputer yang satu Wi-Fi dengan Pi. Gambar kamera ada di kiri. Panel di kanan punya tiga bagian:
 
-- **Ambil dan analisis**: menyimpan satu foto dan membacanya dengan MobileNet di Pi.
+- **Ambil dan analisis**: menyimpan satu foto dan membacanya dengan Sumopod AI.
 - **Cincin LED**: tombol Putih, Merah, Hijau, Biru dan Mati. Butuh sudo dan pigpiod berhenti, kalau tidak panel memberi tahu bahwa cincin tidak aktif.
 - **API Sumopod**: mengecek koneksi dan kunci, lalu mengirim gambar kamera saat ini ke Sumopod dan menampilkan label, keyakinan dan waktu respons. Butuh `LLM_API_KEY` di `.env`. Ctrl+C menghentikan tes. Nyalakan pemilah lagi dengan:
 

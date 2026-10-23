@@ -10,6 +10,7 @@ from gpiozero import Buzzer, Device, DistanceSensor, LED
 from picamera2 import Picamera2
 
 from trash2trace.display import Display
+from trash2trace.llm import LlmVision
 from trash2trace.network import wifi_connected
 from trash2trace.servo_driver import StableServo, connect_pigpio
 from trash2trace.settings import (
@@ -28,7 +29,6 @@ from trash2trace.settings import (
     WELCOME_TITLE,
     Station,
 )
-from trash2trace.vision import Classifier, Prediction
 from servo.pins import (
     BUZZER_PIN,
     ECHO_PIN,
@@ -83,7 +83,7 @@ class Sorter:
         except Exception as exc:
             print(f"[WARN] Warna kamera: {exc}")
         time.sleep(1.2)
-        self.classifier = Classifier()
+        self.vision = _load_sumopod()
         self._armed = True
         self._lamp_on = False
         self._lamp_hold = False
@@ -132,6 +132,7 @@ class Sorter:
         kedua_cm = self.distance.distance * 100
         print(f"[HC] {self.station.title} barang: {pertama_cm:.1f} cm, {kedua_cm:.1f} cm")
         nama_foto = ""
+        path = None
         try:
             path = self._save_frame(self.camera.capture_array())
             nama_foto = path.name
@@ -141,6 +142,25 @@ class Sorter:
         if pertama_cm >= BUZZER_FROM_M * 100 or kedua_cm >= BUZZER_FROM_M * 100:
             print("[BUZZER] sekali")
             self._beep()
+        if path is not None:
+            self._read_with_sumopod(path)
+
+    def _read_with_sumopod(self, path) -> None:
+        """Kirim foto ke Sumopod dan tampilkan jenis sampah di OLED."""
+        if self.vision is None:
+            return
+        self.display.show("MEMBACA", "Sumopod AI...", path.name)
+        started = time.monotonic()
+        try:
+            label, confidence = self.vision.classify(path.read_bytes())
+        except Exception as exc:
+            print(f"[WARN] Sumopod: {exc}")
+            self.display.show("AI GAGAL", str(exc)[:20], path.name)
+            return
+        took = time.monotonic() - started
+        text = _LABEL_TEXT.get(label, label.upper())
+        print(f"[AI] Sumopod {label} | yakin={confidence:.2f} | {took:.1f} detik | foto={path.name}")
+        self.display.show(text, f"AI {confidence * 100:.0f}%", f"{took:.1f} detik")
 
     def _set_illumination(self, ada_barang: bool) -> None:
         if ada_barang == self._lamp_on:
@@ -164,12 +184,6 @@ class Sorter:
             raise RuntimeError(f"Gagal menyimpan {path}")
         print(f"[FOTO] {path}")
         return path
-
-    def _log_model(self, decision: Prediction, path, distance_m: float) -> None:
-        print(
-            f"[HASIL] {decision.label} | jarak={distance_m * 100:.1f} cm | "
-            f"mentah={decision.raw_label} | yakin={decision.confidence:.2f} | foto={path.name}"
-        )
 
     def _actuate(self, label: str, confidence: float) -> None:
         angle = self.station.angle_for(label)
@@ -250,6 +264,18 @@ class Sorter:
             action()
         except Exception as exc:
             print(f"[WARN] {exc}")
+
+
+_LABEL_TEXT = {"organic": "ORGANIK", "nonorganic": "NONORGANIK", "other": "LAINNYA"}
+
+
+def _load_sumopod():
+    """Pembaca sampah: Sumopod AI lewat internet. Tanpa kunci, foto tetap disimpan."""
+    try:
+        return LlmVision()
+    except (Exception, SystemExit) as exc:
+        print(f"[WARN] Sumopod belum siap, sampah tidak dibaca AI: {exc}")
+        return None
 
 
 def _use_pigpio_if_available() -> None:

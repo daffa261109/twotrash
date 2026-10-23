@@ -1,4 +1,4 @@
-"""Pratinjau kamera di browser: gambar langsung, cincin LED, MobileNet dan tes API Sumopod."""
+"""Pratinjau kamera di browser: gambar langsung, cincin LED, dan pembacaan sampah oleh Sumopod AI."""
 
 from __future__ import annotations
 
@@ -18,7 +18,6 @@ from servo.pins import ILLUMINATION_PIN
 from trash2trace.llm import LlmVision, list_models
 from trash2trace.ring import Ring
 from trash2trace.settings import ROOT, load_llm_config
-from trash2trace.vision import Classifier
 
 PREVIEW_SIZE = (640, 480)
 CAPTURE_DIR = ROOT / "captures"
@@ -230,16 +229,10 @@ def _tune_colour(camera) -> None:
 
 
 class Capture:
+    """Simpan satu foto, lalu minta Sumopod AI membacanya."""
+
     def __init__(self, camera: Camera) -> None:
         self._camera = camera
-        self._model_error = ""
-        try:
-            self._classifier = Classifier()
-        except Exception as exc:
-            # Pratinjau tetap jalan walau model belum bisa dimuat.
-            self._classifier = None
-            self._model_error = str(exc)
-            print(f"[WARN] Model belum siap, hanya foto yang disimpan: {exc}")
         self._lock = threading.Lock()
 
     def take(self) -> dict[str, str]:
@@ -249,21 +242,18 @@ class Capture:
             path = CAPTURE_DIR / f"{datetime.now():%Y%m%d-%H%M%S}.jpg"
             path.write_bytes(image)
             print(f"[FOTO] {path}")
-            if self._classifier is None:
-                return {
-                    "text": "Foto disimpan",
-                    "detail": f"{path.name} · model belum siap: {self._model_error[:120]}",
-                }
+            started = time.monotonic()
             try:
-                prediction = self._classifier.predict_file(path)
-            except Exception as exc:
-                print(f"[WARN] Model: {exc}")
-                return {"text": "Gagal", "detail": str(exc)[:180]}
-            text = _LABELS.get(prediction.label, prediction.label.upper())
-            print(f"[HASIL] {text} {prediction.confidence:.2f}")
+                label, confidence = LlmVision(load_llm_config()).classify(image)
+            except (Exception, SystemExit) as exc:
+                print(f"[WARN] Sumopod: {exc}")
+                return {"text": "Foto disimpan", "detail": f"{path.name} · Sumopod gagal: {str(exc)[:140]}"}
+            took = time.monotonic() - started
+            text = _LABELS.get(label, label.upper())
+            print(f"[HASIL] {text} {confidence:.2f} ({took:.1f} detik)")
             return {
                 "text": text,
-                "detail": f"{prediction.confidence * 100:.0f}% · {path.name}",
+                "detail": f"{confidence * 100:.0f}% · {took:.1f} detik · {path.name}",
             }
 
 
