@@ -11,6 +11,8 @@
     python3 scripts/test_parts.py oled
     sudo python3 scripts/test_parts.py ring
     sudo python3 scripts/test_parts.py camera
+    sudo python3 scripts/test_parts.py api
+    sudo python3 scripts/test_parts.py cek
 """
 
 from __future__ import annotations
@@ -240,7 +242,7 @@ def test_ring() -> None:
     print("Selesai.")
 
 
-def test_camera() -> None:
+def test_camera() -> Path | None:
     from datetime import datetime
 
     from picamera2 import Picamera2
@@ -258,6 +260,7 @@ def test_camera() -> None:
         print(f"  cincin tidak menyala ({exc}). Foto tetap diambil tanpa cincin.")
         print("  Untuk cincin: sudo systemctl stop pigpiod, lalu sudo python3 scripts/test_parts.py camera")
 
+    path = None
     camera = Picamera2()
     try:
         camera.configure(camera.create_still_configuration(main={"size": (1280, 960)}))
@@ -278,11 +281,102 @@ def test_camera() -> None:
         if ring is not None:
             ring.close()
     print("Selesai.")
+    return path
+
+
+def test_api(photo: Path | None = None) -> bool:
+    import json
+    import urllib.error
+    import urllib.request
+
+    from trash2trace.llm import LlmVision
+    from trash2trace.settings import CAPTURE_DIR, load_llm_config
+
+    print("API Sumopod (LLM pembaca gambar). Butuh internet dan LLM_API_KEY di file .env.")
+    config = load_llm_config()
+    key = config.api_key
+    print(f"  endpoint: {config.endpoint}")
+    print(f"  model:    {config.model}")
+    print(f"  kunci:    ...{key[-4:]}" if len(key) > 4 else "  kunci:    (terlalu pendek)")
+
+    request = urllib.request.Request(
+        config.endpoint.rstrip("/") + "/models",
+        headers={"Authorization": f"Bearer {key}"},
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=20) as response:
+            models = [item.get("id") for item in json.loads(response.read()).get("data", [])]
+        print(f"  koneksi dan kunci OK, {len(models)} model tersedia")
+        if config.model not in models:
+            print(f"  [WARN] model {config.model} tidak ada di daftar Sumopod")
+    except urllib.error.HTTPError as exc:
+        print(f"  GAGAL: server menjawab {exc.code}. Kunci salah atau akun tidak aktif.")
+        return False
+    except Exception as exc:
+        print(f"  GAGAL terhubung: {exc}")
+        return False
+
+    if photo is None:
+        photos = sorted(CAPTURE_DIR.glob("*.jpg"), key=lambda item: item.stat().st_mtime)
+        if not photos:
+            print("  Belum ada foto di captures/. Jalankan dulu: sudo python3 scripts/test_parts.py camera")
+            return False
+        photo = photos[-1]
+    print(f"  foto: {photo.name}")
+
+    import cv2
+
+    frame = cv2.imread(str(photo))
+    if frame is None:
+        print("  GAGAL: foto tidak terbaca")
+        return False
+    height, width = frame.shape[:2]
+    if width > 640:
+        frame = cv2.resize(frame, (640, round(height * 640 / width)))
+    ok, jpeg = cv2.imencode(".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
+    if not ok:
+        print("  GAGAL: foto tidak bisa dikecilkan")
+        return False
+
+    started = time.monotonic()
+    try:
+        label, confidence = LlmVision(config).classify(jpeg.tobytes())
+    except Exception as exc:
+        print(f"  GAGAL klasifikasi: {exc}")
+        return False
+    print(f"  hasil: {label}  yakin={confidence:.2f}  ({time.monotonic() - started:.1f} detik)")
+    print("Selesai.")
+    return True
+
+
+def test_cek() -> None:
+    """Cincin LED, kamera, lalu API Sumopod dengan foto dari kamera."""
+    results: dict[str, str] = {}
+    photo = None
+    for name, action in (("cincin LED", test_ring), ("kamera", test_camera)):
+        print(f"\n=== {name} ===")
+        try:
+            outcome = action()
+            results[name] = "dilewati, butuh sudo" if name == "cincin LED" and os.geteuid() != 0 else "jalan"
+            if name == "kamera":
+                photo = outcome
+        except BaseException as exc:
+            results[name] = f"GAGAL: {exc}"
+            print(f"  GAGAL: {exc}")
+    print("\n=== API Sumopod ===")
+    try:
+        results["API Sumopod"] = "OK" if test_api(photo) else "GAGAL"
+    except BaseException as exc:
+        results["API Sumopod"] = f"GAGAL: {exc}"
+        print(f"  GAGAL: {exc}")
+    print("\nRingkasan:")
+    for name, state in results.items():
+        print(f"  {name}: {state}")
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Uji satu komponen.")
-    parser.add_argument("bagian", choices=("buzzer", "hc", "led", "lamp", "servo", "servo1", "servo1_kanan90", "servo2", "oled", "ring", "camera"))
+    parser.add_argument("bagian", choices=("buzzer", "hc", "led", "lamp", "servo", "servo1", "servo1_kanan90", "servo2", "oled", "ring", "camera", "api", "cek"))
     args = parser.parse_args()
     {
         "buzzer": test_buzzer,
@@ -296,6 +390,8 @@ def main() -> None:
         "oled": test_oled,
         "ring": test_ring,
         "camera": test_camera,
+        "api": test_api,
+        "cek": test_cek,
     }[args.bagian]()
 
 
