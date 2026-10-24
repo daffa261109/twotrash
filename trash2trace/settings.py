@@ -1,4 +1,4 @@
-"""Pengaturan mesin. Sudut ada di STATIONS. LLM diisi lewat file .env."""
+"""Pengaturan mesin. Sudut ada di STATIONS. Token API diisi lewat file .env."""
 
 from __future__ import annotations
 
@@ -24,7 +24,7 @@ CLEAR_DISTANCE_M = 0.10
 # Buzzer sekali jika salah satu bacaan bukan di bawah angka ini.
 BUZZER_FROM_M = 0.045
 SETTLE_AFTER_DETECT_S = 0.18
-# Satu foto per sampah, dibaca Sumopod AI.
+# Satu foto per sampah, dibaca API bridge.
 FRAMES_PER_DECISION = 1
 FRAME_GAP_S = 0.07
 SERVO_HOLD_S = 1.45
@@ -39,8 +39,9 @@ OLED_FLIP = True
 WELCOME_TITLE = "TRASH2TRACE"
 WELCOME_SCROLL = "Buang sampah pada tempatnya"
 WIFI_INTERFACE = "wlan0"
-# Foto ke Sumopod dikecilkan dulu supaya unggahan dan balasan lebih cepat.
+# Foto ke API dikecilkan dulu supaya unggahan lebih cepat.
 LLM_IMAGE_WIDTH = 320
+BRIDGE_TIMEOUT_S = 45
 # Gerakan setelah AI membaca sampah (dipakai preview). Jenis "other" tidak menggerakkan servo.
 # Servo 1 memutar ke sudut ini dan menunggu. Servo 2 turun, naik lagi ke tegak (0),
 # lalu setelah jeda servo 1 kembali ke 0.
@@ -85,34 +86,19 @@ STATIONS = {
 
 
 @dataclass(frozen=True)
-class LlmConfig:
-    provider: str
+class BridgeConfig:
     endpoint: str
-    api_key: str
-    model: str
+    token: str
 
 
-def load_llm_config() -> LlmConfig:
+def load_bridge_config() -> BridgeConfig:
     _load_env_file(ENV_PATH)
-    config = LlmConfig(
-        provider=os.environ.get("LLM_PROVIDER", "").strip(),
-        endpoint=os.environ.get("LLM_ENDPOINT", "").strip(),
-        api_key=os.environ.get("LLM_API_KEY", "").strip(),
-        model=os.environ.get("LLM_MODEL", "").strip(),
+    config = BridgeConfig(
+        endpoint=os.environ.get("API_ENDPOINT", "https://twotrash.wbesoft.com/classify").strip(),
+        token=os.environ.get("API_TOKEN", "").strip(),
     )
-    missing = [
-        name
-        for name, value in (
-            ("LLM_PROVIDER", config.provider),
-            ("LLM_ENDPOINT", config.endpoint),
-            ("LLM_API_KEY", config.api_key),
-            ("LLM_MODEL", config.model),
-        )
-        if not value
-    ]
-    if missing:
-        joined = ", ".join(missing)
-        raise SystemExit(f"Isi {joined} di file .env")
+    if not config.token:
+        raise SystemExit("Isi API_TOKEN di file .env, sama dengan token di server.")
     return config
 
 

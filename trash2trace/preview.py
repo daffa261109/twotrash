@@ -1,4 +1,4 @@
-"""Pratinjau kamera di browser: gambar langsung, cincin LED, dan pembacaan sampah oleh Sumopod AI."""
+"""Pratinjau kamera di browser: gambar langsung, cincin LED, dan pembacaan sampah oleh API."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ from gpiozero import LED
 from picamera2 import Picamera2
 
 from servo.pins import ILLUMINATION_PIN
-from trash2trace.llm import LlmVision, list_models
+from trash2trace.bridge import BridgeVision, ping
 from trash2trace.ring import Ring
 from servo.pins import SERVO_PIN, SERVO_TILT_PIN
 from trash2trace.servo_driver import StableServo, connect_pigpio
@@ -27,7 +27,7 @@ from trash2trace.settings import (
     TILT_DOWN_DEG,
     TILT_HOLD_S,
     TILT_UP_SETTLE_S,
-    load_llm_config,
+    load_bridge_config,
 )
 
 PREVIEW_SIZE = (640, 480)
@@ -89,7 +89,7 @@ PAGE = """<!DOCTYPE html>
           <button type="button" data-mode="mati">Mati</button>
         </div>
         <p class="detail" id="ring-state">Memeriksa...</p>
-        <h2>API Sumopod</h2>
+        <h2>API</h2>
         <button id="api" type="button">Tes API dengan gambar ini</button>
         <p class="kind small" id="api-kind">Belum dites</p>
         <p class="detail" id="api-detail"></p>
@@ -125,7 +125,7 @@ PAGE = """<!DOCTYPE html>
     const apiButton = document.getElementById("api");
     apiButton.addEventListener("click", async () => {
       apiButton.disabled = true;
-      document.getElementById("api-kind").textContent = "Menghubungi Sumopod...";
+      document.getElementById("api-kind").textContent = "Menghubungi API...";
       document.getElementById("api-detail").textContent = "Bisa sampai 45 detik";
       try {
         const data = await fetch("/api", { method: "POST" }).then((r) => r.json());
@@ -297,7 +297,7 @@ class SortMotion:
 
 
 class Capture:
-    """Simpan satu foto, minta Sumopod AI membacanya, lalu gerakkan servo."""
+    """Simpan satu foto, minta API membacanya, lalu gerakkan servo."""
 
     def __init__(self, camera: Camera, motion: SortMotion) -> None:
         self._camera = camera
@@ -313,22 +313,22 @@ class Capture:
             print(f"[FOTO] {path}")
             started = time.monotonic()
             try:
-                label, confidence = LlmVision(load_llm_config()).classify(image)
+                label, _confidence = BridgeVision().classify(image)
             except (Exception, SystemExit) as exc:
-                print(f"[WARN] Sumopod: {exc}")
-                return {"text": "Foto disimpan", "detail": f"{path.name} · Sumopod gagal: {str(exc)[:140]}"}
+                print(f"[WARN] API: {exc}")
+                return {"text": "Foto disimpan", "detail": f"{path.name} · API gagal: {str(exc)[:140]}"}
             took = time.monotonic() - started
             text = _LABELS.get(label, label.upper())
-            print(f"[HASIL] {text} {confidence:.2f} ({took:.1f} detik)")
+            print(f"[HASIL] {text} ({took:.1f} detik)")
             motion = self._motion.start(label)
             return {
                 "text": text,
-                "detail": f"{confidence * 100:.0f}% · {took:.1f} detik · {motion}",
+                "detail": f"{took:.1f} detik · {motion}",
             }
 
 
 class ApiCheck:
-    """Kirim gambar kamera saat ini ke Sumopod, lapor hasilnya, lalu gerakkan servo."""
+    """Kirim gambar kamera saat ini ke API, lapor hasilnya, lalu gerakkan servo."""
 
     def __init__(self, camera: Camera, motion: SortMotion) -> None:
         self._camera = camera
@@ -338,26 +338,25 @@ class ApiCheck:
     def run(self) -> dict[str, str]:
         with self._lock:
             try:
-                config = load_llm_config()
+                config = load_bridge_config()
             except BaseException as exc:
                 return {"text": "Belum diatur", "detail": str(exc)[:180]}
             try:
-                models = list_models(config)
+                status = ping(config)
             except Exception as exc:
                 return {"text": "Gagal terhubung", "detail": str(exc)[:180]}
-            note = "" if config.model in models else f" · model {config.model} tidak ada di daftar"
             started = time.monotonic()
             try:
-                label, confidence = LlmVision(config).classify(self._camera.jpeg())
+                label, _confidence = BridgeVision(config).classify(self._camera.jpeg())
             except Exception as exc:
                 return {"text": "Gagal klasifikasi", "detail": str(exc)[:180]}
             took = time.monotonic() - started
             text = _LABELS.get(label, label.upper())
-            print(f"[API] {text} {confidence:.2f} ({took:.1f} detik)")
+            print(f"[API] {text} ({took:.1f} detik)")
             motion = self._motion.start(label)
             return {
                 "text": text,
-                "detail": f"{confidence * 100:.0f}% · {config.model} · {took:.1f} detik · {motion}{note}",
+                "detail": f"{status} · {took:.1f} detik · {motion}",
             }
 
 

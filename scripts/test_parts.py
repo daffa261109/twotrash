@@ -322,33 +322,16 @@ def test_camera() -> Path | None:
 
 
 def test_api(photo: Path | None = None) -> bool:
-    import json
-    import urllib.error
-    import urllib.request
+    from trash2trace.bridge import BridgeVision, ping
+    from trash2trace.settings import CAPTURE_DIR, load_bridge_config
 
-    from trash2trace.llm import LlmVision
-    from trash2trace.settings import CAPTURE_DIR, load_llm_config
-
-    print("API Sumopod (LLM pembaca gambar). Butuh internet dan LLM_API_KEY di file .env.")
-    config = load_llm_config()
-    key = config.api_key
+    print("API bridge twotrash.wbesoft.com. Butuh internet dan API_TOKEN di file .env.")
+    config = load_bridge_config()
     print(f"  endpoint: {config.endpoint}")
-    print(f"  model:    {config.model}")
-    print(f"  kunci:    ...{key[-4:]}" if len(key) > 4 else "  kunci:    (terlalu pendek)")
-
-    request = urllib.request.Request(
-        config.endpoint.rstrip("/") + "/models",
-        headers={"Authorization": f"Bearer {key}"},
-    )
+    print(f"  token:    ...{config.token[-4:]}" if len(config.token) > 4 else "  token:    (terlalu pendek)")
     try:
-        with urllib.request.urlopen(request, timeout=20) as response:
-            models = [item.get("id") for item in json.loads(response.read()).get("data", [])]
-        print(f"  koneksi dan kunci OK, {len(models)} model tersedia")
-        if config.model not in models:
-            print(f"  [WARN] model {config.model} tidak ada di daftar Sumopod")
-    except urllib.error.HTTPError as exc:
-        print(f"  GAGAL: server menjawab {exc.code}. Kunci salah atau akun tidak aktif.")
-        return False
+        status = ping(config)
+        print(f"  server merespons: {status}")
     except Exception as exc:
         print(f"  GAGAL terhubung: {exc}")
         return False
@@ -377,7 +360,7 @@ def test_api(photo: Path | None = None) -> bool:
 
     started = time.monotonic()
     try:
-        label, confidence = LlmVision(config).classify(jpeg.tobytes())
+        label, confidence = BridgeVision(config).classify(jpeg.tobytes())
     except Exception as exc:
         print(f"  GAGAL klasifikasi: {exc}")
         return False
@@ -387,7 +370,7 @@ def test_api(photo: Path | None = None) -> bool:
 
 
 def test_cek() -> None:
-    """Cincin LED, kamera, lalu API Sumopod dengan foto dari kamera."""
+    """Cincin LED, kamera, lalu API dengan foto dari kamera."""
     results: dict[str, str] = {}
     photo = None
     for name, action in (("cincin LED", test_ring), ("kamera", test_camera)):
@@ -400,11 +383,11 @@ def test_cek() -> None:
         except BaseException as exc:
             results[name] = f"GAGAL: {exc}"
             print(f"  GAGAL: {exc}")
-    print("\n=== API Sumopod ===")
+    print("\n=== API ===")
     try:
-        results["API Sumopod"] = "OK" if test_api(photo) else "GAGAL"
+        results["API"] = "OK" if test_api(photo) else "GAGAL"
     except BaseException as exc:
-        results["API Sumopod"] = f"GAGAL: {exc}"
+        results["API"] = f"GAGAL: {exc}"
         print(f"  GAGAL: {exc}")
     print("\nRingkasan:")
     for name, state in results.items():

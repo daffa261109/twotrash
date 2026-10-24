@@ -10,7 +10,7 @@ from gpiozero import Buzzer, Device, DistanceSensor, LED
 from picamera2 import Picamera2
 
 from trash2trace.display import Display
-from trash2trace.llm import LlmVision
+from trash2trace.bridge import BridgeVision
 from trash2trace.network import wifi_connected
 from trash2trace.servo_driver import StableServo, connect_pigpio
 from trash2trace.settings import (
@@ -83,7 +83,7 @@ class Sorter:
         except Exception as exc:
             print(f"[WARN] Warna kamera: {exc}")
         time.sleep(1.2)
-        self.vision = _load_sumopod()
+        self.vision = _load_bridge()
         self._armed = True
         self._lamp_on = False
         self._lamp_hold = False
@@ -143,24 +143,24 @@ class Sorter:
             print("[BUZZER] sekali")
             self._beep()
         if path is not None:
-            self._read_with_sumopod(path)
+            self._read_with_bridge(path)
 
-    def _read_with_sumopod(self, path) -> None:
-        """Kirim foto ke Sumopod dan tampilkan jenis sampah di OLED."""
+    def _read_with_bridge(self, path) -> None:
+        """Kirim foto ke API bridge dan tampilkan jenis sampah di OLED."""
         if self.vision is None:
             return
-        self.display.show("MEMBACA", "Sumopod AI...", path.name)
+        self.display.show("MEMBACA", "API...", path.name)
         started = time.monotonic()
         try:
-            label, confidence = self.vision.classify(path.read_bytes())
+            label, _confidence = self.vision.classify(path.read_bytes())
         except Exception as exc:
-            print(f"[WARN] Sumopod: {exc}")
+            print(f"[WARN] API: {exc}")
             self.display.show("AI GAGAL", str(exc)[:20], path.name)
             return
         took = time.monotonic() - started
         text = _LABEL_TEXT.get(label, label.upper())
-        print(f"[AI] Sumopod {label} | yakin={confidence:.2f} | {took:.1f} detik | foto={path.name}")
-        self.display.show(text, f"AI {confidence * 100:.0f}%", f"{took:.1f} detik")
+        print(f"[AI] {label} | {took:.1f} detik | foto={path.name}")
+        self.display.show(text, f"{took:.1f} detik", path.name)
 
     def _set_illumination(self, ada_barang: bool) -> None:
         if ada_barang == self._lamp_on:
@@ -269,12 +269,12 @@ class Sorter:
 _LABEL_TEXT = {"organic": "ORGANIK", "nonorganic": "NONORGANIK", "other": "LAINNYA"}
 
 
-def _load_sumopod():
-    """Pembaca sampah: Sumopod AI lewat internet. Tanpa kunci, foto tetap disimpan."""
+def _load_bridge():
+    """Pembaca sampah: API bridge lewat internet. Tanpa token, foto tetap disimpan."""
     try:
-        return LlmVision()
+        return BridgeVision()
     except (Exception, SystemExit) as exc:
-        print(f"[WARN] Sumopod belum siap, sampah tidak dibaca AI: {exc}")
+        print(f"[WARN] API belum siap, sampah tidak dibaca: {exc}")
         return None
 
 

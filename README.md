@@ -34,7 +34,7 @@ flap2
 
 Sudut servo ada di `trash2trace/settings.py`. Organik ke kiri (`-60`), nonorganik ke kanan (`+60`), other di tengah (`0`). Ubah angka itu kalau posisi flap di mekanik berbeda.
 
-Sampah dibaca oleh **Sumopod AI** lewat internet. Model lokal MobileNet tidak dipakai lagi. Isi `.env` dari `.env.example` dengan `LLM_API_KEY` Sumopod. Saat HC-SR04 melihat benda, mesin mengambil satu foto, mengirimnya ke Sumopod, lalu menampilkan ORGANIK, NONORGANIK atau LAINNYA di OLED dan mencatatnya di log sebagai `[AI] Sumopod`. Servo belum ikut bergerak. Tanpa kunci atau tanpa internet, foto tetap disimpan dan OLED menampilkan "AI GAGAL".
+Sampah dibaca oleh **API bridge** `https://twotrash.wbesoft.com/classify`. Isi `.env` dari `.env.example` dengan `API_TOKEN` yang sama dengan token di server. Saat HC-SR04 melihat benda, mesin mengambil satu foto, mengirimnya ke API, lalu menampilkan ORGANIK, NONORGANIK atau LAINNYA di OLED. Servo belum ikut bergerak. Tanpa token atau tanpa internet, foto tetap disimpan dan OLED menampilkan "AI GAGAL".
 
 ## Menjalankan
 
@@ -92,9 +92,9 @@ Uji cepat tanpa browser: `sudo python3 scripts/test_parts.py camera` menyalakan 
 
 Buka `http://<nama-pi>.local:8080` dari komputer yang satu Wi-Fi dengan Pi. Gambar kamera ada di kiri. Panel di kanan punya tiga bagian:
 
-- **Ambil dan analisis**: menyimpan satu foto dan membacanya dengan Sumopod AI. Setelah hasilnya muncul, servo bergerak: servo 1 memutar ke -45° (organik) atau +45° (nonorganik) dan tetap di sana, servo 2 turun lalu naik lagi ke tegak, dan setelah jeda beberapa detik servo 1 kembali ke titik awal. Jenis LAINNYA tidak menggerakkan servo. Sudut dan jeda ada di `trash2trace/settings.py` (`SORT_ANGLES`, `TILT_DOWN_DEG`, `SORT_WAIT_S`). Butuh `pigpiod` aktif.
+- **Ambil dan analisis**: menyimpan satu foto dan membacanya dengan API. Setelah hasilnya muncul, servo bergerak: servo 1 memutar ke -45° (organik) atau +45° (nonorganik) dan tetap di sana, servo 2 turun lalu naik lagi ke tegak, dan setelah jeda beberapa detik servo 1 kembali ke titik awal. Jenis LAINNYA tidak menggerakkan servo. Sudut dan jeda ada di `trash2trace/settings.py` (`SORT_ANGLES`, `TILT_DOWN_DEG`, `SORT_WAIT_S`). Butuh `pigpiod` aktif.
 - **Cincin LED**: tombol Putih, Merah, Hijau, Biru dan Mati. Butuh sudo. Kalau cincin tidak bisa dipakai, panel memberi tahu bahwa cincin tidak aktif.
-- **API Sumopod**: mengecek koneksi dan kunci, lalu mengirim gambar kamera saat ini ke Sumopod dan menampilkan label, keyakinan dan waktu respons. Servo ikut bergerak seperti pada tombol di atas. Butuh `LLM_API_KEY` di `.env`. Ctrl+C menghentikan tes. Nyalakan pemilah lagi dengan:
+- **API**: mengecek server, lalu mengirim gambar kamera saat ini ke API dan menampilkan ORGANIK, NONORGANIK atau LAINNYA. Servo ikut bergerak seperti pada tombol di atas. Butuh `API_TOKEN` di `.env`. Ctrl+C menghentikan tes. Nyalakan pemilah lagi dengan:
 
 ```bash
 sudo systemctl start trash2trace
