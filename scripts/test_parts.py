@@ -8,6 +8,8 @@
     python3 scripts/test_parts.py servo1
     python3 scripts/test_parts.py servo1_kanan90
     python3 scripts/test_parts.py servo2
+    python3 scripts/test_parts.py urut_kiri [--sudut 45] [--turun -45]
+    python3 scripts/test_parts.py urut_kanan [--sudut 45] [--turun -45]
     python3 scripts/test_parts.py oled
     sudo python3 scripts/test_parts.py ring
     sudo python3 scripts/test_parts.py camera
@@ -29,6 +31,7 @@ sys.path.insert(0, str(ROOT))
 from gpiozero import Buzzer, Device, DistanceSensor, LED
 
 from trash2trace.servo_driver import StableServo, connect_pigpio
+from trash2trace.settings import TILT_DOWN_DEG
 from servo.pins import (
     BUZZER_PIN,
     ECHO_PIN,
@@ -163,6 +166,40 @@ def test_servo1_kanan90() -> None:
         (("tengah", 0), ("kanan", 90), ("tengah", 0)),
         hold_s=3.0,
     )
+
+
+def _test_urut(arah: str, sudut: float, turun: float) -> None:
+    """Servo 1 memutar, servo 2 turun-naik, lalu servo 1 kembali. Arah kiri = sudut negatif."""
+    angle = -abs(sudut) if arah == "kiri" else abs(sudut)
+    print(f"Urutan: servo 1 {arah} {abs(sudut):.0f}°, servo 2 turun {turun:+.0f}° lalu naik, servo 1 kembali.")
+    print("Hentikan trash2trace dulu: sudo systemctl stop trash2trace")
+    pi = connect_pigpio()
+    if pi is None:
+        return
+    servo1 = StableServo(pi, SERVO_PIN)
+    servo2 = StableServo(pi, SERVO_TILT_PIN)
+    try:
+        print("  kedua servo ke tengah, tunggu 1 detik")
+        servo1.angle = 0
+        servo2.angle = 0
+        time.sleep(1.0)
+        print(f"  servo 1 {arah} {angle:+.0f}°, tunggu 1 detik")
+        servo1.angle = angle
+        time.sleep(1.0)
+        print(f"  servo 2 turun {turun:+.0f}°, tunggu 2 detik")
+        servo2.angle = turun
+        time.sleep(2.0)
+        print("  servo 2 naik ke tegak (0°), tunggu 1 detik")
+        servo2.angle = 0
+        time.sleep(1.0)
+        print("  servo 1 kembali ke posisi awal (0°)")
+        servo1.angle = 0
+        time.sleep(1.0)
+    finally:
+        servo1.detach()
+        servo2.detach()
+        pi.stop()
+    print("Selesai.")
 
 
 def test_servo2() -> None:
@@ -376,8 +413,13 @@ def test_cek() -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Uji satu komponen.")
-    parser.add_argument("bagian", choices=("buzzer", "hc", "led", "lamp", "servo", "servo1", "servo1_kanan90", "servo2", "oled", "ring", "camera", "api", "cek"))
+    parser.add_argument("bagian", choices=("buzzer", "hc", "led", "lamp", "servo", "servo1", "servo1_kanan90", "servo2", "urut_kiri", "urut_kanan", "oled", "ring", "camera", "api", "cek"))
+    parser.add_argument("--sudut", type=float, default=45.0, help="sudut servo 1 untuk urut_kiri/urut_kanan")
+    parser.add_argument("--turun", type=float, default=TILT_DOWN_DEG, help="sudut servo 2 saat turun")
     args = parser.parse_args()
+    if args.bagian in ("urut_kiri", "urut_kanan"):
+        _test_urut(args.bagian.removeprefix("urut_"), args.sudut, args.turun)
+        return
     {
         "buzzer": test_buzzer,
         "hc": test_hc,
