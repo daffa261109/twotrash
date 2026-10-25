@@ -302,6 +302,29 @@ def _open_webcam(cv2, index: int):
     return cv2.VideoCapture(index, cv2.CAP_V4L2)
 
 
+def _frame_usable(frame) -> bool:
+    if frame is None or getattr(frame, "size", 0) == 0 or getattr(frame, "ndim", 0) != 3:
+        return False
+    blue, green, red = (float(frame[:, :, channel].mean()) for channel in range(3))
+    # Gambar hijau polos: kanal warna gagal, biasanya karena resolusi USB terlalu besar.
+    return not (green > 40 and blue < 15 and red < 15)
+
+
+def _grab_webcam(cv2, camera):
+    # XVV-6320S jatuh dari USB jika diminta 1280×720 tanpa MJPEG, dan fotonya hijau.
+    camera.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"MJPG"))
+    camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+    camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+    camera.set(cv2.CAP_PROP_FPS, 15)
+    frame = None
+    for _ in range(15):
+        ok, grabbed = camera.read()
+        if ok and _frame_usable(grabbed):
+            frame = grabbed
+        time.sleep(0.05)
+    return frame
+
+
 def _usb_lines() -> list[str]:
     import subprocess
 
@@ -324,10 +347,11 @@ def test_webcam(device: int = 0) -> Path | None:
         print("OpenCV belum terpasang. Di Pi jalankan:")
         print("  sudo apt install python3-opencv")
         return None
-    print("  menunggu webcam muncul...")
+    print("Colokkan kabel USB webcam. Tunggu sampai lampunya merah, lalu uji ini membukanya.")
+    print("  menunggu sampai 30 detik...")
     found: list[tuple[int, str]] = []
     nodes: list[tuple[int, str]] = []
-    deadline = time.monotonic() + 8
+    deadline = time.monotonic() + 30
     while True:
         found = _video_nodes()
         nodes = [(index, name) for index, name in found if not name.startswith("bcm2835-")]
@@ -341,7 +365,13 @@ def test_webcam(device: int = 0) -> Path | None:
         print("  tidak ada webcam USB. Yang terlihat hanya perangkat internal Pi.")
     else:
         print("  tidak ada /dev/video*")
-    order = [index for index, _ in nodes]
+    order = []
+    seen_names = set()
+    for index, name in nodes:
+        if name in seen_names:
+            continue
+        seen_names.add(name)
+        order.append(index)
     if device in order:
         order.remove(device)
         order.insert(0, device)
@@ -354,16 +384,10 @@ def test_webcam(device: int = 0) -> Path | None:
             if not camera.isOpened():
                 print(f"  /dev/video{index} tidak terbuka")
                 continue
-            print(f"  membuka /dev/video{index}. Lampu webcam seharusnya hijau.")
-            camera.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-            camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-            for _ in range(8):
-                ok, grabbed = camera.read()
-                if ok and grabbed is not None:
-                    frame = grabbed
-                time.sleep(0.05)
+            print(f"  membuka /dev/video{index} pada 640×480. Lampu webcam seharusnya hijau.")
+            frame = _grab_webcam(cv2, camera)
             if frame is None:
-                print(f"  /dev/video{index} terbuka tetapi tidak mengirim gambar")
+                print(f"  /dev/video{index} tidak mengirim gambar berwarna")
                 continue
             used = index
             time.sleep(2)
