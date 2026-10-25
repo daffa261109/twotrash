@@ -203,11 +203,13 @@ def _test_urut(arah: str, sudut: float, turun: float) -> None:
 
 
 def test_servo2() -> None:
+    # Arah positif mentok di batas mekanik. 25° ke bawah, lalu kembali ke rata.
     _test_servo(
         "Servo 2 (miring atas-bawah, buang sampah)",
         SERVO_TILT_PIN,
         33,
-        (("rata", 0), ("miring", 25), ("rata", 0)),
+        (("rata", 0), ("turun", -25), ("rata", 0)),
+        hold_s=2.0,
     )
 
 
