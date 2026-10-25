@@ -7,6 +7,9 @@ import uuid
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
+# Cloudflare menolak User-Agent Python-urllib dengan 403 kode 1010 sebelum permintaan sampai ke server.
+_USER_AGENT = "Mozilla/5.0 (X11; Linux aarch64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+
 from trash2trace.settings import (
     BRIDGE_TIMEOUT_S,
     LLM_IMAGE_QUALITY,
@@ -28,6 +31,7 @@ class BridgeVision:
             self.config.endpoint,
             data=body,
             headers={
+                "User-Agent": _USER_AGENT,
                 "X-API-Token": self.config.token,
                 "Content-Type": f"multipart/form-data; boundary={boundary}",
             },
@@ -49,7 +53,7 @@ class BridgeVision:
 def ping(config=None) -> str:
     """Cek server merespons. Tanpa token yang benar biasanya 401, itu sudah cukup."""
     config = config or load_bridge_config()
-    request = Request(config.endpoint, method="GET")
+    request = Request(config.endpoint, method="GET", headers={"User-Agent": _USER_AGENT})
     try:
         with urlopen(request, timeout=10) as response:
             return f"HTTP {response.status}"
