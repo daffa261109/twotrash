@@ -282,45 +282,88 @@ def test_ring() -> None:
     print("Selesai.")
 
 
+def _webcam_nodes() -> list[tuple[int, str]]:
+    root = Path("/sys/class/video4linux")
+    if not root.is_dir():
+        return []
+    nodes = []
+    for entry in root.glob("video*"):
+        suffix = entry.name.removeprefix("video")
+        if not suffix.isdigit():
+            continue
+        name_file = entry / "name"
+        name = name_file.read_text(encoding="utf-8", errors="replace").strip() if name_file.exists() else entry.name
+        nodes.append((int(suffix), name))
+    return sorted(nodes)
+
+
+def _open_webcam(cv2, index: int):
+    params = []
+    for prop in ("CAP_PROP_OPEN_TIMEOUT_MSEC", "CAP_PROP_READ_TIMEOUT_MSEC"):
+        value = getattr(cv2, prop, None)
+        if value is not None:
+            params.extend((value, 3000))
+    return cv2.VideoCapture(index, cv2.CAP_V4L2, params)
+
+
 def test_webcam(device: int = 0) -> Path | None:
     from datetime import datetime
 
     from trash2trace.settings import CAPTURE_DIR
 
-    print(f"Webcam USB, perangkat {device}. Satu foto disimpan di captures/.")
+    print("Webcam USB. Satu foto disimpan di captures/.")
     try:
         import cv2
     except ImportError:
         print("OpenCV belum terpasang. Di Pi jalankan:")
         print("  sudo apt install python3-opencv")
         return None
-    camera = cv2.VideoCapture(device)
-    if not camera.isOpened():
-        print(f"Webcam tidak terbuka di perangkat {device}.")
-        print("  cek: ls /dev/video*")
-        print("  coba nomor lain: python3 scripts/test_parts.py webcam --device 1")
+    nodes = _webcam_nodes()
+    if nodes:
+        for index, name in nodes:
+            print(f"  terlihat /dev/video{index}: {name}")
+    else:
+        print("  tidak ada /dev/video*")
+    order = [device] + [index for index, _ in nodes if index != device]
+    frame = None
+    used = None
+    for index in order:
+        camera = _open_webcam(cv2, index)
+        try:
+            if not camera.isOpened():
+                print(f"  /dev/video{index} tidak terbuka")
+                continue
+            camera.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+            camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+            for _ in range(8):
+                ok, grabbed = camera.read()
+                if ok and grabbed is not None:
+                    frame = grabbed
+                time.sleep(0.05)
+            if frame is None:
+                print(f"  /dev/video{index} terbuka tetapi tidak mengirim gambar")
+                continue
+            used = index
+            break
+        finally:
+            if used != index:
+                camera.release()
+    if frame is None or used is None:
+        print("Tidak ada webcam yang mengirim gambar.")
+        print("  Colokkan webcam USB, lalu ulangi. Kamera Pi: sudo python3 scripts/test_parts.py camera")
         return None
-    path = None
+    height, width = frame.shape[:2]
+    CAPTURE_DIR.mkdir(parents=True, exist_ok=True)
+    path = CAPTURE_DIR / f"test-webcam-{datetime.now():%Y%m%d-%H%M%S}.jpg"
     try:
-        camera.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-        camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-        for _ in range(8):
-            camera.read()
-            time.sleep(0.05)
-        ok, frame = camera.read()
-        if not ok or frame is None:
-            print("Webcam terbuka tetapi tidak mengirim gambar.")
-            return None
-        height, width = frame.shape[:2]
-        CAPTURE_DIR.mkdir(parents=True, exist_ok=True)
-        path = CAPTURE_DIR / f"test-webcam-{datetime.now():%Y%m%d-%H%M%S}.jpg"
         if not cv2.imwrite(str(path), frame):
             print("Gagal menyimpan foto.")
             return None
-        print(f"  ukuran: {width}×{height}")
-        print(f"  foto: {path}")
     finally:
         camera.release()
+    print(f"  dipakai: /dev/video{used}")
+    print(f"  ukuran: {width}×{height}")
+    print(f"  foto: {path}")
     print("Selesai.")
     return path
 
