@@ -302,20 +302,38 @@ def _open_webcam(cv2, index: int):
     return cv2.VideoCapture(index, cv2.CAP_V4L2)
 
 
+def _usb_lines() -> list[str]:
+    import subprocess
+
+    try:
+        result = subprocess.run(["lsusb"], capture_output=True, text=True, timeout=5)
+    except (OSError, subprocess.SubprocessError):
+        return []
+    return [line.strip() for line in result.stdout.splitlines() if line.strip()]
+
+
 def test_webcam(device: int = 0) -> Path | None:
     from datetime import datetime
 
     from trash2trace.settings import CAPTURE_DIR
 
-    print("Webcam USB. Satu foto disimpan di captures/.")
+    print("Webcam USB. Lampu merah = ada listrik. Lampu hijau = kamera sedang dibuka.")
     try:
         import cv2
     except ImportError:
         print("OpenCV belum terpasang. Di Pi jalankan:")
         print("  sudo apt install python3-opencv")
         return None
-    found = _video_nodes()
-    nodes = [(index, name) for index, name in found if not name.startswith("bcm2835-")]
+    print("  menunggu webcam muncul...")
+    found: list[tuple[int, str]] = []
+    nodes: list[tuple[int, str]] = []
+    deadline = time.monotonic() + 8
+    while True:
+        found = _video_nodes()
+        nodes = [(index, name) for index, name in found if not name.startswith("bcm2835-")]
+        if nodes or time.monotonic() >= deadline:
+            break
+        time.sleep(0.5)
     if nodes:
         for index, name in nodes:
             print(f"  terlihat /dev/video{index}: {name}")
@@ -329,12 +347,14 @@ def test_webcam(device: int = 0) -> Path | None:
         order.insert(0, device)
     frame = None
     used = None
+    camera = None
     for index in order:
         camera = _open_webcam(cv2, index)
         try:
             if not camera.isOpened():
                 print(f"  /dev/video{index} tidak terbuka")
                 continue
+            print(f"  membuka /dev/video{index}. Lampu webcam seharusnya hijau.")
             camera.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
             camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
             for _ in range(8):
@@ -346,14 +366,23 @@ def test_webcam(device: int = 0) -> Path | None:
                 print(f"  /dev/video{index} terbuka tetapi tidak mengirim gambar")
                 continue
             used = index
+            time.sleep(2)
             break
         finally:
-            if used != index:
+            if used != index and camera is not None:
                 camera.release()
-    if frame is None or used is None:
-        print("Tidak ada webcam USB yang mengirim gambar.")
-        print("  Cek colokan dengan: lsusb")
-        print("  Kamera Pi: sudo python3 scripts/test_parts.py camera")
+                camera = None
+    if frame is None or used is None or camera is None:
+        print("Webcam belum dipakai, jadi lampunya tetap merah.")
+        usb = _usb_lines()
+        if usb:
+            print("  lsusb:")
+            for line in usb:
+                print(f"    {line}")
+        else:
+            print("  lsusb tidak menampilkan perangkat.")
+        print("  Kalau nama webcam tidak ada di lsusb, Pi hanya memberi listrik.")
+        print("  Coba porta USB lain. Kamera Pi: sudo python3 scripts/test_parts.py camera")
         return None
     height, width = frame.shape[:2]
     CAPTURE_DIR.mkdir(parents=True, exist_ok=True)
@@ -367,7 +396,7 @@ def test_webcam(device: int = 0) -> Path | None:
     print(f"  dipakai: /dev/video{used}")
     print(f"  ukuran: {width}×{height}")
     print(f"  foto: {path}")
-    print("Selesai.")
+    print("Selesai. Lampu kembali merah karena kamera ditutup.")
     return path
 
 
