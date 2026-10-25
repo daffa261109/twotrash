@@ -282,7 +282,7 @@ def test_ring() -> None:
     print("Selesai.")
 
 
-def _webcam_nodes() -> list[tuple[int, str]]:
+def _video_nodes() -> list[tuple[int, str]]:
     root = Path("/sys/class/video4linux")
     if not root.is_dir():
         return []
@@ -298,12 +298,8 @@ def _webcam_nodes() -> list[tuple[int, str]]:
 
 
 def _open_webcam(cv2, index: int):
-    params = []
-    for prop in ("CAP_PROP_OPEN_TIMEOUT_MSEC", "CAP_PROP_READ_TIMEOUT_MSEC"):
-        value = getattr(cv2, prop, None)
-        if value is not None:
-            params.extend((value, 3000))
-    return cv2.VideoCapture(index, cv2.CAP_V4L2, params)
+    # OpenCV 4.6 menolak CAP_PROP_OPEN_TIMEOUT_MSEC dan lalu menganggap kamera gagal dibuka.
+    return cv2.VideoCapture(index, cv2.CAP_V4L2)
 
 
 def test_webcam(device: int = 0) -> Path | None:
@@ -318,13 +314,19 @@ def test_webcam(device: int = 0) -> Path | None:
         print("OpenCV belum terpasang. Di Pi jalankan:")
         print("  sudo apt install python3-opencv")
         return None
-    nodes = _webcam_nodes()
+    found = _video_nodes()
+    nodes = [(index, name) for index, name in found if not name.startswith("bcm2835-")]
     if nodes:
         for index, name in nodes:
             print(f"  terlihat /dev/video{index}: {name}")
+    elif found:
+        print("  tidak ada webcam USB. Yang terlihat hanya perangkat internal Pi.")
     else:
         print("  tidak ada /dev/video*")
-    order = [device] + [index for index, _ in nodes if index != device]
+    order = [index for index, _ in nodes]
+    if device in order:
+        order.remove(device)
+        order.insert(0, device)
     frame = None
     used = None
     for index in order:
@@ -349,8 +351,9 @@ def test_webcam(device: int = 0) -> Path | None:
             if used != index:
                 camera.release()
     if frame is None or used is None:
-        print("Tidak ada webcam yang mengirim gambar.")
-        print("  Colokkan webcam USB, lalu ulangi. Kamera Pi: sudo python3 scripts/test_parts.py camera")
+        print("Tidak ada webcam USB yang mengirim gambar.")
+        print("  Cek colokan dengan: lsusb")
+        print("  Kamera Pi: sudo python3 scripts/test_parts.py camera")
         return None
     height, width = frame.shape[:2]
     CAPTURE_DIR.mkdir(parents=True, exist_ok=True)
