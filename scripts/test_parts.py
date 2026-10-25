@@ -12,6 +12,7 @@
     python3 scripts/test_parts.py urut_kanan [--sudut 45] [--turun -45]
     python3 scripts/test_parts.py oled
     sudo python3 scripts/test_parts.py ring
+    python3 scripts/test_parts.py webcam [--device 0]
     sudo python3 scripts/test_parts.py camera
     sudo python3 scripts/test_parts.py api
     sudo python3 scripts/test_parts.py cek
@@ -281,6 +282,45 @@ def test_ring() -> None:
     print("Selesai.")
 
 
+def test_webcam(device: int = 0) -> Path | None:
+    from datetime import datetime
+
+    import cv2
+
+    from trash2trace.settings import CAPTURE_DIR
+
+    print(f"Webcam USB, perangkat {device}. Satu foto disimpan di captures/.")
+    camera = cv2.VideoCapture(device)
+    if not camera.isOpened():
+        print(f"Webcam tidak terbuka di perangkat {device}.")
+        print("  cek: ls /dev/video*")
+        print("  coba nomor lain: python3 scripts/test_parts.py webcam --device 1")
+        return None
+    path = None
+    try:
+        camera.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+        camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+        for _ in range(8):
+            camera.read()
+            time.sleep(0.05)
+        ok, frame = camera.read()
+        if not ok or frame is None:
+            print("Webcam terbuka tetapi tidak mengirim gambar.")
+            return None
+        height, width = frame.shape[:2]
+        CAPTURE_DIR.mkdir(parents=True, exist_ok=True)
+        path = CAPTURE_DIR / f"test-webcam-{datetime.now():%Y%m%d-%H%M%S}.jpg"
+        if not cv2.imwrite(str(path), frame):
+            print("Gagal menyimpan foto.")
+            return None
+        print(f"  ukuran: {width}×{height}")
+        print(f"  foto: {path}")
+    finally:
+        camera.release()
+    print("Selesai.")
+    return path
+
+
 def test_camera() -> Path | None:
     from datetime import datetime
 
@@ -398,12 +438,16 @@ def test_cek() -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Uji satu komponen.")
-    parser.add_argument("bagian", choices=("buzzer", "hc", "led", "lamp", "servo", "servo1", "servo1_kanan90", "servo2", "urut_kiri", "urut_kanan", "oled", "ring", "camera", "api", "cek"))
+    parser.add_argument("bagian", choices=("buzzer", "hc", "led", "lamp", "servo", "servo1", "servo1_kanan90", "servo2", "urut_kiri", "urut_kanan", "oled", "ring", "camera", "webcam", "api", "cek"))
     parser.add_argument("--sudut", type=float, default=45.0, help="sudut servo 1 untuk urut_kiri/urut_kanan")
     parser.add_argument("--turun", type=float, default=TILT_DOWN_DEG, help="sudut servo 2 saat turun")
+    parser.add_argument("--device", type=int, default=0, help="nomor webcam USB, biasanya 0")
     args = parser.parse_args()
     if args.bagian in ("urut_kiri", "urut_kanan"):
         _test_urut(args.bagian.removeprefix("urut_"), args.sudut, args.turun)
+        return
+    if args.bagian == "webcam":
+        test_webcam(args.device)
         return
     {
         "buzzer": test_buzzer,
