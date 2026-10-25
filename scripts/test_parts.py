@@ -438,19 +438,52 @@ _WEBCAM_PAGE = """<!DOCTYPE html>
     body { margin: 0; background: #111; color: #eee; font-family: sans-serif; }
     main { max-width: 720px; margin: 0 auto; padding: 16px; }
     img { width: 100%; background: #000; }
+    button {
+      margin-top: 16px;
+      background: #2f6fed;
+      color: white;
+      border: 0;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 16px;
+    }
+    button:disabled { background: #555; }
+    .kind { font-size: 42px; margin: 16px 0 8px; }
+    .detail { color: #bbb; margin: 0; }
   </style>
 </head>
 <body>
   <main>
     <h1>Webcam langsung</h1>
     <img src="/stream" alt="Gambar webcam">
+    <button id="proses" type="button">Proses</button>
+    <p class="kind" id="kind">Belum diproses</p>
+    <p class="detail" id="detail">Ambil gambar yang sedang tampil dan kirim ke twotrash.wbesoft.com.</p>
   </main>
+  <script>
+    const button = document.getElementById("proses");
+    button.addEventListener("click", async () => {
+      button.disabled = true;
+      document.getElementById("kind").textContent = "Memproses...";
+      document.getElementById("detail").textContent = "Foto dikirim ke API";
+      try {
+        const data = await fetch("/proses", { method: "POST" }).then((response) => response.json());
+        document.getElementById("kind").textContent = data.text;
+        document.getElementById("detail").textContent = data.detail;
+      } catch (error) {
+        document.getElementById("kind").textContent = "Gagal";
+        document.getElementById("detail").textContent = "Permintaan tidak selesai";
+      }
+      button.disabled = false;
+    });
+  </script>
 </body>
 </html>
 """.encode("utf-8")
 
 
 def test_webcam_live(device: int = 0, port: int = 8081) -> None:
+    import json
     import socket
     import threading
     from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -466,6 +499,7 @@ def test_webcam_live(device: int = 0, port: int = 8081) -> None:
     if camera is None or used is None:
         return
     lock = threading.Lock()
+    labels = {"organic": "ORGANIK", "nonorganic": "NONORGANIK", "other": "LAINNYA"}
 
     def jpeg() -> bytes | None:
         with lock:
@@ -476,6 +510,24 @@ def test_webcam_live(device: int = 0, port: int = 8081) -> None:
         if not ok:
             return None
         return encoded.tobytes()
+
+    def classify() -> dict[str, str]:
+        image = jpeg()
+        if image is None:
+            return {"text": "Gagal", "detail": "Gambar webcam tidak terbaca"}
+        from trash2trace.bridge import BridgeVision
+        from trash2trace.settings import load_bridge_config
+
+        started = time.monotonic()
+        try:
+            label, _confidence = BridgeVision(load_bridge_config()).classify(image)
+        except BaseException as exc:
+            print(f"[WARN] API: {exc}")
+            return {"text": "Gagal", "detail": str(exc)[:180]}
+        text = labels.get(label, label.upper())
+        took = time.monotonic() - started
+        print(f"[HASIL] {text} ({took:.1f} detik)")
+        return {"text": text, "detail": f"{took:.1f} detik · https://twotrash.wbesoft.com/classify"}
 
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self) -> None:
@@ -502,6 +554,17 @@ def test_webcam_live(device: int = 0, port: int = 8081) -> None:
             self.send_header("Content-Length", str(len(_WEBCAM_PAGE)))
             self.end_headers()
             self.wfile.write(_WEBCAM_PAGE)
+
+        def do_POST(self) -> None:
+            if not self.path.startswith("/proses"):
+                self.send_error(404)
+                return
+            body = json.dumps(classify()).encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
 
         def log_message(self, fmt: str, *args) -> None:
             return
