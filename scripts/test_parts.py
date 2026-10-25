@@ -13,6 +13,7 @@
     python3 scripts/test_parts.py oled
     sudo python3 scripts/test_parts.py ring
     python3 scripts/test_parts.py webcam [--device 0]
+    python3 scripts/test_parts.py webcam --live
     sudo python3 scripts/test_parts.py camera
     sudo python3 scripts/test_parts.py api
     sudo python3 scripts/test_parts.py cek
@@ -335,18 +336,7 @@ def _usb_lines() -> list[str]:
     return [line.strip() for line in result.stdout.splitlines() if line.strip()]
 
 
-def test_webcam(device: int = 0) -> Path | None:
-    from datetime import datetime
-
-    from trash2trace.settings import CAPTURE_DIR
-
-    print("Webcam USB. Lampu merah = ada listrik. Lampu hijau = kamera sedang dibuka.")
-    try:
-        import cv2
-    except ImportError:
-        print("OpenCV belum terpasang. Di Pi jalankan:")
-        print("  sudo apt install python3-opencv")
-        return None
+def _select_webcam(cv2, device: int):
     print("Colokkan kabel USB webcam. Tunggu sampai lampunya merah, lalu uji ini membukanya.")
     print("  menunggu sampai 30 detik...")
     found: list[tuple[int, str]] = []
@@ -375,43 +365,57 @@ def test_webcam(device: int = 0) -> Path | None:
     if device in order:
         order.remove(device)
         order.insert(0, device)
-    frame = None
-    used = None
-    camera = None
     for index in order:
         camera = _open_webcam(cv2, index)
-        try:
-            if not camera.isOpened():
-                print(f"  /dev/video{index} tidak terbuka")
-                continue
-            print(f"  membuka /dev/video{index} pada 640×480. Lampu webcam seharusnya hijau.")
-            frame = _grab_webcam(cv2, camera)
-            if frame is None:
-                print(f"  /dev/video{index} tidak mengirim gambar berwarna")
-                continue
-            used = index
-            time.sleep(2)
-            break
-        finally:
-            if used != index and camera is not None:
-                camera.release()
-                camera = None
-    if frame is None or used is None or camera is None:
-        print("Webcam belum dipakai, jadi lampunya tetap merah.")
-        usb = _usb_lines()
-        if usb:
-            print("  lsusb:")
-            for line in usb:
-                print(f"    {line}")
-        else:
-            print("  lsusb tidak menampilkan perangkat.")
-        print("  Kalau nama webcam tidak ada di lsusb, Pi hanya memberi listrik.")
-        print("  Coba porta USB lain. Kamera Pi: sudo python3 scripts/test_parts.py camera")
-        return None
-    height, width = frame.shape[:2]
-    CAPTURE_DIR.mkdir(parents=True, exist_ok=True)
-    path = CAPTURE_DIR / f"test-webcam-{datetime.now():%Y%m%d-%H%M%S}.jpg"
+        if not camera.isOpened():
+            print(f"  /dev/video{index} tidak terbuka")
+            camera.release()
+            continue
+        print(f"  membuka /dev/video{index} pada 640×480. Lampu webcam seharusnya hijau.")
+        if _grab_webcam(cv2, camera) is None:
+            print(f"  /dev/video{index} tidak mengirim gambar berwarna")
+            camera.release()
+            continue
+        return camera, index
+    print("Webcam belum dipakai, jadi lampunya tetap merah.")
+    usb = _usb_lines()
+    if usb:
+        print("  lsusb:")
+        for line in usb:
+            print(f"    {line}")
+    else:
+        print("  lsusb tidak menampilkan perangkat.")
+    print("  Kalau nama webcam tidak ada di lsusb, Pi hanya memberi listrik.")
+    print("  Coba porta USB lain. Kamera Pi: sudo python3 scripts/test_parts.py camera")
+    return None, None
+
+
+def test_webcam(device: int = 0) -> Path | None:
+    from datetime import datetime
+
+    from trash2trace.settings import CAPTURE_DIR
+
+    print("Webcam USB. Lampu merah = ada listrik. Lampu hijau = kamera sedang dibuka.")
     try:
+        import cv2
+    except ImportError:
+        print("OpenCV belum terpasang. Di Pi jalankan:")
+        print("  sudo apt install python3-opencv")
+        return None
+    camera, used = _select_webcam(cv2, device)
+    if camera is None or used is None:
+        return None
+    try:
+        ok, frame = camera.read()
+        if not ok or not _frame_usable(frame):
+            frame = _grab_webcam(cv2, camera)
+        if frame is None:
+            print("Gambar berwarna tidak terbaca.")
+            return None
+        time.sleep(2)
+        height, width = frame.shape[:2]
+        CAPTURE_DIR.mkdir(parents=True, exist_ok=True)
+        path = CAPTURE_DIR / f"test-webcam-{datetime.now():%Y%m%d-%H%M%S}.jpg"
         if not cv2.imwrite(str(path), frame):
             print("Gagal menyimpan foto.")
             return None
@@ -422,6 +426,101 @@ def test_webcam(device: int = 0) -> Path | None:
     print(f"  foto: {path}")
     print("Selesai. Lampu kembali merah karena kamera ditutup.")
     return path
+
+
+_WEBCAM_PAGE = """<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Webcam</title>
+  <style>
+    body { margin: 0; background: #111; color: #eee; font-family: sans-serif; }
+    main { max-width: 720px; margin: 0 auto; padding: 16px; }
+    img { width: 100%; background: #000; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Webcam langsung</h1>
+    <img src="/stream" alt="Gambar webcam">
+  </main>
+</body>
+</html>
+""".encode("utf-8")
+
+
+def test_webcam_live(device: int = 0, port: int = 8081) -> None:
+    import socket
+    import threading
+    from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+    print("Webcam USB, gambar langsung di browser.")
+    try:
+        import cv2
+    except ImportError:
+        print("OpenCV belum terpasang. Di Pi jalankan:")
+        print("  sudo apt install python3-opencv")
+        return
+    camera, used = _select_webcam(cv2, device)
+    if camera is None or used is None:
+        return
+    lock = threading.Lock()
+
+    def jpeg() -> bytes | None:
+        with lock:
+            ok, frame = camera.read()
+        if not ok or frame is None:
+            return None
+        ok, encoded = cv2.imencode(".jpg", frame, [int(cv2.IMWRITE_JPEG_QUALITY), 70])
+        if not ok:
+            return None
+        return encoded.tobytes()
+
+    class Handler(BaseHTTPRequestHandler):
+        def do_GET(self) -> None:
+            if self.path.startswith("/stream"):
+                self.send_response(200)
+                self.send_header("Content-Type", "multipart/x-mixed-replace; boundary=frame")
+                self.end_headers()
+                try:
+                    while True:
+                        image = jpeg()
+                        if image is None:
+                            time.sleep(0.1)
+                            continue
+                        self.wfile.write(b"--frame\r\nContent-Type: image/jpeg\r\n")
+                        self.wfile.write(f"Content-Length: {len(image)}\r\n\r\n".encode())
+                        self.wfile.write(image)
+                        self.wfile.write(b"\r\n")
+                        time.sleep(0.1)
+                except (BrokenPipeError, ConnectionResetError):
+                    return
+                return
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(_WEBCAM_PAGE)))
+            self.end_headers()
+            self.wfile.write(_WEBCAM_PAGE)
+
+        def log_message(self, fmt: str, *args) -> None:
+            return
+
+    server = ThreadingHTTPServer(("0.0.0.0", port), Handler)
+    server.daemon_threads = True
+    server.block_on_close = False
+    name = socket.gethostname()
+    print(f"  dipakai: /dev/video{used}")
+    print(f"  buka http://{name}.local:{port}")
+    print("  Ctrl+C untuk berhenti. Lampu hijau tetap nyala selama halaman terbuka.")
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print("\nBerhenti.")
+    finally:
+        server.server_close()
+        camera.release()
+        print("Selesai. Lampu kembali merah karena kamera ditutup.")
 
 
 def test_camera() -> Path | None:
@@ -545,12 +644,17 @@ def main() -> None:
     parser.add_argument("--sudut", type=float, default=45.0, help="sudut servo 1 untuk urut_kiri/urut_kanan")
     parser.add_argument("--turun", type=float, default=TILT_DOWN_DEG, help="sudut servo 2 saat turun")
     parser.add_argument("--device", type=int, default=0, help="nomor webcam USB, biasanya 0")
+    parser.add_argument("--live", action="store_true", help="tampilkan webcam langsung di browser")
+    parser.add_argument("--port", type=int, default=8081, help="port browser untuk webcam --live")
     args = parser.parse_args()
     if args.bagian in ("urut_kiri", "urut_kanan"):
         _test_urut(args.bagian.removeprefix("urut_"), args.sudut, args.turun)
         return
     if args.bagian == "webcam":
-        test_webcam(args.device)
+        if args.live:
+            test_webcam_live(args.device, args.port)
+        else:
+            test_webcam(args.device)
         return
     {
         "buzzer": test_buzzer,
