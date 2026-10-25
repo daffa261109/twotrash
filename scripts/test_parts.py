@@ -285,11 +285,15 @@ def test_ring() -> None:
 def test_webcam(device: int = 0) -> Path | None:
     from datetime import datetime
 
-    import cv2
-
     from trash2trace.settings import CAPTURE_DIR
 
     print(f"Webcam USB, perangkat {device}. Satu foto disimpan di captures/.")
+    try:
+        import cv2
+    except ImportError:
+        print("OpenCV belum terpasang. Di Pi jalankan:")
+        print("  sudo apt install python3-opencv")
+        return None
     camera = cv2.VideoCapture(device)
     if not camera.isOpened():
         print(f"Webcam tidak terbuka di perangkat {device}.")
