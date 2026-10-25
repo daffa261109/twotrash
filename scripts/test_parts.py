@@ -207,7 +207,7 @@ def test_servo2() -> None:
         "Servo 2 (miring atas-bawah, buang sampah)",
         SERVO_TILT_PIN,
         33,
-        (("rata", 0), ("miring atas", 45), ("rata", 0), ("miring bawah", -45), ("rata", 0)),
+        (("rata", 0), ("miring", 25), ("rata", 0)),
     )
 
 
