@@ -75,7 +75,7 @@ def _multipart(boundary: str, jpeg: bytes) -> bytes:
     crlf = b"\r\n"
     lines = [
         f"--{boundary}".encode(),
-        b'Content-Disposition: form-data; name="image"; filename="foto.jpg"',
+        b"Content-Disposition: form-data; name=image; filename=foto.jpg",
         b"Content-Type: image/jpeg",
         b"",
         jpeg,
