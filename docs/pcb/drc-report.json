@@ -1,18 +1,18 @@
 {
-  "board_sha256": "ba5cbb6552e2faf8ddff3bc40a0be2788928f942915a38894133e555695ae0cc",
-  "revision": "TT-PZ1",
+  "board_sha256": "a4ef831df08b9cec5470e8c6e06fc088ff2071b7d1444b5843ce93a5f8d43088",
+  "revision": "TT-PZ2",
   "passed": true,
-  "pad_count": 242,
-  "drilled_pad_count": 218,
-  "solid_test_pad_count": 24,
-  "trace_count": 167,
-  "wire_jumpers": 28,
-  "net_count": 61,
+  "pad_count": 199,
+  "drilled_pad_count": 181,
+  "solid_test_pad_count": 18,
+  "trace_count": 130,
+  "wire_jumpers": 22,
+  "net_count": 56,
   "unconnected_nets": [],
   "min_measured_clearance_mm": 0.505,
   "closest_nets": [
     "3V3",
-    "DRV_EN"
+    "GND"
   ],
   "minimum_annular_ring_mm": 0.5,
   "errors": [],

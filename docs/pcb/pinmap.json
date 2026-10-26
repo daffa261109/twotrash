@@ -1,5 +1,5 @@
 {
-  "board": "TT-PZ1",
+  "board": "TT-PZ2",
   "controller": "Raspberry Pi Zero directly; no Nano",
   "firmware_status": "not implemented; existing servo code must not enable motors",
   "pins": {
@@ -49,15 +49,12 @@
     },
     "hc_trig": {
       "bcm": 17,
-      "physical": 11
+      "physical": 11,
+      "connection": "direct 3.3V to JHC-2; R9 100k pull-down"
     },
     "hc_echo_divided": {
       "bcm": 27,
       "physical": 13
-    },
-    "ring_data": {
-      "bcm": 21,
-      "physical": 40
     },
     "led_green": {
       "bcm": 22,
@@ -75,5 +72,10 @@
   "microstep": 16,
   "motor_full_steps_per_turn": 200,
   "gear_ratio": 3,
-  "output_steps_per_turn": 9600
+  "output_steps_per_turn": 9600,
+  "unused_physical_pins": [
+    2,
+    4,
+    40
+  ]
 }

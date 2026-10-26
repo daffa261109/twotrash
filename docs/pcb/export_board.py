@@ -67,14 +67,13 @@ def board(d,b,mode='copper'):
                 d.text(x0+3,y0+8,c['ref'],1.65)
                 d.text(x0+3,y0+11,'DRV8825',1.4)
                 d.text(x0,y0-1,'EN',1.25);d.text(x1-3,y0-1,'VMOT',1.25)
-            elif c['ref']=='U1':d.text(36.2,22,'U1 AHCT125',1.4,angle=90)
             else:
                 d.text(x0,max(1,y0-.55),c['ref'],1.4)
             # Pin1 on component side only. All etched pads are round.
             ps=[p for p in b['pads'] if p['ref']==c['ref'] and p['pin']=='1']
             if ps:
                 p=ps[0];d.circle(p['x']-1.4,p['y']-1.4,.32,'#16569b')
-        d.text(5,97.5,'TT-PZ1 / PI ZERO + 2x DRV8825 / TOP',2.)
+        d.text(5,97.5,'TT-PZ2 / PI ZERO + 2x DRV8825 / TOP',2.)
     if mode=='jumpers':
         for w in b['jumpers']:
             a,c=w['start'],w['end'];d.line([a,c],.35,'#d67b1d')
@@ -132,7 +131,7 @@ def main():
     for p in [PDF,SVG,PRE]:p.mkdir(parents=True,exist_ok=True)
     files=[('01-transfer-toner-1to1.pdf','TRANSFER TONER - CETAK FILE INI',False),('02-tembaga-bawah-inspeksi.pdf','SISI TEMBAGA - HANYA UNTUK INSPEKSI',True)]
     for name,title,mirror in files:
-        c=canvas.Canvas(str(PDF/name),pagesize=A4);page_header(c,title,'TT-PZ1 / 140 x 100 mm / single-sided copper / no mains')
+        c=canvas.Canvas(str(PDF/name),pagesize=A4);page_header(c,title,'TT-PZ2 / 140 x 100 mm / single-sided copper / no mains')
         page_board(c,b,'copper',mirror)
         footer_lines(c,['Printer laser. Actual size 100%. Matikan Fit / Shrink. JANGAN mirror lagi.',
                         'Hitam = tembaga dipertahankan. Titik putih kecil = pusat bor.',
@@ -143,10 +142,10 @@ def main():
         c.showPage();c.save()
     c=canvas.Canvas(str(PDF/'03-komponen-dan-bor.pdf'),pagesize=A4)
     for mode,title,lines in [
-        ('assembly','COMPONENT SIDE - 1:1 PLACEMENT',['All components on bare FR4 side. Copper is on the opposite side.', 'Blue dot = pin1. All copper pads round. JPI cable must be pin1-to-pin1.', 'DRV: EN upper-left, VMOT upper-right. U1 notch faces the board top.', 'Capacitor pin1 positive. D1 pin1 cathode. Q1 pads E-B-C left-to-right.', 'Keep JARM open until STEP/DIR software and homing are ready.']),
+        ('assembly','COMPONENT SIDE - 1:1 PLACEMENT',['All components on bare FR4 side. Copper is on the opposite side.', 'Blue dot = pin1. All copper pads round. JPI cable must be pin1-to-pin1.', 'DRV: EN upper-left, VMOT upper-right. HC TRIG direct3.3V; no buffer.', 'Capacitor pin1 positive. D1 pin1 cathode. Q1 pads E-B-C left-to-right.', 'Keep JARM open until STEP/DIR software and homing are ready.']),
         ('drill','DRILL GUIDE - COMPONENT SIDE',['Header / component / jumper holes: 1.0 mm.', 'Screw terminals: 1.2 mm. Mounts: 3.2 mm. Solid test pads: DO NOT DRILL.', 'Coordinates in pads.csv are millimetres from TOP-LEFT, component-side view.', 'Check footprint with the real part; form radial capacitor leads to 5.08 mm.', 'No plated holes required. Solder all pads on copper side.']),
         ('jumpers','INSULATED WIRE JUMPERS - TOP SIDE',['Orange lines are insulated WIRE, not copper traces.', 'Each Wxx connects its two dedicated pads. Follow jumpers.csv endpoints.', 'Route around sockets/components as needed; cut length includes 20 mm slack.', 'AWG22 for GND / 5V / 12V; AWG26 for logic. Insulate every crossing.', 'Install wires before sockets; retain access to module trimpots and heatsinks.'])]:
-        page_header(c,title,'TT-PZ1 / 140 x 100 mm / exact scale at 100% print');page_board(c,b,mode);footer_lines(c,lines);c.showPage()
+        page_header(c,title,'TT-PZ2 / 140 x 100 mm / exact scale at 100% print');page_board(c,b,mode);footer_lines(c,lines);c.showPage()
     # Connection schedule as additional pages in the assembly document.
     for start in range(0,len(b['jumpers']),26):
         page_header(c,'WIRE SCHEDULE - COMPONENT SIDE','Pad coordinates from top-left. Dedicated pads already included in copper master.')
@@ -162,6 +161,7 @@ def main():
         (SVG/(name+'.svg')).write_text(svg_board(b,mode,mirror))
     (ROOT.parent/'diagram-pcb.svg').write_text(svg_board(b,'assembly'))
     for f in PDF.glob('*.pdf'):
+        for old in PRE.glob(f.stem+'-p*.png'):old.unlink()
         doc=pymupdf.open(f)
         for i,p in enumerate(doc):p.get_pixmap(matrix=pymupdf.Matrix(1.5,1.5)).save(PRE/(f.stem+f'-p{i+1}.png'))
     # A cropped, readable board image for wiring.md.
@@ -182,12 +182,12 @@ def main():
             elif x['ref']=='JARM':value='Header 1x2 pitch2.54mm + removable shunt'
             elif pins[0]['drill']==1.2:value=f'Terminal sekrup {len(pins)} pin pitch5.08mm'
             else:value=f'Header 1x{len(pins)} pitch2.54mm'
-            note=x['value']+'. '+note
+            note=(x['value']+'. '+note).strip()
         elif x['kind']=='resistor':note='Metal film 1/4W 1%; pitch7.62mm'
         elif x['kind']=='capacitor':
             note+='; '+('ceramic pitch2.54mm' if '100n' in value else 'radial leads formed to pitch5.08mm; see placement envelope')
         rows.append(dict(ref=x['ref'],qty=1,value=value,kind=x['kind'],note=note))
-    rows += [dict(ref='SOCKET_DRV',qty=4,value='Female 1x8 2.54mm, rated >=2A/contact',kind='socket',note='For two removable DRV8825 modules; socket height >=8.5mm for wire clearance'),dict(ref='SOCKET_U1',qty=1,value='DIP14 7.62mm socket',kind='socket',note='For SN74AHCT125N'),dict(ref='WIRES',qty=len(b['jumpers']),value='Insulated copper wire',kind='jumper',note='See jumpers.csv; required for netlist continuity'),dict(ref='HEATSINK',qty=2,value='DRV8825 heatsink + airflow',kind='cooling',note='Keep conductive sink clear of pins/trimpot')]
+    rows += [dict(ref='SOCKET_DRV',qty=4,value='Female 1x8 2.54mm, rated >=2A/contact',kind='socket',note='For two removable DRV8825 modules; socket height >=8.5mm for wire clearance'),dict(ref='WIRES',qty=len(b['jumpers']),value='Insulated copper wire',kind='jumper',note='See jumpers.csv; required for netlist continuity'),dict(ref='HEATSINK',qty=2,value='DRV8825 heatsink + airflow',kind='cooling',note='Keep conductive sink clear of pins/trimpot')]
     rows += [dict(ref='EXT_F12',qty=1,value='Inline fuse2A + holder',kind='external',note='In positive12V supply lead'),dict(ref='EXT_F5',qty=1,value='Inline fuse1.5A + holder',kind='external',note='In positive5V AUX supply lead'),dict(ref='EXT_HOME',qty=2,value='Microswitch COM/NC',kind='external',note='Match mechanical home locations'),dict(ref='EXT_PSU12',qty=1,value='Regulated12V3A DC adapter',kind='external',note='Motor power only'),dict(ref='EXT_PSU5',qty=1,value='Regulated5V2A DC supply',kind='external',note='Peripherals only; Pi uses its own USB PSU'),dict(ref='EXT_USB',qty=1,value='USB OTG adapter/cable for Pi Zero',kind='external',note='Webcam connects directly, not through etched copper')]
     writecsv(ROOT/'bom.csv',['ref','qty','value','kind','note'],rows)
     print('Exported',len(files)+1,'PDF files;',len(b['jumpers']),'wire jumpers')

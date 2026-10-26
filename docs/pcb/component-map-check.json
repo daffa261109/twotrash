@@ -1,10 +1,10 @@
 {
-  "component_count": 37,
+  "component_count": 31,
   "pages": 2,
   "page_size": "A3 landscape",
   "map_scale": 2,
   "all_references_listed": true,
   "text_within_pages": true,
   "copper_geometry_and_transfer_files_unchanged": true,
-  "source_board_sha256": "ba5cbb6552e2faf8ddff3bc40a0be2788928f942915a38894133e555695ae0cc"
+  "source_board_sha256": "a4ef831df08b9cec5470e8c6e06fc088ff2071b7d1444b5843ce93a5f8d43088"
 }

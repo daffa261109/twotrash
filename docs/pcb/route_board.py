@@ -151,7 +151,7 @@ def main():
     groups=defaultdict(list)
     for p in pads:groups[p['net']].append(p)
     # First preserve short wide motor circuits, then power and local low-voltage signals.
-    priority=['12V','5V_AUX','PAN_B2','PAN_B1','PAN_A1','PAN_A2','TILT_B2','TILT_B1','TILT_A1','TILT_A2','RING_DATA','RING_BUF','ECHO_5V','BUZZ_C','BUZZ_B','TRIG_5V','GREEN_A','RED_A','GND','3V3']
+    priority=['12V','5V_AUX','PAN_B2','PAN_B1','PAN_A1','PAN_A2','TILT_B2','TILT_B1','TILT_A1','TILT_A2','ECHO_5V','BUZZ_C','BUZZ_B','GREEN_A','RED_A','GND','3V3']
     rest=sorted([n for n in groups if n not in priority and not n.startswith('NC_')],key=lambda n:len(groups[n]))
     for n in priority+rest:
         if len(groups[n])>1:
@@ -162,9 +162,9 @@ def main():
     # Unused escape pads remain as solid copper test points, not extra holes.
     for p in pads:
         if p.get('wire_port') and p['ref'] not in used_ports:p['drill']=0
-    board=dict(revision='TT-PZ1',width=W,height=H,grid=G,min_clearance=CLEAR,edge_clearance=EDGE,copper_oz=1,
+    board=dict(revision='TT-PZ2',width=W,height=H,grid=G,min_clearance=CLEAR,edge_clearance=EDGE,copper_oz=1,
                pads=pads,traces=traces,jumpers=jumpers,components=D.components,mounts=D.mounts,
-               notes=['Bottom copper only; wire jumpers on insulated top side.','Pi powered separately via USB. Pi pins2/4 not routed.','Nano not used. DRV8825 direct3.3V STEP/DIR.'])
+               notes=['Bottom copper only; wire jumpers on insulated top side.','Pi powered separately via USB. Pi pins2/4 not routed.','Nano not used. DRV8825 direct3.3V STEP/DIR.','No WS2812 or buffer IC. HC TRIG direct3.3V; ECHO divider retained; GPIO21 pin40 NC.'])
     (ROOT/'board.json').write_text(json.dumps(board,indent=2)+'\n')
     print('TOTAL',len(pads),'pads',len(traces),'tracks',len(jumpers),'jumpers')
 if __name__=='__main__':main()

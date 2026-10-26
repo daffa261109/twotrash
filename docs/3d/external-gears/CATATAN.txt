@@ -152,7 +152,7 @@ caps.stl dicetak1 set (sudah2 bagian), retainers.stl dicetak1 set (sudah4 bagian
 - empat bautM3 untuk tutup bearing; lubang bawah2.5mm perlu tap/fit uji.
 - backingplate35x30x2mm:2, logam; rivet3.5mm:4, grip sesuai bak sebenarnya.
 - dua driver STEP/DIR + controller dan catu yang sesuai arus motor.
-  Pola carrierPCB TT-PZ1 tersedia di docs/pcb dan wiring di docs/wiring.md.
+  Pola carrierPCB TT-PZ2 tersedia di docs/pcb dan wiring di docs/wiring.md.
   Pi langsung ke DRV8825 tanpa Nano; firmware stepper/homing belum selesai.
   Sistem ini tidak membutuhkan kanal rem24V Rev F.
 Screw heads, kabel, sensor home dan guard gear belum dimodelkan lengkap.

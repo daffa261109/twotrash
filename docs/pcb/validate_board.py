@@ -54,10 +54,15 @@ def main():
     assert pn['JARM','1']=='ENABLE_GPIO' and pn['JARM','2']=='DRV_EN'
     assert pn['R_EN','1']=='DRV_EN' and pn['R_EN','2']=='3V3'
     assert pn['R2','1']=='ECHO_5V' and pn['R2','2']==pn['R3','1']=='ECHO_3V3' and pn['R3','2']=='GND'
-    expected_pi={3:'SDA',5:'SCL',11:'TRIG_3V3',12:'PAN_STEP',13:'ECHO_3V3',15:'GREEN_GPIO',16:'RED_GPIO',22:'TILT_FAULT',29:'BUZZ_GPIO',31:'HOME_PAN',32:'PAN_DIR',33:'TILT_STEP',35:'TILT_DIR',36:'HOME_TILT',37:'ENABLE_GPIO',38:'PAN_FAULT',40:'RING_3V3'}
+    expected_pi={3:'SDA',5:'SCL',11:'TRIG_3V3',12:'PAN_STEP',13:'ECHO_3V3',15:'GREEN_GPIO',16:'RED_GPIO',22:'TILT_FAULT',29:'BUZZ_GPIO',31:'HOME_PAN',32:'PAN_DIR',33:'TILT_STEP',35:'TILT_DIR',36:'HOME_TILT',37:'ENABLE_GPIO',38:'PAN_FAULT'}
     for pin,net in expected_pi.items():assert pn['JPI',str(pin)]==net,(pin,net)
-    expected_u1=['GND','RING_3V3','RING_BUF','GND','TRIG_3V3','TRIG_5V','GND','NC_U1_8','GND','5V_AUX','NC_U1_11','GND','5V_AUX','5V_AUX']
-    assert [pn['U1',str(i)] for i in range(1,15)]==expected_u1
+    assert pn['JPI','40'].startswith('NC_')
+    assert [pn['JHC',str(i)] for i in range(1,5)]==['5V_AUX','TRIG_3V3','ECHO_5V','GND']
+    assert pn['JHC','2']==pn['JPI','11']==pn['R9','1'] and pn['R9','2']=='GND'
+    values={c['ref']:c['value'] for c in b['components']}
+    assert values['R9']=='100k' and values['R2']=='2k2' and values['R3']=='2k7'
+    assert not ({'U1','JRING','C1','C2','R1','R8'} & set(values))
+    assert not any(n.startswith('RING') or n=='TRIG_5V' for n in nets)
     assert [pn['Q1',str(i)] for i in range(1,4)]==['GND','BUZZ_B','BUZZ_C']
     assert pn['D1','1']=='5V_AUX' and pn['D1','2']=='BUZZ_C'
     for axis in ['PAN','TILT']:

@@ -34,9 +34,6 @@ def draw_map(d,b):
         elif kind=='module':
             center(d,cx,cy-1,ref,1.9);center(d,cx,cy+2,'DRV8825',1.8)
             d.text(x0,y0-1,'EN',1.5);d.text(x1-4,y0-1,'VMOT',1.5)
-        elif ref=='U1':
-            d.text(cx+.6,y0+3,'U1  AHCT125',1.8,angle=90)
-            d.line([[cx-1,y0+.2],[cx,y0+1.2],[cx+1,y0+.2]],.3,'#17384b')
         elif kind=='resistor':
             vertical=y1-y0>x1-x0
             if vertical:
@@ -52,11 +49,6 @@ def draw_map(d,b):
                 d.text(x0-2,y0-1,ref,1.4)
                 center(d,cx,cy+1,'100uF',1.4)
                 center(d,cx,y1+2.2,'35V',1.5)
-            elif ref=='C2':
-                center(d,cx,cy-.4,'C2',1.5);center(d,cx,cy+2,'1000uF',1.45)
-                center(d,cx,y1+2,'16V',1.5)
-            else:
-                d.text(x1+1,y1+3,'C1 100nF',1.4)
             if 'uF' in c['value']:
                 p=next(p for p in ps if p['pin']=='1')
                 d.text(p['x']-1.8,p['y']-1.3,'+',1.8,'#b04425')
@@ -77,14 +69,14 @@ def draw_map(d,b):
                 for p in ps:d.text(x1+1,p['y']+.5,p['label'],1.5)
             else:
                 pos={
-                    'J5V':(x0,1.1),'JRING':(x0,1.1),'J12V':(x0,1.1),
+                    'J5V':(x0,1.1),'J12V':(x0,1.1),
                     'JBUZ':(x0,y0-1),'JARM':(x0,y0-1),
                     'JH_PAN':(x0-1,y1+2.1),'JH_TILT':(x0-1,y1+2.1),
                 }.get(ref,(x0,y0-1))
                 d.text(*pos,ref,1.5)
                 if ref in ['J5V','J12V']:
                     center(d,cx,y1+2,'+  GND',1.4)
-    d.text(5,98,'TT-PZ1 / TAMPAK ATAS / 140 x 100 mm',1.8)
+    d.text(5,98,'TT-PZ2 / TAMPAK ATAS / 140 x 100 mm',1.8)
 
 def start(c):
     c.saveState();c.translate(0,297*mm);c.scale(mm,-mm)
@@ -97,14 +89,14 @@ def main():
     c=canvas.Canvas(str(path),pagesize=landscape(A3))
     d=start(c)
     d.text(12,17,'Peta komponen PCB TwoTrash',6)
-    d.text(12,25,'Pi Zero + dua DRV8825. Tampak dari sisi komponen, bukan sisi tembaga.',3.4)
+    d.text(12,25,'TT-PZ2: tanpa WS2812 / IC buffer. Tampak atas dari sisi komponen.',3.4)
     d.text(12,32,'Gambar diperbesar 2x pada A3. Untuk panduan pemasangan, BUKAN pola transfer toner.',3.1,'#a34c24')
     d.text(12,40,'Kode pada papan cocok dengan daftar di kanan. Titik biru = kaki 1.',3.1)
     c.saveState();c.translate(12,48);c.scale(2,2)
     bd=Drawing(c);draw_map(bd,b);c.restoreState()
     d.text(302,40,'KODE / KOMPONEN',3.8)
     short={'JPI':'GPIO Pi / IDC 40 pin','J5V':'Masuk 5V AUX','J12V':'Masuk 12V motor',
-      'JBUZ':'Buzzer aktif 5V, <=50mA','U1':'SN74AHCT125N DIP14','Q1':'2N3904, E-B-C',
+      'JBUZ':'Buzzer aktif 5V, <=50mA','JHC':'HC-SR04; TRIG 3,3V','Q1':'2N3904, E-B-C',
       'D1':'1N4148, garis = K','JARM':'Jumper enable; biarkan terbuka'}
     for i,x in enumerate(b['components']):
         y=47+i*5.65
@@ -113,10 +105,10 @@ def main():
         value=short.get(x['ref'],x['value'])
         d.text(327,y,value,2.7)
     d.text(12,260,'Warna: biru konektor | ungu driver | kuning resistor | hijau kapasitor | abu IC/transistor.',3.2)
-    d.text(12,267,'Elko: + ke kaki 1. Dioda D1: garis katoda K ke kaki 1. IC U1: takik menghadap atas.',3.2)
+    d.text(12,267,'Elko: + ke kaki 1. Dioda D1: garis katoda K ke kaki 1. TRIG langsung GPIO17, tanpa buffer.',3.2)
     d.text(12,274,'Driver: EN kiri atas, VMOT kanan atas. Cocokkan tulisan pin modul; jangan mengandalkan warna PCB.',3.2)
-    d.text(12,281,'28 jumper berisolasi tetap wajib dipasang: lihat panduan 03. Komponen periferal terhubung lewat kabel.',3.2)
-    d.text(12,289,'Sumber: board.json, pinmap.json dan wiring.md / TT-PZ1 / Halaman 1 dari 2',2.6,'#64748b')
+    d.text(12,281,f'{len(b["jumpers"])} jumper berisolasi wajib dipasang: lihat panduan 03. WS2812 dan IC buffer dihapus.',3.2)
+    d.text(12,289,'Sumber: board.json, pinmap.json dan wiring.md / TT-PZ2 / Halaman 1 dari 2',2.6,'#64748b')
     c.restoreState();c.showPage()
     # Save the same annotated overview as an SVG for project documentation.
     svg=''.join(d.svg)+f'<g transform="translate(12 48) scale(2)">{"".join(bd.svg)}</g>'
@@ -128,23 +120,23 @@ def main():
     d.text(12,26,'Urutan di bawah mengikuti nomor pad, dilihat dari ATAS. Titik biru pada peta adalah pad 1.',3.4)
     d.rect(12,34,396,9,'#23466b','#23466b')
     for x,t in [(15,'KODE'),(48,'UNTUK'),(115,'URUTAN KAKI 1 -> TERAKHIR'),(285,'CATATAN')]:d.text(x,40,t,3.2,'#ffffff')
-    labels={'JPI':'Pi Zero','J5V':'Daya AUX','J12V':'Daya motor','JOLED':'OLED','JHC':'HC-SR04','JGREEN':'LED hijau','JRED':'LED merah','JBUZ':'Buzzer','JRING':'Ring WS2812','JM_PAN':'Motor pan','JM_TILT':'Motor tilt','JARM':'Aktifkan driver','JH_PAN':'Home pan','JH_TILT':'Home tilt'}
-    orders={'JPI':'IDC 40 pin, kabel lurus 1-ke-1','J5V':'+5V AUX / GND','J12V':'+12V / GND','JOLED':'GND / 3,3V / SCL / SDA','JHC':'+5V / TRIG / ECHO / GND','JGREEN':'Anoda (+) / katoda (-)','JRED':'Anoda (+) / katoda (-)','JBUZ':'+5V / negatif ke transistor','JRING':'+5V / GND / DIN','JM_PAN':'B2 / B1 / A1 / A2','JM_TILT':'B2 / B1 / A1 / A2','JARM':'GPIO ENABLE / EN kedua driver','JH_PAN':'Input HOME / GND','JH_TILT':'Input HOME / GND'}
-    notes={'JPI':'Pin 2/4 Pi tidak memasok AUX.','J5V':'Sekring eksternal 1,5A.','J12V':'Sekring eksternal 2A.','JOLED':'Modul harus mendukung 3,3V.','JHC':'ECHO memakai pembagi tegangan.','JBUZ':'Aktif 5V, dua kaki, <=50mA.','JRING':'12 LED, suplai 5V.','JM_PAN':'Cari pasangan lilitan dengan ohmmeter.','JM_TILT':'Jangan cabut motor saat hidup.','JARM':'Tetap TERBUKA hingga firmware siap.','JH_PAN':'Hubungkan kontak COM dan NC.','JH_TILT':'Hubungkan kontak COM dan NC.'}
+    labels={'JPI':'Pi Zero','J5V':'Daya AUX','J12V':'Daya motor','JOLED':'OLED','JHC':'HC-SR04','JGREEN':'LED hijau','JRED':'LED merah','JBUZ':'Buzzer','JM_PAN':'Motor pan','JM_TILT':'Motor tilt','JARM':'Aktifkan driver','JH_PAN':'Home pan','JH_TILT':'Home tilt'}
+    orders={'JPI':'IDC 40 pin, kabel lurus 1-ke-1','J5V':'+5V AUX / GND','J12V':'+12V / GND','JOLED':'GND / 3,3V / SCL / SDA','JHC':'+5V / TRIG 3,3V / ECHO 5V / GND','JGREEN':'Anoda (+) / katoda (-)','JRED':'Anoda (+) / katoda (-)','JBUZ':'+5V / negatif ke transistor','JM_PAN':'B2 / B1 / A1 / A2','JM_TILT':'B2 / B1 / A1 / A2','JARM':'GPIO ENABLE / EN kedua driver','JH_PAN':'Input HOME / GND','JH_TILT':'Input HOME / GND'}
+    notes={'JPI':'Pin 2/4 Pi tidak memasok AUX.','J5V':'Sekring eksternal 1,5A.','J12V':'Sekring eksternal 2A.','JOLED':'Modul harus mendukung 3,3V.','JHC':'ECHO memakai pembagi tegangan.','JBUZ':'Aktif 5V, dua kaki, <=50mA.','JM_PAN':'Cari pasangan lilitan dengan ohmmeter.','JM_TILT':'Jangan cabut motor saat hidup.','JARM':'Tetap TERBUKA hingga firmware siap.','JH_PAN':'Hubungkan kontak COM dan NC.','JH_TILT':'Hubungkan kontak COM dan NC.'}
     for i,ref in enumerate(labels):
         y=51+i*10
         if i%2==0:d.rect(12,y-6,396,10,'#edf3f7','#edf3f7',0)
         for x,t in [(15,ref),(48,labels[ref]),(115,orders[ref]),(285,notes.get(ref,''))]:d.text(x,y,t,3.2)
     for y,text in [(201,'Resistor: semua 1/4W, 1%. Nilai 2k2 = 2,2 kohm; 2k7 = 2,7 kohm; 330R = 330 ohm.'),
-      (210,'C1, C_HPAN, C_HTILT: 100nF keramik, tanpa polaritas. C2: 1000uF 16V, perhatikan + / -.'),
+      (210,'C_HPAN dan C_HTILT: 100nF keramik, tanpa polaritas. R9: 100k menarik TRIG ke ground.'),
       (219,'C_PAN dan C_TILT: 100uF 35V. Kaki 1 positif. Cocokkan ukuran badan elko dengan ruang pada PCB.'),
       (228,'D1: garis pada badan dioda adalah katoda K. Q1: pad 1=E, 2=B, 3=C dari kiri ke kanan.'),
-      (237,'U1: SN74AHCT125N DIP14, bukan 74HC125. Gunakan soket DIP14, takik di sisi atas peta.'),
+      (237,'Tidak memakai IC buffer atau ring WS2812. GPIO21 / pin40 tidak dirutekan.'),
       (246,'DRV8825: 4 soket female 1x8; pitch 2,54mm; tinggi >=8,5mm; jarak antarbaris 15,24mm.'),
       (255,'Acuan orientasi driver: EN kiri atas, VMOT kanan atas. Jauhkan heatsink dari pin dan trimpot.'),
       (264,'Webcam USB dan Pi berada di luar PCB. USB kamera melalui adaptor OTG langsung ke Pi.'),
       (273,'Gambar menunjukkan batas footprint, bukan jaminan bentuk semua merek komponen identik.')]:d.text(12,y,text,3.3)
-    d.text(12,289,'Panduan 04 / TT-PZ1 / Halaman 2 dari 2. Untuk bor dan 28 jumper, gunakan panduan 03.',2.8,'#64748b')
+    d.text(12,289,f'Panduan 04 / TT-PZ2 / Halaman 2 dari 2. Untuk bor dan {len(b["jumpers"])} jumper, gunakan panduan 03.',2.8,'#64748b')
     c.restoreState();c.showPage();c.save()
     doc=pymupdf.open(path)
     for i,p in enumerate(doc):

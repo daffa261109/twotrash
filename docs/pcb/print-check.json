@@ -1,11 +1,12 @@
 {
+  "revision": "TT-PZ2",
   "pdf_count": 4,
-  "pages": 9,
+  "pages": 8,
   "page_size": "PDF 01-03: A4; PDF 04: A3 landscape",
   "calibration_line_mm": 50.00000576443142,
-  "transfer_vs_bottom_mirror_pixel_mean_error": 0.004381223857613772,
-  "jumper_count": 28,
+  "transfer_vs_bottom_mirror_pixel_mean_error": 0.013443113980466844,
+  "jumper_count": 22,
+  "component_count": 31,
   "relative_wiring_links": "all exist",
-  "status": "print geometry checks passed; physical prototype untested",
-  "component_map": "37 component references; enlarged 2x; not an etch master"
+  "status": "digital print checks passed; physical prototype and direct3.3V HC TRIG untested"
 }

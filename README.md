@@ -14,7 +14,8 @@ Seluruh file mekanik dan petunjuk build berada di `docs/3d/external-gears/`;
 folder tersebut dapat disalin sendiri. Dasar desain: satu Pi,
 webcam USB sekitar 100 × 30 mm, jarak lensa ke flap 30 cm. Target awal sampah 1 kg
 ditangguhkan; revisi mekanik terbaru menghitung flap kosong saja.
-PCB TT-PZ1 memakai Pi Zero langsung ke dua DRV8825, tanpa Nano.
+PCB TT-PZ2 memakai Pi Zero langsung ke dua DRV8825, tanpa Nano.
+WS2812 dan IC buffer dihapus; TRIG HC-SR04 langsung 3,3 V dan ECHO tetap memakai pembagi resistor.
 Pola transfer 1:1 dan panduan perakitan ada di [docs/wiring.md](docs/wiring.md).
 PCB dan mekanik masih memerlukan uji fisik.
 
@@ -26,7 +27,7 @@ Pengendali gerak aplikasi masih servo; kendali STEP/DIR langsung dari Pi, homing
 dan penanganan FAULT belum diimplementasikan. Jumper JARM PCB baru harus tetap terbuka.
 Bagian wiring/dua Pi di bawah mendokumentasikan konfigurasi lama.
 
-## Kabel konfigurasi servo lama (bukan PCB TT-PZ1)
+## Kabel konfigurasi servo lama (bukan PCB TT-PZ2)
 
 | Komponen | Dari | Ke |
 | --- | --- | --- |

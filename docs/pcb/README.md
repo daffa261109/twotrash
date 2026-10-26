@@ -1,6 +1,6 @@
-# PCB TT-PZ1 — Pi Zero langsung ke DRV8825
+# PCB TT-PZ2 — Pi Zero langsung ke DRV8825
 
-Papan carrier satu sisi **140 × 100 mm**, dua motor NEMA17 42HD4027-01, tanpa Nano. Rangkaian lengkap dan langkah uji: [../wiring.md](../wiring.md).
+Papan carrier satu sisi **140 × 100 mm**, dua motor NEMA17 42HD4027-01, tanpa Nano, WS2812, atau IC buffer. TRIG HC-SR04 langsung 3,3 V dari Pi; ECHO tetap lewat pembagi resistor. Pola TT-PZ2 dan daftar jumper baru harus digunakan bersama. Rangkaian lengkap dan langkah uji: [../wiring.md](../wiring.md).
 
 ## File yang digunakan
 
@@ -13,16 +13,16 @@ Papan carrier satu sisi **140 × 100 mm**, dua motor NEMA17 42HD4027-01, tanpa N
 | Preview tampak atas | [previews/pcb-atas.png](previews/pcb-atas.png) |
 | Versi vektor | [output/svg/](output/svg/) |
 | Belanja komponen | [bom.csv](bom.csv) |
-| Kawat jumper W01–W28 | [jumpers.csv](jumpers.csv) |
+| Kawat jumper W01–W22 | [jumpers.csv](jumpers.csv) |
 | Semua pad, net dan diameter bor | [pads.csv](pads.csv) |
 | GPIO untuk firmware baru | [pinmap.json](pinmap.json) |
 | Pemeriksaan jalur/net | [drc-report.json](drc-report.json) |
 
 Cetak file **01** pada **100% / Actual size**, tanpa Fit dan **tanpa mirror tambahan**. Sisi toner ditempel ke tembaga; setelah transfer tampilan sisi tembaga harus sama dengan file **02**. Ukur garis 50 mm terlebih dahulu.
 
-File **04** adalah panduan baca dua halaman A3: peta komponen diperbesar 2×, daftar kode/nilai, dan urutan pin konektor. Titik biru menunjukkan kaki 1; tanda + menunjukkan kaki positif elko. Bentuk berwarna menunjukkan footprint, bukan bentuk pasti semua merek. File 04 bukan master etsa dan tidak menggantikan panduan 28 jumper pada file 03.
+File **04** adalah panduan baca dua halaman A3: peta komponen diperbesar 2×, daftar kode/nilai, dan urutan pin konektor. Titik biru menunjukkan kaki 1; tanda + menunjukkan kaki positif elko. Bentuk berwarna menunjukkan footprint, bukan bentuk pasti semua merek. File 04 bukan master etsa dan tidak menggantikan panduan 22 jumper pada file 03.
 
-Jalur tembaga saja belum merupakan rangkaian lengkap: **28 jumper berisolasi wajib dipasang**. Kedua ujung setiap jumper memakai lubang tersendiri; tidak berbagi lubang dengan kaki komponen. Titik yang hitam penuh pada pola adalah test point cadangan tanpa bor. Lubang mayoritas 1,0 mm; terminal sekrup 1,2 mm; dudukan 3,2 mm. Soket driver perlu tinggi minimal 8,5 mm agar ada ruang kawat di bawah modul; ujung jumper tidak diletakkan di bawah rumah IDC atau IC DIP.
+Jalur tembaga saja belum merupakan rangkaian lengkap: **22 jumper berisolasi wajib dipasang**. Kedua ujung setiap jumper memakai lubang tersendiri; tidak berbagi lubang dengan kaki komponen. Titik yang hitam penuh pada pola adalah test point cadangan tanpa bor. Lubang mayoritas 1,0 mm; terminal sekrup 1,2 mm; dudukan 3,2 mm. Soket driver perlu tinggi minimal 8,5 mm agar ada ruang kawat di bawah modul; ujung jumper tidak diletakkan di bawah rumah IDC .
 
 Footprint driver khusus pinout Pololu DRV8825 2133: 2×8 pin, pitch 2,54 mm, jarak baris 15,24 mm. **EN kiri atas / VMOT kanan atas**. Cocokkan modul dan konektor fisik pada gambar 1:1 sebelum etsa. Ukuran body elko adalah batas penempatan, bukan jaminan semua merek cocok.
 
@@ -37,6 +37,7 @@ PCB hanya DC: input 12 V motor dan 5 V AUX periferal. Pi memakai catu USB sendir
 - `export_board.py`: PDF/SVG/PNG serta CSV dari geometri yang sama; menolak ekspor jika laporan DRC gagal.
 - `draw_system.py`: diagram sistem daya dan sinyal untuk `wiring.md`.
 - `export_component_map.py`: peta berlabel dan tabel konektor; otomatis dipanggil `export_board.py`. Dapat dijalankan sendiri tanpa mengubah file transfer toner.
+- `check_release.py`: cek ukuran PDF, mirror, jumlah jumper, tautan wiring dan hash rilis.
 
 Dengan Python dan paket dari `requirements.txt`, jalankan dari folder ini:
 
@@ -45,6 +46,7 @@ python route_board.py
 python validate_board.py
 python export_board.py
 python draw_system.py
+python check_release.py
 ```
 
 Tidak membutuhkan KiCad atau autorouter eksternal. Tidak ada lapisan tembaga atas atau via berlapis; jumper adalah kawat nyata. Hasil merupakan prototipe untuk etsa manual, bukan Gerber fabrikasi multi-layer.
