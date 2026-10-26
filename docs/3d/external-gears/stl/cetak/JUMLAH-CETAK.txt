@@ -1,0 +1,50 @@
+JUMLAH CETAK — SATU RAKITAN REV G1 (FLAP KOSONG)
+
+Hanya STL dalam folder cetak ini yang dicetak sebagai komponen plastik.
+Jumlah salinan di bawah berlaku untuk SELURUH ISI file STL.
+
+File             Salinan STL   Isi per STL   Hasil komponen
+----------------------------------------------------------
+flap.stl         1             1             1
+frame.stl        1             1             1
+base_left.stl    1             1             1
+base_right.stl   1             1             1
+pinion_pan.stl   1             1             1
+pinion_tilt.stl  1             1             1
+driven.stl       2             1             2
+caps.stl         1             2             2
+retainers.stl    1             4             4
+
+TOTAL: 14 komponen plastik untuk satu rakitan.
+caps.stl: impor satu kali, sudah berisi DUA tutup; jangan digandakan lagi.
+retainers.stl: impor satu kali, sudah berisi EMPAT cincin; jangan digandakan lagi.
+pinion_pan.stl dan pinion_tilt.stl: masing-masing SATU; driven.stl: DUA.
+
+KETERANGAN
+- flap.stl: Flap 200 x 250 mm dengan penguat dan hub menyatu.
+- frame.stl: Rangka kepala pan-tilt.
+- base_left.stl: Belahan base kiri.
+- base_right.stl: Belahan base kanan.
+- pinion_pan.stl: Gear kecil PAN: penjepit di bawah gigi, untuk poros bulat 5 mm.
+- pinion_tilt.stl: Gear kecil TILT: penjepit di atas gigi, untuk poros bulat 5 mm.
+- driven.stl: Gear besar 48 gigi.
+- caps.stl: Satu STL sudah berisi dua tutup bearing.
+- retainers.stl: Satu STL sudah berisi empat cincin penahan bearing.
+
+Material awal: PETG untuk prototipe flap kosong.
+Pinion lama pinion.stl sudah diganti; jangan gunakan untuk motor ini.
+Pinion: 6 perimeter, infill 100%, layer 0.15-0.20 mm sebagai awal uji.
+PAN cetak sisi gigi datar di bed (balik 180 derajat); TILT sisi gigi di bed.
+Support diperlukan di bawah telinga/hub yang menjorok; bersihkan slot dan bore.
+Setiap penjepit: baut socket-head M3x16 + mur M3, TANPA washer.
+Total 2 baut M3x16 dan 2 mur M3; baut tambahan ini belum dibeli.
+Bersihkan lubang cetakan; jangan mengikir poros motor. Uji fit tanpa memaksa.
+Lihat catatan motor/pinion di CATATAN.txt sebelum merakit.
+Flap berukuran 200 x 250 mm; sediakan area cetak untuk brim.
+Periksa orientasi dan support di slicer, terutama flap dan hub poros.
+Ukuran CAD dalam mm. Jumlah cetak bukan pengaturan orientasi/support.
+
+Folder sebelah, referensi/, BUKAN daftar komponen untuk dicetak.
+Motor, bearing, poros baja, collar, backing plate logam, baut/mur dan
+rivet memakai hardware nyata sesuai CATATAN.txt di folder utama.
+Desain ini belum melalui uji fisik; tidak memiliki rating sampah 1 kg.

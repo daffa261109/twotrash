@@ -1,0 +1,10 @@
+{
+  "pdf_count": 3,
+  "pages": 7,
+  "page_size": "A4",
+  "calibration_line_mm": 50.00000576443142,
+  "transfer_vs_bottom_mirror_pixel_mean_error": 0.004381223857613772,
+  "jumper_count": 28,
+  "relative_wiring_links": "all exist",
+  "status": "print geometry checks passed; physical prototype untested"
+}

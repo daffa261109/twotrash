@@ -1,5 +1,5 @@
 {
-  "revision": "G",
+  "revision": "G1",
   "status": "design_selected_and_locked_by_user",
   "locked_date": "2026-10-26",
   "specification": {
@@ -12,38 +12,58 @@
       66,
       98
     ],
-    "motor": "2 x NEMA17",
+    "motor": "2 x NEMA17 42HD4027-01, 1.5A/phase",
     "external_gear_ratio_each_axis": 3,
     "payload_kg": 0,
-    "integral_flap_support": true
+    "integral_flap_support": true,
+    "motor_round_shaft_target_diameter_mm": 5,
+    "motor_shaft_projection_mm": {
+      "nominal": 23,
+      "tolerance": 1
+    },
+    "pinions": {
+      "pinion_pan": 1,
+      "pinion_tilt": 1,
+      "clamp_bolt": "M3x16 socket head, maximum head diameter5.5mm",
+      "clamp_nut": "M3 AF5.5mm thickness2.4mm",
+      "washer": false
+    }
   },
   "validation_status": "Digital checks only; physical testing pending; not a 1kg load rating",
   "source_sha256": {
-    "rakitan.scad": "0feeefe7dffc154a900c333e99e87accaedaa4b2e6c464127331320eb7e44998",
+    "rakitan.scad": "d5228b13e6fb299218bdc05c70af21670d44de9e417d46612ac8a696ffd97258",
     "gear_profiles.scad": "72e33217123638c3677eab2d4de4f8c6c621eab0564609d24d02d221b0c7337a",
-    "flap-shape-library.scad": "dabf0b736726e6fd2b3c4e3fd9aaf00563443b184a9283d80d74a1f726b4e345"
+    "flap-shape-library.scad": "dabf0b736726e6fd2b3c4e3fd9aaf00563443b184a9283d80d74a1f726b4e345",
+    "build.py": "a98ba9267a351b4cb07d68c60ae2b239ba3a46367401a2d5331ef3df2362a5ca",
+    "parts.py": "db77dd4b5c2d8c6e88073f51d71ea92225b47ae9268515c24a01b93373a2b560",
+    "check_pinion_fit.py": "c3a8cab7ef0bba83e0fd932b4caadfd61f5f90841458e9726d05b51f352d3b6a"
   },
   "stl_sha256": {
-    "stl/pan_collars.stl": "a83d47a77383c357ba61bbcd6ade75834551aa75d4805d67962726d55b5f2510",
-    "stl/tray_only.stl": "919122bf806b77474a78e77f011c22c4f582fe2ff5a498c09fed65263fea2ef8",
-    "stl/flap.stl": "6eccf9ee8dafc0fb62207cd711800cdb3f9cafa46a4dca27da3b76720f428afa",
-    "stl/flange.stl": "dbf931114e4094356b60a80cd47aebd7771bbbc58743884e4632dd3f9d56b52b",
-    "stl/pan_bearings.stl": "a0a36e97f824f31ef6ac425b3b4f5a85ba249d26c5283e9abd7206e90a6dcab3",
-    "stl/motor.stl": "8a08f87c5a16a9828e6b1f1e7c1e078b9833c0ef8594e14801782c95af89e61a",
-    "stl/base_left.stl": "0c6ce27ab4a93506924c9a575a8deaec7c9e3572cc9d47948d546c4aebf64e26",
-    "stl/tilt_collar.stl": "2c62787f2375535f35d9dd1f8026e0ceeb61a17d1a0192cefc27025691b0a639",
-    "stl/tilt_bearings.stl": "ac8c9013056e9a19f49da98c0d1bedd60f7c580e4e0c144499edcc1112cbca34",
-    "stl/backplates.stl": "e787efe1463bf9bbb251e886f1d6a5abd5bb08b026ad12edef08b3d1e78bfa56",
-    "stl/retainers.stl": "8459036eb63c6355cd84a31a7f48cc26a86e2f7cd7aa2ac37a5fdba3d16b032c",
-    "stl/driven.stl": "13689447b7eca8374b35a0dde743b0c80844a28880ecff64ccb5d5b7ff214473",
-    "stl/tilt_shaft.stl": "6aeda3825651f96835cb51ff21dc1bcd4f8775f12cbf7d44e65c82f36ddf0a23",
-    "stl/pinion.stl": "0ff5c4e6d7fad8a1f2785292eba8ef09e5b11f19399573fbda850a9fce6892df",
-    "stl/frame.stl": "97bf9dfe6c00a3c9a2d52e4cb9452cc6cdf8dbe848867f73a580b4c9039fddec",
-    "stl/caps.stl": "998000722120c525a806bbaa635280725277258ae5974d08c50ddcee757a927c",
-    "stl/rails.stl": "94a89452660b3346e577cb8ebf22958e86d0749da68b078490d8b38eec6a0c4c",
-    "stl/base_right.stl": "60d957a24bf3e783728a574458780f20ba68ab104e319aeb0d78185177b0b6e8",
-    "stl/pan_shaft.stl": "f48a5e944f3c9b0658ee5f72cbee246fc70fda7f84a62afbfe00d31c94f38ea9",
-    "stl/rivets.stl": "ffe06408e969b419a2cc17c83721527abebf03102d5878329c8a67ac8b857c95"
+    "stl/cetak/base_left.stl": "0c6ce27ab4a93506924c9a575a8deaec7c9e3572cc9d47948d546c4aebf64e26",
+    "stl/cetak/base_right.stl": "60d957a24bf3e783728a574458780f20ba68ab104e319aeb0d78185177b0b6e8",
+    "stl/cetak/caps.stl": "998000722120c525a806bbaa635280725277258ae5974d08c50ddcee757a927c",
+    "stl/cetak/driven.stl": "13689447b7eca8374b35a0dde743b0c80844a28880ecff64ccb5d5b7ff214473",
+    "stl/cetak/flap.stl": "6eccf9ee8dafc0fb62207cd711800cdb3f9cafa46a4dca27da3b76720f428afa",
+    "stl/cetak/frame.stl": "97bf9dfe6c00a3c9a2d52e4cb9452cc6cdf8dbe848867f73a580b4c9039fddec",
+    "stl/cetak/pinion_pan.stl": "d9d3865e957935e9fa2910911f419f1374eaa7b949eab7bad57b8b6bd76905a3",
+    "stl/cetak/pinion_tilt.stl": "30cee7bf6dcf1c41caf1f4aed2b041c9e9003a97655b526370d03cbcecb937be",
+    "stl/cetak/retainers.stl": "8459036eb63c6355cd84a31a7f48cc26a86e2f7cd7aa2ac37a5fdba3d16b032c",
+    "stl/referensi/backplates.stl": "e787efe1463bf9bbb251e886f1d6a5abd5bb08b026ad12edef08b3d1e78bfa56",
+    "stl/referensi/flange.stl": "dbf931114e4094356b60a80cd47aebd7771bbbc58743884e4632dd3f9d56b52b",
+    "stl/referensi/motor.stl": "4125b393f9dd058dc9bd4b96e933937a2e3f8e79dad1dce3618f3b327ef208c5",
+    "stl/referensi/pan_bearings.stl": "a0a36e97f824f31ef6ac425b3b4f5a85ba249d26c5283e9abd7206e90a6dcab3",
+    "stl/referensi/pan_collars.stl": "a83d47a77383c357ba61bbcd6ade75834551aa75d4805d67962726d55b5f2510",
+    "stl/referensi/pan_shaft.stl": "f48a5e944f3c9b0658ee5f72cbee246fc70fda7f84a62afbfe00d31c94f38ea9",
+    "stl/referensi/pinion_pan_fastener.stl": "6e5d3d5395c94188b9678f06c9e9d7c66323d7bb27e4a9e798ca482daca90d97",
+    "stl/referensi/pinion_tilt_fastener.stl": "74e80152f72d04f2c1bdfd8ff6994bf0ce031aaa6de7919d81b28361f33fe38e",
+    "stl/referensi/rails.stl": "94a89452660b3346e577cb8ebf22958e86d0749da68b078490d8b38eec6a0c4c",
+    "stl/referensi/rivets.stl": "ffe06408e969b419a2cc17c83721527abebf03102d5878329c8a67ac8b857c95",
+    "stl/referensi/tilt_bearings.stl": "ac8c9013056e9a19f49da98c0d1bedd60f7c580e4e0c144499edcc1112cbca34",
+    "stl/referensi/tilt_collar.stl": "2c62787f2375535f35d9dd1f8026e0ceeb61a17d1a0192cefc27025691b0a639",
+    "stl/referensi/tilt_shaft.stl": "6aeda3825651f96835cb51ff21dc1bcd4f8775f12cbf7d44e65c82f36ddf0a23",
+    "stl/referensi/tray_only.stl": "919122bf806b77474a78e77f011c22c4f582fe2ff5a498c09fed65263fea2ef8"
   },
-  "path_base": "directory containing this file"
+  "path_base": "directory containing this file",
+  "parent_revision": "G",
+  "revision_reason": "User authorized 42HD4027-01 motors and split-clamp pinions for round shafts without filing."
 }

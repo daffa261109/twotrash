@@ -1,4 +1,6 @@
-"""Pin BCM sesuai docs/wiring.md. Nomor physical mengikuti header 40 pin Pi Zero."""
+"""Pin BCM konfigurasi SERVO LAMA. PCB stepper baru: docs/pcb/pinmap.json.
+Nomor physical mengikuti header 40 pin Pi Zero; jangan aktifkan JARM dengan driver servo ini.
+"""
 
 # OLED I2C. Physical pin 3 dan 5.
 OLED_SDA_PIN = 2

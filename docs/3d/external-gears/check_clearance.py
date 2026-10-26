@@ -3,8 +3,9 @@ from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor,as_completed
 import subprocess,json,tempfile
 ROOT=Path(__file__).resolve().parent
+from parts import stl_path
 
-def imp(p):return 'import('+json.dumps(str(ROOT/'stl'/f'{p}.stl'))+');'
+def imp(p):return 'import('+json.dumps(str(stl_path(p)))+');'
 def run(angle):
     with tempfile.TemporaryDirectory(prefix='external-gear-clearance-') as d:
         d=Path(d)

@@ -1,179 +1,136 @@
-# Wiring Pi Zero
+# Wiring TT-PZ1: Pi Zero langsung ke dua NEMA17
 
-> Mekanik yang dikunci: [Rev G, flap kosong](3d/external-gears/CATATAN.txt).
-> Pengendali stepper belum diaktifkan; wiring di bawah masih untuk konfigurasi servo.
+Revisi 26 Oktober 2026. Mekanik: [Rev G1, flap 200 × 250 mm, flap kosong](3d/external-gears/CATATAN.txt).
+**Tidak memakai Arduino Nano.** Pi Zero mengendalikan dua modul **DRV8825**, masing-masing untuk motor **42HD4027-01, 1,5 A/fase**. Kamera lama diganti webcam USB.
 
-Mesin punya dua tingkat. Kotak atas memegang elektronik yang dekat kamera. Rak bawah memegang listrik PLN, catu 5 V, dan dua servo.
+**Status:** pola PCB satu sisi dibuat untuk prototipe. Program dalam proyek masih mengendalikan servo; belum menghasilkan gerak stepper, homing, atau penanganan FAULT sesuai tabel di bawah. Jangan menjalankan urutan sortir lama pada rakitan baru. Biarkan jumper **JARM terbuka** sampai perangkat lunak stepper siap.
 
-Mesin memakai **satu Raspberry Pi Zero** dan **dua servo MG996R**:
+## File PCB
 
-- **Servo 1** memutar flap 360° untuk memilih jalur sampah (GPIO 18).
-- **Servo 2** memiringkan flap ke atas dan ke bawah untuk membuang sampah (GPIO 13).
+Semua sumber, pemeriksaan dan keluaran ada di [pcb/](pcb/).
 
-Kedua servo duduk di tengah rak bawah, diikat dengan braket MG996. Kabel dari Pi di atas ke servo dipotong **80 cm** (jalur terpakai sekitar 70 cm).
+- [01-transfer-toner-1to1.pdf](pcb/output/pdf/01-transfer-toner-1to1.pdf): **file yang dicetak untuk transfer toner**. Hitam adalah tembaga yang dipertahankan.
+- [02-tembaga-bawah-inspeksi.pdf](pcb/output/pdf/02-tembaga-bawah-inspeksi.pdf): tampilan sisi tembaga setelah transfer; untuk pembanding, bukan master transfer kedua.
+- [03-komponen-dan-bor.pdf](pcb/output/pdf/03-komponen-dan-bor.pdf): posisi komponen tampak atas dan panduan bor.
+- [Daftar jumper kawat](pcb/jumpers.csv), [BOM](pcb/bom.csv), [daftar kaki/net](pcb/pads.csv), dan [hasil pemeriksaan](pcb/drc-report.json).
 
-![Susunan kotak atas dan rak bawah](rangkaian.jpg)
+![Papan gabungan tampak atas](pcb/previews/pcb-atas.png)
 
-## Diagram rangkaian
+Papan **140 × 100 mm**, FR4 satu sisi, tembaga nominal **35 µm / 1 oz**. Komponen berada di sisi tanpa tembaga. Modul driver dan IC buffer memakai soket. Soket driver setinggi minimal 8,5 mm menyediakan ruang jumper di bawah modul. Pi berada di luar PCB, dihubungkan dengan kabel IDC 40 pin **1-ke-1**, pendek sekitar 10–15 cm; pin 1 wajib bertemu pin 1. PCB ini menggantikan papan lubang lama, bukan pola untuk PCB lubang 2 × 8 cm.
 
-Diagram daya: alur listrik PLN, catu 5 V, dua servo, dan kabel naik 80 cm ke kotak atas.
+## Daya dan kamera
 
 ![Diagram daya](diagram-daya.svg)
 
-Diagram sinyal: sambungan tiap pin Pi Zero ke OLED, HC-SR04, LED, buzzer, cincin, dua servo, dan kamera.
+| Sambungan | Sumber / fungsi |
+| --- | --- |
+| Pi Zero | Catu USB 5 V yang sesuai Pi; tetap melalui port **PWR IN** |
+| J12V-1 / -2 | +12 V / GND dari adaptor DC 12 V, kapasitas awal 3 A, melalui sekring eksternal 2 A |
+| J5V-1 / -2 | +5 V AUX / GND dari catu stabil 5 V 2 A; melalui sekring eksternal 1,5 A |
+| JRING | Ring WS2812 12 LED: 5 V AUX, GND, DIN |
+| Webcam | Kabel USB ke port **USB/OTG** Pi melalui adaptor OTG; bukan PWR IN |
+
+Pin 5 V Pi (pin fisik 2 dan 4) **tidak dirutekan** ke 5 V AUX. Semua ground bertemu di PCB. Tegangan 12 V tidak masuk ke Pi, OLED, ring, atau sensor. Dua motor mendapat daya hanya dari keluaran DRV8825; tegangan nominal lilitan motor bukan tegangan adaptor yang harus dipakai ketika menggunakan pembatas arus driver.
+
+Kamera menggunakan kabel USB utuh; pasangan D+/D− tidak dibuat di PCB etsa ini. Jika perangkat USB tambahan diperlukan, gunakan hub USB yang sesuai dan tidak memberi daya balik ke port upstream. Lebar pandangan ditentukan lensa webcam, bukan rangkaian PCB. Posisi rencana lensa sekitar 30 cm dari flap; uji seluruh area flap terlihat sebelum mengencangkan dudukan.
+
+PCB hanya membawa tegangan DC rendah. Adaptor, sekring dan sambungan jaringan listrik tetap di luar papan ini. Jangan memindahkan terminal PLN lama ke pola PCB ini.
+
+## Koneksi Pi
+
+Nomor BCM dan nomor fisik **berbeda**. Semua nomor pada konektor JPI mengikuti nomor fisik header Pi 40 pin. Kaki JPI yang tidak disebutkan pada tabel tidak dirutekan.
+
+| Fungsi | BCM | Pin fisik / JPI | Ke |
+| --- | ---: | ---: | --- |
+| 3,3 V | — | 1 | OLED, logika driver, pull-up home dan enable |
+| Ground | — | 6 | GND bersama |
+| OLED SDA | 2 | 3 | JOLED-4 |
+| OLED SCL | 3 | 5 | JOLED-3 |
+| HC-SR04 TRIG | 17 | 11 | U1 buffer 3,3 → 5 V → JHC-2 |
+| HC-SR04 ECHO | 27 | 13 | Pembagi R2/R3 dari JHC-3 |
+| LED hijau | 22 | 15 | R4 330 Ω → JGREEN-1 |
+| LED merah | 23 | 16 | R5 330 Ω → JRED-1 |
+| Buzzer | 5 | 29 | R6 → transistor Q1 → JBUZ-2 |
+| Ring LED DIN | 21 | 40 | U1 buffer → R1 330 Ω → JRING-3 |
+| PAN STEP | 18 | 12 | DRV_PAN STEP |
+| PAN DIR | 12 | 32 | DRV_PAN DIR |
+| TILT STEP | 13 | 33 | DRV_TILT STEP |
+| TILT DIR | 19 | 35 | DRV_TILT DIR |
+| ENABLE bersama | 26 | 37 | Lewat JARM ke kedua EN, **LOW = aktif** |
+| Home pan | 6 | 31 | JH_PAN-1 |
+| Home tilt | 16 | 36 | JH_TILT-1 |
+| FAULT pan | 20 | 38 | DRV_PAN FAULT, **LOW = fault** |
+| FAULT tilt | 25 | 22 | DRV_TILT FAULT, **LOW = fault** |
+
+GPIO Pi menggunakan logika 3,3 V. GPIO24/pin18 dan koneksi servo lama tidak dipakai pada PCB ini. Jangan menjalankan modul `motor` L298N yang memakai pin bertumpang tindih. [Dokumentasi GPIO Raspberry Pi](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#gpio).
 
 ![Diagram sinyal](diagram-sinyal.svg)
 
-## Rak bawah
+## Dua driver DRV8825
 
-Dari kiri ke kanan: soket AC, catu switching 5 V, lalu dua servo di tengah.
+Footprint dikunci ke **pinout carrier Pololu 2133**, dua baris masing-masing 8 pin, pitch 2,54 mm, jarak antarbaris 15,24 mm. Modul dipasang komponen menghadap atas: **EN di kiri atas, VMOT di kanan atas** pada gambar penempatan. Cocokkan tulisan kaki pada modul yang dibeli; jangan menilai arah dari posisi trimpot atau warna PCB. A4988/TMC bukan pengganti tanpa pemeriksaan ulang.
 
-| Komponen | Dari | Ke |
-| --- | --- | --- |
-| Soket AC | L | sekring, lalu saklar, lalu L catu |
-| Soket AC | N | N catu |
-| Soket AC | PE | baut rangka logam, atau diisolasi jika kotak semua plastik |
-| Catu 5 V | +V | kabel merah kedua servo, dan kabel 5 V naik ke cincin LED |
-| Catu 5 V | −V | kabel cokelat kedua servo, GND Pi, dan GND cincin |
-| Servo 1 (putar 360°) | sinyal | GPIO 18 / pin 12 pada Pi, kabel 80 cm |
-| Servo 2 (miring atas-bawah) | sinyal | GPIO 13 / pin 33 pada Pi, kabel 80 cm |
-
-Kabel merah servo tidak masuk ke pin 5 V Pi. Pi tetap makan dari kabel USB-nya sendiri.
-
-Catu di foto adalah 5 V 2 A. Itu cukup untuk cincin LED, tetapi dua servo MG996R saat macet menarik jauh di atas 2 A. Untuk rak bawah ini pakai catu **5 V 5 A** dengan bentuk yang sama. Jangan membebani unit 2 A dengan kedua servo.
-
-## Kotak atas
-
-Kotak plastik 160 × 130 × 45 mm. Isinya satu Pi Zero, kamera, cincin LED, HC-SR04, OLED, buzzer, LED hijau, LED merah, dan PCB lubang 2 × 8 cm.
-
-Pi Zero lebih besar dari PCB itu, jadi Pi tidak ditumpang di atas PCB. PCB memegang resistor, buzzer, LED indikator, dan header. Kamera, cincin, sensor jarak, dan OLED dipasang di dinding kotak, lalu kawatnya masuk ke header PCB.
-
-Cincin yang dibeli adalah **WS2812 12 LED**. Pasang mengelilingi lensa kamera. Lampu satu LED di GPIO 24 tidak dipakai pada rakitan ini. Data cincin masuk ke GPIO 21 / pin 40.
-
-| Komponen | Dari | Ke |
-| --- | --- | --- |
-| OLED | VCC | 5 V Pi (pin 2) |
-| OLED | GND | GND |
-| OLED | SDA | GPIO 2 / pin 3 |
-| OLED | SCL | GPIO 3 / pin 5 |
-| HC-SR04 | VCC | 5 V Pi (pin 4) |
-| HC-SR04 | GND | GND |
-| HC-SR04 | TRIG | GPIO 17 / pin 11 |
-| HC-SR04 | ECHO | 2,2 kΩ → GPIO 27 / pin 13, lalu 2,7 kΩ ke GND |
-| LED hijau | anoda | 330 Ω → GPIO 22 / pin 15 |
-| LED merah | anoda | 330 Ω → GPIO 23 / pin 16 |
-| Buzzer | sinyal | GPIO 5 / pin 29 |
-| Cincin 12 LED | 5 V | +V catu bawah, kabel 80 cm |
-| Cincin 12 LED | GND | −V catu bawah |
-| Cincin 12 LED | DIN | 100 Ω → GPIO 21 / pin 40 |
-| Servo 1 (putar 360°) | sinyal | GPIO 18 / pin 12, kabel 80 cm turun |
-| Servo 2 (miring atas-bawah) | sinyal | GPIO 13 / pin 33, kabel 80 cm turun |
-
-Pin sinyal ada di `servo/pins.py`.
-
-## Isi PCB 2 × 8 cm
-
-Papan ini berbaring di dasar kotak, di samping Pi, sisi panjang 8 cm menghadap header Pi. Jangan menaruh Pi, kamera, cincin, badan HC-SR04, atau modul OLED di atas papan. Bagian itu menempel di dinding kotak. Yang masuk ke lubang PCB hanya resistor, buzzer kecil, dan pin header.
-
-Tiga jalur disolder memanjang, tidak saling tersambung:
-
-| Jalur | Isi | Tidak disambung ke |
-| --- | --- | --- |
-| GND | semua ground di kotak, termasuk GND Pi dan GND kabel 80 cm dari catu bawah | — |
-| 5 V Pi | VCC OLED dan VCC HC-SR04, dari pin 2 atau pin 4 | jalur 5 V catu |
-| 5 V catu | hanya kaki 5 V cincin, dari kabel 80 cm | pin 5 V Pi |
-
-Ground memang berkumpul di jalur GND pada PCB ini. Satu kawat dari situ ke pin GND Pi. Satu kawat 80 cm dari situ ke −V catu di bawah. Itulah sambungan ground bersama.
-
-Urutan dari kiri ke kanan pada papan:
-
-1. Header dupont ke Pi.
-2. Pembagi ECHO: 2,2 kΩ lalu 2,7 kΩ. Ujung bawah 2,7 kΩ ke jalur GND.
-3. Dua resistor 330 Ω untuk LED hijau dan LED merah. Katoda LED ke jalur GND.
-4. Satu resistor 100 Ω untuk data cincin. Keluar ke DIN.
-5. Buzzer, kaki negatif ke jalur GND.
-6. Di ujung kanan, header untuk kabel 80 cm: dua sinyal servo, GND, dan 5 V catu.
-
-LED hijau, LED merah, dan buzzer boleh menempel di dinding kotak. Kakinya yang masuk ke PCB, bukan badannya, jika tempat di papan sudah penuh.
-
-## Tata letak resistor di PCB lubang 6 × 28
-
-Versi ini memakai papan dengan 6 baris (A sampai F) dan 28 kolom. Baris A jadi jalur 5 V Pi, baris F jadi jalur GND, semua resistor ada di baris C. Jalur 5 V catu tidak lewat papan ini. Kabel merah servo dan 5 V cincin datang langsung dari catu bawah.
-
-![Tata letak PCB 6 × 28](diagram-pcb.svg)
-
-| Resistor | Lubang | Sambungan |
-| --- | --- | --- |
-| 2,2 kΩ | C2 ↔ C5 | ECHO HC-SR04 masuk di C2. Simpul C5 ke Pi pin 13 |
-| 2,7 kΩ | C5 ↕ F5 | Dari simpul C5 ke jalur GND |
-| 330 Ω | C8 ↔ C11 | Pi pin 15 masuk di C8. C11 ke anoda LED hijau |
-| 330 Ω | C13 ↔ C16 | Pi pin 16 masuk di C13. C16 ke anoda LED merah |
-| 100 Ω | C18 ↔ C21 | Pi pin 40 masuk di C18. C21 ke DIN cincin |
-
-Hanya ada satu resistor 100 Ω, jadi dipakai untuk data cincin dan kedua LED memakai 330 Ω.
-
-Stok yang dibutuhkan: satu 2,2 kΩ, satu 2,7 kΩ, dua 330 Ω, dan satu 100 Ω. Resistor 1 kΩ dan 4,7 kΩ tidak dipakai.
-
-## Pembagi ECHO
-
-ECHO HC-SR04 mengeluarkan 5 V. GPIO hanya tahan 3,3 V.
-
-```
-ECHO ---- 2,2 kΩ ----+---- GPIO 27 / pin 13
-                      |
-                    2,7 kΩ
-                      |
-                     GND
-```
-
-Tegangan ke GPIO: 5 V × 2,7 / (2,2 + 2,7) = 2,75 V. Itu di bawah batas 3,3 V dan jauh di atas ambang HIGH Pi (sekitar 1,3 V).
-
-Resistor ini duduk di PCB lubang. Jangan menyambung ECHO langsung ke pin 13.
-
-## Kebutuhan kabel
-
-Panjang di bawah sudah termasuk sedikit lebih untuk dilipat di ujung. Kabel 80 cm adalah jalur Pi di atas ke rak bawah.
-
-### Di rak bawah, pendek
-
-| Kabel | Jumlah | Panjang | Kawat | Sambungan |
-| --- | --- | --- | --- | --- |
-| Fasa | 1 | 15 cm | 0,75 mm² | L soket, lewat sekring dan saklar, ke L catu |
-| Netral | 1 | 15 cm | 0,75 mm² | N soket ke N catu |
-| Bumi | 1 | 15 cm | 0,75 mm² | PE soket ke rangka logam, atau diisolasi |
-| 5 V servo | 2 | 20 cm | 0,75 mm² | +V catu ke merah tiap servo |
-| GND servo | 2 | 20 cm | 0,75 mm² | −V catu ke cokelat tiap servo |
-
-### Naik ke kotak atas
-
-Satu Pi, satu set kabel.
-
-| Kabel | Jumlah | Panjang | Kawat | Sambungan |
-| --- | --- | --- | --- | --- |
-| Sinyal servo 1 (putar) | 1 | 80 cm | 0,25 mm² | GPIO 18 ke kabel oranye/kuning servo 1 |
-| Sinyal servo 2 (miring) | 1 | 80 cm | 0,25 mm² | GPIO 13 ke kabel oranye/kuning servo 2 |
-| GND pasangan servo | 1 | 80 cm | 0,5 mm² | GND Pi ke −V catu, dipilin dengan kedua sinyal |
-| 5 V cincin | 1 | 80 cm | 0,5 mm² | +V catu ke 5 V cincin |
-| GND cincin | 1 | 80 cm | 0,5 mm² | −V catu ke GND cincin |
-
-Jangan memakai kabel dupont tipis untuk 5 V cincin sepanjang 80 cm. Dua belas LED putih menarik kira-kira 0,7 A.
-
-### Di dalam kotak, 15 cm
-
-| Kabel | Jumlah per kotak | Kawat | Catatan |
+| Baris kiri, atas → bawah | Net | Baris kanan, atas → bawah | Net |
 | --- | --- | --- | --- |
-| Dupont ke header Pi | 13 | 0,25 mm² | OLED, sensor, LED, buzzer, data cincin, dua sinyal servo |
-| Kabel pita kamera | 1 | pita CSI | dari kamera ke soket kamera Pi, pendek |
-| Data cincin | 1 | 0,25 mm² | DIN cincin, lewat 100 Ω, ke GPIO 21 |
+| EN | ENABLE bersama | VMOT | +12 V |
+| M0 | GND | GND | GND |
+| M1 | GND | B2 | JM motor pin 1 |
+| M2 | 3,3 V | B1 | JM motor pin 2 |
+| RESET | 3,3 V | A1 | JM motor pin 3 |
+| SLEEP | 3,3 V | A2 | JM motor pin 4 |
+| STEP | GPIO sesuai sumbu | FAULT | GPIO FAULT masing-masing |
+| DIR | GPIO sesuai sumbu | GND | GND |
 
-## Urutan pasang
+Konfigurasi M0=0, M1=0, M2=1 memilih **1/16 microstep**. Dengan motor 200 langkah/putaran dan gear 3:1, satu putaran keluaran membutuhkan 9.600 pulsa; 1° sekitar 26,667 pulsa. Gunakan target posisi absolut dalam satuan langkah agar pembulatan sudut tidak terakumulasi. Input driver menerima 3,3 V; pembatas arus dan setelan langkah harus sesuai carrier. [Panduan carrier DRV8825](https://www.pololu.com/product/2133).
 
-1. Cabut PLN dan USB Pi.
-2. Ikat dua servo di tengah rak bawah dengan braket. Merah dan cokelat hanya ke catu 5 V.
-3. Pasang soket AC. Fasa wajib lewat sekring dulu, baru saklar, baru ke catu. Tutup semua sambungan PLN sebelum kotak ditutup.
-4. Naikkan dua sinyal servo, GND, serta 5 V dan GND cincin sepanjang 80 cm.
-5. Di kotak atas, solder pembagi ECHO, resistor LED, dan header pada PCB 2 × 8 cm. Baru kemudian colok ke Pi.
-6. Nyalakan USB Pi dulu. Catu 5 V bawah dinyalakan setelah Pi hidup.
-7. Hentikan program sebelum melepas kabel.
+C_PAN dan C_TILT adalah elko **100 µF 35 V**, masing-masing dekat pasangan VMOT/GND. Kaki positif ke 12 V. Jangan mencabut/memasang motor atau driver saat diberi daya. EN ditarik HIGH oleh R_EN 2,2 kΩ; JARM yang terbuka memutus kontrol enable dari Pi. RESET/SLEEP ikut 3,3 V Pi sehingga driver tidak dibangunkan ketika Pi tidak diberi daya.
 
-Program yang sekarang masih menyalakan GPIO 24 untuk lampu lama. Cincin WS2812 di GPIO 21 belum ikut perintah itu.
+Terminal motor berurutan **B2, B1, A1, A2**. Cari dua pasangan lilitan memakai ohmmeter: satu pasangan ke B2/B1, pasangan lain ke A1/A2. Jangan mengandalkan warna kabel; kabel dalam satu pasangan menunjukkan resistansi kecil, pasangan silang tidak tersambung. Tukar kedua kabel satu pasangan hanya jika perlu membalik arah dan setelah daya dicabut.
+
+**Setelan awal pembatas arus: 1,0 A.** Untuk carrier dengan resistor sense **R100 = 0,10 Ω**, rumusnya `I_limit = Vref / (5 × Rsense)`, sehingga Vref awal 0,50 V. Batas motor 1,5 A setara 0,75 V **hanya bila Rsense benar-benar 0,10 Ω**. Jangan memakai angka tersebut pada clone R050/R068 atau trimpot yang belum diketahui. Gunakan heatsink dan aliran udara; naikkan arus hanya setelah memeriksa suhu dan kebutuhan torsi. Pengukuran arus adaptor bukan pengukuran arus lilitan. [Datasheet TI DRV8825](https://www.ti.com/lit/ds/symlink/drv8825.pdf).
+
+## Sensor, lampu dan buzzer
+
+| Konektor | Urutan kaki 1 → terakhir |
+| --- | --- |
+| JOLED | GND, **3,3 V**, SCL, SDA |
+| JHC | 5 V AUX, TRIG 5 V, ECHO 5 V, GND |
+| JGREEN / JRED | Anoda LED setelah resistor, katoda/GND |
+| JBUZ | +5 V AUX, negatif buzzer ke kolektor Q1 |
+| JRING | +5 V AUX, GND, DIN setelah buffer/resistor |
+| JH_PAN / JH_TILT | Input home, GND |
+
+OLED harus modul yang mendukung suplai 3,3 V dan tidak memiliki pull-up I²C ke 5 V. Urutan soket modul OLED dapat berbeda dari JOLED; sambungkan berdasarkan nama sinyal.
+
+ECHO diturunkan oleh R2=2,2 kΩ dan R3=2,7 kΩ: `5 × 2,7 / (2,2 + 2,7) ≈ 2,76 V`. ECHO sensor tidak langsung masuk Pi. U1 **SN74AHCT125N DIP14** menaikkan TRIG dan DIN ring menjadi 5 V; jangan menggantinya dengan 74HC125. C1=100 nF dipasang dekat U1, dan C2=1000 µF 16 V di suplai ring. R8/R9 masing-masing 100 kΩ menahan input buffer LOW saat GPIO belum aktif. Dua gate U1 yang tidak dipakai dinonaktifkan dan inputnya diberi level tetap. [Datasheet buffer TI](https://www.ti.com/lit/ds/symlink/sn74ahct125.pdf).
+
+Pin U1: 1/4/7/9/12 ke GND; 10/13/14 ke 5 V AUX; 2 dari GPIO21;
+3 ke R1; 5 dari GPIO17; 6 ke TRIG sensor; 8/11 tidak tersambung. Notch IC
+menghadap bagian atas gambar penempatan, pin1 berada di kiri atas.
+
+Buzzer adalah **aktif 5 V, dua kaki, maksimum 50 mA**. Q1=2N3904 memakai urutan E-B-C sesuai [datasheet onsemi](https://www.onsemi.com/pdf/datasheet/2n3904-d.pdf); kaki dibentuk ke pitch 2,54 mm pada PCB. R6=1 kΩ, R7=10 kΩ untuk menahan basis LOW ketika GPIO belum aktif. Garis katoda D1 (1N4148) ke +5 V, anoda ke kolektor. Modul buzzer tiga kaki memerlukan sambungan berbeda; jangan menyambungnya hanya berdasarkan warna kabel.
+
+Home memakai microswitch **COM dan NC**: keadaan belum tertekan menghubungkan input ke GND; ketika terkena mekanik atau kabel putus, input HIGH. R_H masing-masing 10 kΩ ke 3,3 V, C_H 100 nF ke GND. Firmware harus memperlakukan kabel putus sebagai kegagalan homing; dua switch ini bukan sertifikasi batas keselamatan mekanik.
+
+## Cetak dan etsa
+
+1. Buka **01-transfer-toner-1to1.pdf**. Cetak laser pada **Actual size / 100%**, A4, hitam penuh. Matikan Fit/Shrink dan **jangan mirror lagi**.
+2. Ukur garis kalibrasi 50 mm dan jarak kaki 2,54/15,24 mm di kertas. Tempelkan modul/soket nyata pada gambar penempatan untuk memeriksa footprint sebelum etsa.
+3. Letakkan sisi toner menghadap tembaga. Master sudah disiapkan untuk cara ini; setelah transfer, sisi tembaga harus sama dengan **02-tembaga-bawah-inspeksi.pdf**. Jangan memakai kedua file secara bergantian.
+4. Setelah etsa, bor sesuai panduan: 1,0 mm untuk mayoritas kaki, 1,2 mm untuk terminal sekrup, 3,2 mm lubang dudukan. Titik putih kecil di pola adalah pusat bor, bukan ukuran akhir lubang. Pad bulat hitam penuh tanpa titik putih adalah test point cadangan: tidak perlu dibor.
+5. Pasang **28 jumper W01–W28** dari `jumpers.csv` dengan kawat berisolasi; garis jumper pada gambar atas **bukan jalur tembaga**. Jumper yang berbeda boleh bersilangan hanya dalam isolasi. Sisakan ruang untuk memasang/melepas soket dan heatsink; panjang potong pada tabel adalah perkiraan awal, tambah bila jalur kawat perlu memutar.
+6. Pasang resistor, diode, transistor, IC socket, elko, terminal dan socket driver. Perhatikan polaritas elko, D1, Q1, pin1 U1 dan orientasi driver. Bersihkan sisa etsa/flux sebelum uji.
+
+Jalur minimum sinyal 0,6 mm, jalur utama yang lebih lebar 1,2–1,5 mm, jarak tembaga minimum rancangan 0,4 mm. Keluaran DRC digital tidak menggantikan inspeksi hasil etsa; lubang/solder yang melebar atau jalur tergerus dapat mengubah hasil.
+
+## Urutan uji
+
+1. Tanpa Pi, driver, buffer dan motor terpasang: ukur kontinuitas semua net; pastikan 12 V, 5 V AUX, 3,3 V dan GND tidak korslet. Periksa khusus celah antarpad header.
+2. Uji catu di terminal dengan pembatas arus. Pastikan +12 V hanya ada di VMOT dan elko motor, +5 V AUX hanya di periferal 5 V. Cabut daya kembali sebelum memasang modul.
+3. Pasang U1 dan driver sesuai pinout, **JARM tetap dilepas**. Hentikan service servo lama. Nyalakan Pi dahulu, lalu 5 V AUX dan 12 V; ukur rel dan setel Vref dengan motor masih dilepas.
+4. Cabut semua daya, hubungkan pasangan lilitan dan sensor. Nyalakan kembali. Uji kamera, OLED, pembacaan home dan FAULT tanpa mengaktifkan motor.
+5. Setelah kontrol STEP/DIR tersedia, tetapkan STEP LOW, DIR sesuai arah, ENABLE HIGH; baru pasang JARM. Awali gerak lambat tanpa sampah. Pulsa STEP HIGH dan LOW harus memenuhi datasheet; target awal HIGH 5 µs, kecepatan motor sekitar 267 pulsa/detik untuk flap 10°/detik.
+6. Gunakan generator pulsa bertiming perangkat keras/DMA, bukan loop `time.sleep()` Python untuk gerak produksi. Validasi penggunaan pigpio bersama WS2812 agar peripheral/DMA tidak bentrok. Homing, batas sudut, ramp percepatan dan penghentian saat FAULT harus diimplementasikan sebelum sortir otomatis.
+7. Periksa panas driver, jalur, konektor, kelancaran dan selip pinion. Putuskan catu AUX/motor sebelum mematikan atau melepas Pi. Flap tetap dinilai untuk **beban kosong**, bukan sampah 1 kg.
+
+Kabel motor gunakan pasangan lilitan dipilin, sekitar 0,5 mm²; 12 V dan return utama 0,75 mm². Jalur suplai ring sekitar 0,5 mm². Pisahkan kabel motor dari USB, sensor dan I²C. Bila PCB ditempatkan jauh dari ring, pindahkan kapasitor tambahan dekat ring dan uji sinyal pada panjang kabel sebenarnya.

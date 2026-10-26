@@ -1,0 +1,25 @@
+{
+  "board_sha256": "ba5cbb6552e2faf8ddff3bc40a0be2788928f942915a38894133e555695ae0cc",
+  "revision": "TT-PZ1",
+  "passed": true,
+  "pad_count": 242,
+  "drilled_pad_count": 218,
+  "solid_test_pad_count": 24,
+  "trace_count": 167,
+  "wire_jumpers": 28,
+  "net_count": 61,
+  "unconnected_nets": [],
+  "min_measured_clearance_mm": 0.505,
+  "closest_nets": [
+    "3V3",
+    "DRV_EN"
+  ],
+  "minimum_annular_ring_mm": 0.5,
+  "errors": [],
+  "limitations": [
+    "Geometry/netlist checks only, not an electrical simulation or certified layout review.",
+    "No prototype, thermal or EMC tests performed. Trace current capability assumes35um copper.",
+    "Module and connector pinouts/physical fit must match the specified footprints.",
+    "Insulated wire jumpers are required; copper alone is intentionally incomplete."
+  ]
+}

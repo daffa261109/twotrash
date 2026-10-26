@@ -168,12 +168,40 @@
     "motion": ""
   },
   {
-    "part": "pinion",
+    "part": "pinion_pan",
     "kind": "fixed",
     "color": [
       225,
       163,
       56
+    ],
+    "base": [
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      38.4,
+      12.0,
+      1.0
+    ],
+    "motion": "panpinion"
+  },
+  {
+    "part": "pinion_pan_fastener",
+    "kind": "fixed",
+    "color": [
+      170,
+      186,
+      199
     ],
     "base": [
       1.0,
@@ -420,12 +448,40 @@
     "motion": ""
   },
   {
-    "part": "pinion",
+    "part": "pinion_tilt",
     "kind": "pan",
     "color": [
       225,
       163,
       56
+    ],
+    "base": [
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      6.123233995736766e-17,
+      1.0,
+      0.0,
+      0.0,
+      -1.0,
+      6.123233995736766e-17,
+      0.0,
+      0.0,
+      -40.0,
+      61.6,
+      1.0
+    ],
+    "motion": "tiltpinion"
+  },
+  {
+    "part": "pinion_tilt_fastener",
+    "kind": "pan",
+    "color": [
+      170,
+      186,
+      199
     ],
     "base": [
       1.0,

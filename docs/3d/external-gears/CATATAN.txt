@@ -1,9 +1,11 @@
-REV G DIKUNCI — FLAP KOSONG, GEAR LUAR 3:1
+REV G1 — MOTOR 42HD4027-01 DAN PINION PENJEPIT POROS BULAT
 26 Oktober 2026. Unit CAD mm.
 
 LINGKUP
 Mengikuti keputusan pengguna terbaru: hitung flap saja; sampah 0 kg.
-Desain ini dipilih dan dikunci pengguna pada 26 Oktober 2026.
+Arsitektur Rev G dipilih pengguna pada 26 Oktober 2026.
+Rev G1: pengguna menyetujui motor 42HD4027-01 dan penyesuaian pinion tanpa
+mengikir poros. Flap, frame, rasio dan posisi bidang gigi tetap Rev G.
 Revisi percobaan sebelumnya dihapus. Baseline ada di design-lock.json.
 Status dikunci berarti keputusan desain, bukan kelulusan uji fisik.
 Arsitektur dua motor dan gear luar mengikuti inspirasi video:
@@ -19,7 +21,10 @@ Folder ini dapat disalin sendiri; tidak memerlukan file proyek di induknya.
 - flap-shape-library.scad: geometri piring/rusuk 200x250mm.
 - gear_profiles.scad dan generate_gears.py: profil gear dan generator.
 - render_pan_tilt.py: renderer CPU lokal, dipakai oleh build.py.
-- stl/: bagian cetak serta model referensi hardware.
+- stl/cetak/: sembilan file STL untuk cetak plastik.
+  Ikuti JUMLAH-CETAK.txt; total14 komponen per satu rakitan.
+- stl/referensi/: empat belas STL model hardware/perhitungan, bukan untuk cetak.
+- parts.py: daftar komponen, lokasi STL dan generator catatan jumlah cetak.
 - rakitan-3d.html / rakitan.glb: viewer offline dan rakitan berwarna.
 - previews/: gambar flap dan base; PNG rakitan ada di folder utama ini.
 
@@ -30,8 +35,8 @@ Pillow, matplotlib dan shapely. Dari dalam folder ini jalankan:
   python check_clearance.py
 Build menyimpan semua hasil ke folder ini, tidak menulis ke folder induk.
 Path di design-lock.json dihitung relatif terhadap folder external-gears.
-Hash STL dipertahankan dari baseline Rev G; perpindahan sumber bukan
-perubahan ukuran/geometri desain yang sudah dipilih.
+design-lock.json mencatat hash hasil Rev G1. Perubahan geometri hanya motor,
+dua pinion dan model baut penjepitnya; komponen cetak lain tetap Rev G.
 
 UKURAN
 Piring 200x250mm, dinding nominal3mm, bentuk cekung dan rusuk lama dipertahankan.
@@ -53,11 +58,48 @@ PENGGERAK
 lebar gigi8mm, rasio3:1 setiap sumbu. Jarak sumbu38.4mm.
 Backlash profil0.12mm per anggota, total nominal0.24mm pada pitch.
 Diameter luar gear besar60mm; pinion21.6mm.
-Acuan motor biasa17HS15-1504S1,39+/-1mm panjang,42.3mm muka maksimum,
-poros5mm dengan flat, panjang nominal24mm. CAD menggunakan panjang badan40mm.
-Datasheet: https://www.omc-stepperonline.com/download/17HS15-1504S1.pdf
-Holding torque0.45Nm dan arus1.5A/fase adalah spesifikasi acuan, bukan
-bukti torsi berjalan pada driver yang belum diuji.
+Motor pilihan: 2 x 42HD4027-01, 1.5A/fase, poros bulat target diameter5mm.
+Listing: https://shopee.co.id/product/292092948/21458015977
+Gambar penjual: muka42.3mm maksimum, badan39.5mm maksimum, poros23+/-1mm,
+pilot22mm x2mm, pola baut31mm, ulir4-M3 kedalaman4.5mm minimum.
+Diameter poros5mm adalah target fit CAD: ukur unit yang datang sebelum cetak
+final karena gambar dimensi penjual tidak memberi toleransi diameter jelas.
+Torsi pada deskripsi0.28Nm berbeda dari gambar0.40Nm; jangan menganggap
+nilai yang lebih tinggi sudah pasti. Keduanya holding torque, bukan bukti
+torsi berjalan pada driver. Model ini tetap prototipe flap kosong.
+
+PINION BARU — POROS MOTOR TIDAK PERLU DIKIKIR
+pinion_pan.stl: satu, hub penjepit di sisi bawah gigi/menghadap motor pan.
+pinion_tilt.stl: satu, hub penjepit di sisi luar gigi/menjauhi motor tilt.
+Kedua pinion16 gigi, lebar8mm; bidang gigi dan jarak sumbu tidak berubah.
+Lubang bulat nominal5.10mm; celah penjepit0.8mm, berada di lembah antargigi.
+Baut menarik dua sisi hub bersama untuk menjepit poros; ujung baut TIDAK
+menekan poros. Tidak menggunakan grubscrew untuk dua pinion ini.
+PAN: bidang gigi Z12..20 dari muka motor, hub lebarZ6.2..11.7; sumbu bautZ9.
+Poros terpendek22mm masih menembus seluruh gigi dan penjepit.
+TILT: bidang gigi4..12mm dari muka motor, hub lebar12.3..20mm; sumbu baut16mm.
+Poros terpendek22mm melewati seluruh hub. Jangan menukar kedua pinion.
+Setiap hub: satu baut socket-head M3x16 (panjang di bawah kepala),
+kepala diameter maksimum5.5mm, satu murM3 AF5.5 tebal2.4mm; TANPA washer.
+Total tambahan2 bautM3x16,2 murM3. BautM3x16 belum dimasukkan ke keranjang;
+mur bisa memakai persediaan M3. Jangan mengganti dengan M3x25 karena ujung
+baut lebih panjang memperbesar ruang putar yang belum diverifikasi.
+Mur dipasang dengan sisi datar sejajar permukaan base untuk celah PAN;
+pegang mur memakai kunci ketika mengencangkan. Kepala baut pan punya celah
+nominal0.25mm dari base; hub plastik0.20mm. Bersihkan elephant foot dan
+periksa warp/putaran sebelum motor dinyalakan. Jangan menambah washer di PAN.
+PETG awal:6 perimeter, infill100%, layer0.15-0.20mm; cetak sisi gigi datar
+menempel bed (PAN dibalik180deg dari koordinat STL, TILT tidak dibalik).
+Tambahkan support di bawah telinga/hub yang menjorok; bersihkan support
+dari celah penjepit dan lubang poros sebelum uji fit.
+Bersihkan lubang/sisa cetakan agar masuk tanpa palu. Jika fit tidak tepat,
+sesuaikan parameter bore pada modul pinion dan ekspor ulang; jangan mengikir
+poros motor. Kencangkan sedikit demi sedikit sampai tidak selip. Jangan
+menutup paksa celah penjepit sampai habis atau memberi torque baut umum
+logam pada hub plastik. Ketahanan retak/creep dan torsi selip belum diuji.
+Beri tanda sejajar pada poros dan pinion; uji arah bolak-balik dengan flap
+kosong untuk mendeteksi selip. Hentikan bila retak, meleset atau bergesekan.
+
 Pengurangan gear membuat motor berputar3x putaran sumbu, berlawanan arah.
 Pan pinion=-3*pan. Tilt pinion=+3*tilt dalam koordinat poros lokal CAD
 karena arah sumbu lokalnya menghadap-Y. Firmware belum diubah.
@@ -84,6 +126,8 @@ head untuk pan, kabel dan distribusi massa pengikat masih memerlukan uji.
 Motor tidak boleh dipilih hanya berdasarkan ukuranNEMA17/holding torque.
 
 BAGIAN UNTUK PROTOTIPE
+File plastik ada di stl/cetak/, hardware dan model pembanding di stl/referensi/.
+caps.stl dicetak1 set (sudah2 bagian), retainers.stl dicetak1 set (sudah4 bagian).
 - flap.stl:1, PETG; piring+penguat+hub menjadi satu benda.
 - frame.stl:1; caps.stl berisi2 tutup bearing; PETG awal.
 - base_left.stl dan base_right.stl:masing-masing1.
@@ -91,7 +135,8 @@ BAGIAN UNTUK PROTOTIPE
   dua buah pada Y+/-12.5,Z-9, mur dan washer di sisi luar diameter34.
   flange.stl adalah referensi gabungan, JANGAN dicetak sebagai base utuh:
   bearing pan tidak bisa dimasukkan melalui lubang poros yang lebih kecil.
-- pinion.stl:2; driven.stl:2. PETG, orientasi sumbu gear tegak saat dicetak.
+- pinion_pan.stl:1; pinion_tilt.stl:1; driven.stl:2. PETG.
+  Untuk pinion, ikuti orientasi cetak dan hardware khusus pada bagian di atas.
   Coba profil kecil lebih dulu untuk backlash. CAD bukan toolpath produksi.
 - retainers.stl:4 cincin dengan lubang18.6, OD27,tebal1.6mm;
   purwarupa cetak, delapan sekrupM2x4 pada kedua sisi dua bearing tilt.
@@ -99,15 +144,16 @@ BAGIAN UNTUK PROTOTIPE
 - poros baja8mm:pan63mm,tilt104mm. File shaft hanya referensi machining.
   Buat flat lokal sesuai CAD; area dudukan bearing tetap bulat.
 - collar8mm ID,OD16,tebal5:3 buah;2 pan,1 tilt, dengan grubscrewM3.
-- murM3 biasa + grubscrew untuk dua pinion,dua gear besar,hub frame pan,
-  dan dua hub flap (total7 set). Slot masuk mur terbuka tegak lurus sekrup.
+- murM3 biasa + grubscrew untuk dua gear besar,hub frame pan,
+  dan dua hub flap (total5 set). Pinion memakai dua baut penjepit terpisah. Slot masuk mur terbuka tegak lurus sekrup.
   Periksa kesesuaian panjang sekrup terhadap permukaan flat poros.
 - bautM3 untuk empat lubang tiap motor; pilih panjang agar masuk motor
   sesuai kedalaman ulir datasheet, tidak mentok rotor.
 - empat bautM3 untuk tutup bearing; lubang bawah2.5mm perlu tap/fit uji.
 - backingplate35x30x2mm:2, logam; rivet3.5mm:4, grip sesuai bak sebenarnya.
 - dua driver STEP/DIR + controller dan catu yang sesuai arus motor.
-  CarrierPCB, firmware stepper dan homing masih belum selesai/routed.
+  Pola carrierPCB TT-PZ1 tersedia di docs/pcb dan wiring di docs/wiring.md.
+  Pi langsung ke DRV8825 tanpa Nano; firmware stepper/homing belum selesai.
   Sistem ini tidak membutuhkan kanal rem24V Rev F.
 Screw heads, kabel, sensor home dan guard gear belum dimodelkan lengkap.
 File motor/bearing/shaft/rail/rivet untuk pemeriksaan rakitan, bukan dicetak
@@ -123,7 +169,9 @@ URUTAN RAKIT
 4. Pasang motor tilt pada dinding belakang; dudukkan bearing tilt bawah.
 5. Masukkan poros melalui flap integral dan bearing; pasang gear, collar,
    caps,retainers, mur dan semua sekrup pengunci. Periksa kelonggaran aksial.
-6. Selaraskan gigi dan permukaan flat poros sesuai CAD sebelum mengunci hub.
+6. Selaraskan bidang gigi. Kunci pinion pada POROS MOTOR BULAT dengan baut
+   penjepit. Flat tetap diperlukan pada poros baja8mm untuk gear besar/hub
+   lama; instruksi tanpa mengikir hanya berlaku untuk poros motor5mm.
 7. Gerakkan tangan dengan daya mati, cek seluruh sudut dan kabel.
 8. Uji motor perlahan dengan flap kosong. Ukur arus, panas dan torsi; jangan
    menyatakan kemampuan membawa sampah dari uji tanpa beban ini.
@@ -135,6 +183,9 @@ generate_gears.py:721 posisi output, tidak ada overlap profil2D ideal.
 check_clearance.py:13 posisi tilt -60..60deg; flap integral tidak beririsan
 frame,cap,retainer,motor tilt. Bukan bukti gerak kontinu atau defleksi.
 ViewerHTML memakai mesh sama dan transformasi gear3:1. GLB pose netral,
-PNG pose-35deg dari rasterisasi STL. JavaScript diperiksa sintaks; viewer
+PNG pose-35deg dari rasterisasi STL.
+check_pinion_fit.py memeriksa penjepit, baut, poros22..24mm dan celah terhadap
+komponen tetangga pada beberapa sudut; hasil di pinion-fit-check.json.
+Cek digital geometri nominal, bukan bukti torsi jepit atau toleransi cetak. JavaScript diperiksa sintaks; viewer
 belum diuji dalam browser karena pembukaan file lokal dibatasi lingkungan.
 Bukan FEA, proof test, uji umur gear, PCB siap produksi atau rating keselamatan.

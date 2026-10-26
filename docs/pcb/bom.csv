@@ -1,0 +1,48 @@
+ref,qty,value,kind,note
+JPI,1,Header IDC 2x20 pitch2.54mm; cable 1-to-1,connector,Pi GPIO 2x20 / IDC 1-to-1. Pin 1 indicated on assembly map. Pi 5V pins2/4 NC. Top view. No Pi mounting footprint.
+J5V,1,Terminal sekrup 2 pin pitch5.08mm,connector,5V AUX IN.
+J12V,1,Terminal sekrup 2 pin pitch5.08mm,connector,12V IN (fuse external).
+JOLED,1,Header 1x4 pitch2.54mm,connector,OLED 3V3.
+JHC,1,Header 1x4 pitch2.54mm,connector,HC-SR04.
+JGREEN,1,Header 1x2 pitch2.54mm,connector,GREEN LED.
+JRED,1,Header 1x2 pitch2.54mm,connector,RED LED.
+JBUZ,1,Header 1x2 pitch2.54mm,connector,ACTIVE BUZZER 5V <=50mA.
+JRING,1,Terminal sekrup 3 pin pitch5.08mm,connector,WS2812 12LED.
+U1,1,SN74AHCT125N DIP14,ic,"Notch top; use AHCT, not HC. Unused gates disabled."
+C1,1,100nF,capacitor,Pin 1 positive for electrolytic; ceramic pitch2.54mm
+C2,1,1000uF 16V,capacitor,Pin 1 positive for electrolytic; radial leads formed to pitch5.08mm; see placement envelope
+R1,1,330R,resistor,Metal film 1/4W 1%; pitch7.62mm
+R2,1,2k2,resistor,Metal film 1/4W 1%; pitch7.62mm
+R3,1,2k7,resistor,Metal film 1/4W 1%; pitch7.62mm
+R4,1,330R,resistor,Metal film 1/4W 1%; pitch7.62mm
+R5,1,330R,resistor,Metal film 1/4W 1%; pitch7.62mm
+R6,1,1k,resistor,Metal film 1/4W 1%; pitch7.62mm
+R7,1,10k,resistor,Metal film 1/4W 1%; pitch7.62mm
+R8,1,100k,resistor,Metal film 1/4W 1%; pitch7.62mm
+R9,1,100k,resistor,Metal film 1/4W 1%; pitch7.62mm
+Q1,1,2N3904 TO92 E-B-C (spread 2.54),transistor,E-B-C per onsemi; spread leads to 2.54mm.
+D1,1,1N4148 (K at pin1),diode,
+DRV_PAN,1,DRV8825 PAN,module,"2x8 sockets, row gap15.24, pitch2.54. Pololu2133 pinout only."
+JM_PAN,1,Terminal sekrup 4 pin pitch5.08mm,connector,PAN MOTOR.
+C_PAN,1,100uF 35V,capacitor,Pin 1 positive for electrolytic; radial leads formed to pitch5.08mm; see placement envelope
+DRV_TILT,1,DRV8825 TILT,module,"2x8 sockets, row gap15.24, pitch2.54. Pololu2133 pinout only."
+JM_TILT,1,Terminal sekrup 4 pin pitch5.08mm,connector,TILT MOTOR.
+C_TILT,1,100uF 35V,capacitor,Pin 1 positive for electrolytic; radial leads formed to pitch5.08mm; see placement envelope
+JARM,1,Header 1x2 pitch2.54mm + removable shunt,connector,ARM (normally OPEN).
+R_EN,1,2k2,resistor,Metal film 1/4W 1%; pitch7.62mm
+R_HPAN,1,10k,resistor,Metal film 1/4W 1%; pitch7.62mm
+C_HPAN,1,100nF,capacitor,Pin 1 positive for electrolytic; ceramic pitch2.54mm
+JH_PAN,1,Header 1x2 pitch2.54mm,connector,PAN HOME NC.
+R_HTILT,1,10k,resistor,Metal film 1/4W 1%; pitch7.62mm
+C_HTILT,1,100nF,capacitor,Pin 1 positive for electrolytic; ceramic pitch2.54mm
+JH_TILT,1,Header 1x2 pitch2.54mm,connector,TILT HOME NC.
+SOCKET_DRV,4,"Female 1x8 2.54mm, rated >=2A/contact",socket,For two removable DRV8825 modules; socket height >=8.5mm for wire clearance
+SOCKET_U1,1,DIP14 7.62mm socket,socket,For SN74AHCT125N
+WIRES,28,Insulated copper wire,jumper,See jumpers.csv; required for netlist continuity
+HEATSINK,2,DRV8825 heatsink + airflow,cooling,Keep conductive sink clear of pins/trimpot
+EXT_F12,1,Inline fuse2A + holder,external,In positive12V supply lead
+EXT_F5,1,Inline fuse1.5A + holder,external,In positive5V AUX supply lead
+EXT_HOME,2,Microswitch COM/NC,external,Match mechanical home locations
+EXT_PSU12,1,Regulated12V3A DC adapter,external,Motor power only
+EXT_PSU5,1,Regulated5V2A DC supply,external,Peripherals only; Pi uses its own USB PSU
+EXT_USB,1,USB OTG adapter/cable for Pi Zero,external,"Webcam connects directly, not through etched copper"

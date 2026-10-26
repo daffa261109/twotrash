@@ -1,0 +1,305 @@
+{
+  "revision": "G1",
+  "motor": "42HD4027-01",
+  "target_round_shaft_diameter_mm": 5,
+  "bore_mm": 5.1,
+  "engagement": {
+    "pan": {
+      "clamp_from_motor_face_mm": [
+        6.2,
+        11.7
+      ],
+      "shaft_lengths_mm": [
+        22,
+        23,
+        24
+      ],
+      "engaged_clamp_length_mm": [
+        5.499999999999999,
+        5.499999999999999,
+        5.499999999999999
+      ]
+    },
+    "tilt": {
+      "clamp_from_motor_face_mm": [
+        12.3,
+        20
+      ],
+      "shaft_lengths_mm": [
+        22,
+        23,
+        24
+      ],
+      "engaged_clamp_length_mm": [
+        7.699999999999999,
+        7.699999999999999,
+        7.699999999999999
+      ]
+    }
+  },
+  "pan_clamp_to_base_mm": 0.20000000000000018,
+  "pan_fastener_to_base_mm": 0.25,
+  "conservative_radial_clearance_to_motor_bolt_heads_mm": 4.670310216782976,
+  "sampled_cases": [
+    {
+      "axis": "pan",
+      "angle_deg": -90,
+      "broadphase_candidates": [
+        "motor",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "pan",
+      "angle_deg": -77,
+      "broadphase_candidates": [
+        "motor",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "pan",
+      "angle_deg": -61,
+      "broadphase_candidates": [
+        "motor",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "pan",
+      "angle_deg": -44,
+      "broadphase_candidates": [
+        "motor",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "pan",
+      "angle_deg": -26,
+      "broadphase_candidates": [
+        "motor",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "pan",
+      "angle_deg": -9,
+      "broadphase_candidates": [
+        "motor",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "pan",
+      "angle_deg": 0,
+      "broadphase_candidates": [
+        "motor",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "pan",
+      "angle_deg": 14,
+      "broadphase_candidates": [
+        "motor",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "pan",
+      "angle_deg": 31,
+      "broadphase_candidates": [
+        "motor",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "pan",
+      "angle_deg": 49,
+      "broadphase_candidates": [
+        "motor",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "pan",
+      "angle_deg": 67,
+      "broadphase_candidates": [
+        "motor",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "pan",
+      "angle_deg": 82,
+      "broadphase_candidates": [
+        "motor",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "pan",
+      "angle_deg": 90,
+      "broadphase_candidates": [
+        "motor",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "tilt",
+      "angle_deg": -60,
+      "broadphase_candidates": [
+        "frame",
+        "motor",
+        "flap",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "tilt",
+      "angle_deg": -51,
+      "broadphase_candidates": [
+        "frame",
+        "motor",
+        "flap",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "tilt",
+      "angle_deg": -41,
+      "broadphase_candidates": [
+        "frame",
+        "motor",
+        "flap",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "tilt",
+      "angle_deg": -29,
+      "broadphase_candidates": [
+        "frame",
+        "motor",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "tilt",
+      "angle_deg": -17,
+      "broadphase_candidates": [
+        "frame",
+        "motor",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "tilt",
+      "angle_deg": -7,
+      "broadphase_candidates": [
+        "frame",
+        "motor",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "tilt",
+      "angle_deg": 0,
+      "broadphase_candidates": [
+        "frame",
+        "motor",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "tilt",
+      "angle_deg": 11,
+      "broadphase_candidates": [
+        "frame",
+        "motor",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "tilt",
+      "angle_deg": 23,
+      "broadphase_candidates": [
+        "frame",
+        "motor",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "tilt",
+      "angle_deg": 34,
+      "broadphase_candidates": [
+        "frame",
+        "motor",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "tilt",
+      "angle_deg": 43,
+      "broadphase_candidates": [
+        "frame",
+        "motor",
+        "flap",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "tilt",
+      "angle_deg": 53,
+      "broadphase_candidates": [
+        "frame",
+        "motor",
+        "flap",
+        "driven"
+      ],
+      "result": "empty intersection"
+    },
+    {
+      "axis": "tilt",
+      "angle_deg": 60,
+      "broadphase_candidates": [
+        "frame",
+        "motor",
+        "flap",
+        "driven"
+      ],
+      "result": "empty intersection"
+    }
+  ],
+  "limitations": [
+    "Rigid nominal geometry only; no elastic clamp closure simulated.",
+    "0.20mm base clearance requires a flat, cleaned print and physical check.",
+    "Nut orientation: flats parallel to base; no washer; screw head diameter <=5.5mm.",
+    "Sampled angles are not a continuous collision proof.",
+    "Grip torque, PETG creep, fatigue and running motor torque require physical tests."
+  ]
+}

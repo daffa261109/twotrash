@@ -9,16 +9,6 @@
     ],
     "volume_mm3": 239592.39098241026
   },
-  "tray_only": {
-    "watertight": true,
-    "bodies": 1,
-    "size_mm": [
-      200.0,
-      250.0,
-      41.772104457926645
-    ],
-    "volume_mm3": 183778.1552651125
-  },
   "frame": {
     "watertight": true,
     "bodies": 1,
@@ -28,16 +18,6 @@
       73.0
     ],
     "volume_mm3": 101616.9842487985
-  },
-  "flange": {
-    "watertight": true,
-    "bodies": 1,
-    "size_mm": [
-      140.0,
-      98.0,
-      26.0
-    ],
-    "volume_mm3": 61094.28056379264
   },
   "base_left": {
     "watertight": true,
@@ -59,6 +39,36 @@
     ],
     "volume_mm3": 30547.140281896325
   },
+  "pinion_pan": {
+    "watertight": true,
+    "bodies": 1,
+    "size_mm": [
+      24.62320541335047,
+      21.599999994039536,
+      13.8
+    ],
+    "volume_mm3": 3749.9787281818076
+  },
+  "pinion_tilt": {
+    "watertight": true,
+    "bodies": 1,
+    "size_mm": [
+      24.62320541335047,
+      21.599999994039536,
+      16.0
+    ],
+    "volume_mm3": 4462.367863020761
+  },
+  "driven": {
+    "watertight": true,
+    "bodies": 1,
+    "size_mm": [
+      59.906183273512426,
+      59.906183273512426,
+      18.0
+    ],
+    "volume_mm3": 23265.432911643267
+  },
   "caps": {
     "watertight": true,
     "bodies": 2,
@@ -79,25 +89,25 @@
     ],
     "volume_mm3": 1863.1721853352872
   },
-  "pinion": {
+  "tray_only": {
     "watertight": true,
     "bodies": 1,
     "size_mm": [
-      21.599999994039536,
-      21.599999994039536,
-      13.0
+      200.0,
+      250.0,
+      41.772104457926645
     ],
-    "volume_mm3": 2814.5163043642588
+    "volume_mm3": 183778.1552651125
   },
-  "driven": {
+  "flange": {
     "watertight": true,
     "bodies": 1,
     "size_mm": [
-      59.906183273512426,
-      59.906183273512426,
-      18.0
+      140.0,
+      98.0,
+      26.0
     ],
-    "volume_mm3": 23265.432911643267
+    "volume_mm3": 61094.28056379264
   },
   "motor": {
     "watertight": true,
@@ -105,9 +115,9 @@
     "size_mm": [
       42.3,
       42.3,
-      64.0
+      62.5
     ],
-    "volume_mm3": 72619.65879302086
+    "volume_mm3": 71720.64151022915
   },
   "pan_shaft": {
     "watertight": true,
@@ -199,8 +209,28 @@
     ],
     "volume_mm3": 621.4286696894143
   },
+  "pinion_pan_fastener": {
+    "watertight": true,
+    "bodies": 1,
+    "size_mm": [
+      9.011052353292541,
+      19.464054196229924,
+      5.5
+    ],
+    "volume_mm3": 230.01227200471703
+  },
+  "pinion_tilt_fastener": {
+    "watertight": true,
+    "bodies": 1,
+    "size_mm": [
+      9.011052353292541,
+      19.464054196229924,
+      5.5
+    ],
+    "volume_mm3": 230.01227200471706
+  },
   "assembly": {
-    "revision": "G",
+    "revision": "G1",
     "payload_kg": 0,
     "slot_mm": 70,
     "fixed_body_width_mm": 66,
@@ -240,7 +270,7 @@
     "required_motor_torque_Nm": 0.1870990604413651,
     "initial_output_speed_deg_s": 10,
     "motor_speed_rpm": 5,
-    "motor_reference": "17HS15-1504S1; modeled max42.3mm face,40mm body,24mm nominal shaft; 0.45Nm holding only",
+    "motor_reference": "42HD4027-01; max42.3mm face,39.5mm body,23+/-1mm round shaft; target diameter5mm. Listing torque conflicts: 0.28Nm text / 0.40Nm drawing; running torque unverified",
     "limitations": [
       "Mass assumes a fully solid PETG mesh; actual print infill/density changes mass and CoG.",
       "No 1kg trash load included. No payload rating.",

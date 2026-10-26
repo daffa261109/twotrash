@@ -4,25 +4,29 @@ Program Python untuk Raspberry Pi Zero. Wiring lengkap ada di [docs/wiring.md](d
 
 ## Revisi hardware: PCB gabungan, flap pan-tilt, dan webcam USB
 
-**Mekanik dikunci — Rev G:** [Rev G: NEMA17 + gear luar 3:1, frame 66 mm, flap 20 × 25 cm (flap kosong)](docs/3d/external-gears/CATATAN.txt).
+**Mekanik — Rev G1:** [Rev G1: NEMA17 + gear luar 3:1, frame 66 mm, flap 20 × 25 cm (flap kosong)](docs/3d/external-gears/CATATAN.txt).
 Untuk melihat seluruh alat, buka `docs/3d/external-gears/rakitan.scad`;
-untuk mencetak flap, gunakan `docs/3d/external-gears/stl/flap.stl`, dan untuk base berkupingan
-gunakan dua belahan `base_left.stl` dan `base_right.stl` di `docs/3d/external-gears/stl/`.
+untuk mencetak flap, gunakan `docs/3d/external-gears/stl/cetak/flap.stl`, dan untuk base berkupingan
+gunakan dua belahan `base_left.stl` dan `base_right.stl` di `docs/3d/external-gears/stl/cetak/`.
+Jumlah cetak tercantum di `stl/cetak/JUMLAH-CETAK.txt`; STL referensi terpisah di `stl/referensi/`.
 
 Seluruh file mekanik dan petunjuk build berada di `docs/3d/external-gears/`;
 folder tersebut dapat disalin sendiri. Dasar desain: satu Pi,
 webcam USB sekitar 100 × 30 mm, jarak lensa ke flap 30 cm. Target awal sampah 1 kg
 ditangguhkan; revisi mekanik terbaru menghitung flap kosong saja.
-PCB masih tahap rancangan sebelum routing/fabrikasi; mekanik belum diuji beban.
+PCB TT-PZ1 memakai Pi Zero langsung ke dua DRV8825, tanpa Nano.
+Pola transfer 1:1 dan panduan perakitan ada di [docs/wiring.md](docs/wiring.md).
+PCB dan mekanik masih memerlukan uji fisik.
 
 Preview dan sorter sekarang memilih **USB** secara default. Isi `.env` dengan
 `CAMERA_BACKEND=usb`, `CAMERA_DEVICE=/dev/video0`, dan `CAMERA_FPS=15` (atau path
 stabil `/dev/v4l/by-id/...`). Kamera pita lama dapat dipilih dengan
 `CAMERA_BACKEND=csi`. Lebar pandangan tetap bergantung lensa webcam.
-Pengendali gerak aplikasi masih servo; integrasi stepper Pi–Nano belum diaktifkan.
+Pengendali gerak aplikasi masih servo; kendali STEP/DIR langsung dari Pi, homing
+dan penanganan FAULT belum diimplementasikan. Jumper JARM PCB baru harus tetap terbuka.
 Bagian wiring/dua Pi di bawah mendokumentasikan konfigurasi lama.
 
-## Kabel
+## Kabel konfigurasi servo lama (bukan PCB TT-PZ1)
 
 | Komponen | Dari | Ke |
 | --- | --- | --- |

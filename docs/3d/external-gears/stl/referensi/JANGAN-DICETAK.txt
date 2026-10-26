@@ -1,0 +1,8 @@
+REFERENSI SAJA — BUKAN FILE CETAK PLASTIK
+
+motor, bearing, shaft, collar, backing plate dan rivet: model hardware nyata.
+rails: ilustrasi penampang bak.
+flange: model gabungan base; cetak base_left dan base_right di folder cetak.
+tray_only: bagian piring untuk menghitung massa, bukan flap lengkap.
+
+Untuk pencetakan gunakan folder cetak/ dan ikuti JUMLAH-CETAK.txt.

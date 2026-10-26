@@ -1,0 +1,79 @@
+{
+  "board": "TT-PZ1",
+  "controller": "Raspberry Pi Zero directly; no Nano",
+  "firmware_status": "not implemented; existing servo code must not enable motors",
+  "pins": {
+    "pan_step": {
+      "bcm": 18,
+      "physical": 12
+    },
+    "pan_dir": {
+      "bcm": 12,
+      "physical": 32
+    },
+    "tilt_step": {
+      "bcm": 13,
+      "physical": 33
+    },
+    "tilt_dir": {
+      "bcm": 19,
+      "physical": 35
+    },
+    "enable_n": {
+      "bcm": 26,
+      "physical": 37
+    },
+    "home_pan_nc": {
+      "bcm": 6,
+      "physical": 31
+    },
+    "home_tilt_nc": {
+      "bcm": 16,
+      "physical": 36
+    },
+    "fault_pan_n": {
+      "bcm": 20,
+      "physical": 38
+    },
+    "fault_tilt_n": {
+      "bcm": 25,
+      "physical": 22
+    },
+    "oled_sda": {
+      "bcm": 2,
+      "physical": 3
+    },
+    "oled_scl": {
+      "bcm": 3,
+      "physical": 5
+    },
+    "hc_trig": {
+      "bcm": 17,
+      "physical": 11
+    },
+    "hc_echo_divided": {
+      "bcm": 27,
+      "physical": 13
+    },
+    "ring_data": {
+      "bcm": 21,
+      "physical": 40
+    },
+    "led_green": {
+      "bcm": 22,
+      "physical": 15
+    },
+    "led_red": {
+      "bcm": 23,
+      "physical": 16
+    },
+    "buzzer": {
+      "bcm": 5,
+      "physical": 29
+    }
+  },
+  "microstep": 16,
+  "motor_full_steps_per_turn": 200,
+  "gear_ratio": 3,
+  "output_steps_per_turn": 9600
+}

@@ -1,0 +1,6950 @@
+{
+  "revision": "TT-PZ1",
+  "width": 140.0,
+  "height": 100.0,
+  "grid": 0.635,
+  "min_clearance": 0.4,
+  "edge_clearance": 2.0,
+  "copper_oz": 1,
+  "pads": [
+    {
+      "ref": "JPI",
+      "pin": "1",
+      "x": 66.04,
+      "y": 7.62,
+      "net": "3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "JPI",
+      "pin": "2",
+      "x": 68.58000000000001,
+      "y": 7.62,
+      "net": "NC_JPI_2",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "JPI",
+      "pin": "3",
+      "x": 66.04,
+      "y": 10.16,
+      "net": "SDA",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "3"
+    },
+    {
+      "ref": "JPI",
+      "pin": "4",
+      "x": 68.58000000000001,
+      "y": 10.16,
+      "net": "NC_JPI_4",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "4"
+    },
+    {
+      "ref": "JPI",
+      "pin": "5",
+      "x": 66.04,
+      "y": 12.7,
+      "net": "SCL",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "5"
+    },
+    {
+      "ref": "JPI",
+      "pin": "6",
+      "x": 68.58000000000001,
+      "y": 12.7,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "6"
+    },
+    {
+      "ref": "JPI",
+      "pin": "7",
+      "x": 66.04,
+      "y": 15.24,
+      "net": "NC_JPI_7",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "7"
+    },
+    {
+      "ref": "JPI",
+      "pin": "8",
+      "x": 68.58000000000001,
+      "y": 15.24,
+      "net": "NC_JPI_8",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "8"
+    },
+    {
+      "ref": "JPI",
+      "pin": "9",
+      "x": 66.04,
+      "y": 17.78,
+      "net": "NC_JPI_9",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "9"
+    },
+    {
+      "ref": "JPI",
+      "pin": "10",
+      "x": 68.58000000000001,
+      "y": 17.78,
+      "net": "NC_JPI_10",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "10"
+    },
+    {
+      "ref": "JPI",
+      "pin": "11",
+      "x": 66.04,
+      "y": 20.32,
+      "net": "TRIG_3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "11"
+    },
+    {
+      "ref": "JPI",
+      "pin": "12",
+      "x": 68.58000000000001,
+      "y": 20.32,
+      "net": "PAN_STEP",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "12"
+    },
+    {
+      "ref": "JPI",
+      "pin": "13",
+      "x": 66.04,
+      "y": 22.86,
+      "net": "ECHO_3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "13"
+    },
+    {
+      "ref": "JPI",
+      "pin": "14",
+      "x": 68.58000000000001,
+      "y": 22.86,
+      "net": "NC_JPI_14",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "14"
+    },
+    {
+      "ref": "JPI",
+      "pin": "15",
+      "x": 66.04,
+      "y": 25.400000000000002,
+      "net": "GREEN_GPIO",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "15"
+    },
+    {
+      "ref": "JPI",
+      "pin": "16",
+      "x": 68.58000000000001,
+      "y": 25.400000000000002,
+      "net": "RED_GPIO",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "16"
+    },
+    {
+      "ref": "JPI",
+      "pin": "17",
+      "x": 66.04,
+      "y": 27.94,
+      "net": "NC_JPI_17",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "17"
+    },
+    {
+      "ref": "JPI",
+      "pin": "18",
+      "x": 68.58000000000001,
+      "y": 27.94,
+      "net": "NC_JPI_18",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "18"
+    },
+    {
+      "ref": "JPI",
+      "pin": "19",
+      "x": 66.04,
+      "y": 30.48,
+      "net": "NC_JPI_19",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "19"
+    },
+    {
+      "ref": "JPI",
+      "pin": "20",
+      "x": 68.58000000000001,
+      "y": 30.48,
+      "net": "NC_JPI_20",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "20"
+    },
+    {
+      "ref": "JPI",
+      "pin": "21",
+      "x": 66.04,
+      "y": 33.019999999999996,
+      "net": "NC_JPI_21",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "21"
+    },
+    {
+      "ref": "JPI",
+      "pin": "22",
+      "x": 68.58000000000001,
+      "y": 33.019999999999996,
+      "net": "TILT_FAULT",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "22"
+    },
+    {
+      "ref": "JPI",
+      "pin": "23",
+      "x": 66.04,
+      "y": 35.56,
+      "net": "NC_JPI_23",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "23"
+    },
+    {
+      "ref": "JPI",
+      "pin": "24",
+      "x": 68.58000000000001,
+      "y": 35.56,
+      "net": "NC_JPI_24",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "24"
+    },
+    {
+      "ref": "JPI",
+      "pin": "25",
+      "x": 66.04,
+      "y": 38.1,
+      "net": "NC_JPI_25",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "25"
+    },
+    {
+      "ref": "JPI",
+      "pin": "26",
+      "x": 68.58000000000001,
+      "y": 38.1,
+      "net": "NC_JPI_26",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "26"
+    },
+    {
+      "ref": "JPI",
+      "pin": "27",
+      "x": 66.04,
+      "y": 40.64,
+      "net": "NC_JPI_27",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "27"
+    },
+    {
+      "ref": "JPI",
+      "pin": "28",
+      "x": 68.58000000000001,
+      "y": 40.64,
+      "net": "NC_JPI_28",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "28"
+    },
+    {
+      "ref": "JPI",
+      "pin": "29",
+      "x": 66.04,
+      "y": 43.18,
+      "net": "BUZZ_GPIO",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "29"
+    },
+    {
+      "ref": "JPI",
+      "pin": "30",
+      "x": 68.58000000000001,
+      "y": 43.18,
+      "net": "NC_JPI_30",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "30"
+    },
+    {
+      "ref": "JPI",
+      "pin": "31",
+      "x": 66.04,
+      "y": 45.72,
+      "net": "HOME_PAN",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "31"
+    },
+    {
+      "ref": "JPI",
+      "pin": "32",
+      "x": 68.58000000000001,
+      "y": 45.72,
+      "net": "PAN_DIR",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "32"
+    },
+    {
+      "ref": "JPI",
+      "pin": "33",
+      "x": 66.04,
+      "y": 48.26,
+      "net": "TILT_STEP",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "33"
+    },
+    {
+      "ref": "JPI",
+      "pin": "34",
+      "x": 68.58000000000001,
+      "y": 48.26,
+      "net": "NC_JPI_34",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "34"
+    },
+    {
+      "ref": "JPI",
+      "pin": "35",
+      "x": 66.04,
+      "y": 50.8,
+      "net": "TILT_DIR",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "35"
+    },
+    {
+      "ref": "JPI",
+      "pin": "36",
+      "x": 68.58000000000001,
+      "y": 50.8,
+      "net": "HOME_TILT",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "36"
+    },
+    {
+      "ref": "JPI",
+      "pin": "37",
+      "x": 66.04,
+      "y": 53.339999999999996,
+      "net": "ENABLE_GPIO",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "37"
+    },
+    {
+      "ref": "JPI",
+      "pin": "38",
+      "x": 68.58000000000001,
+      "y": 53.339999999999996,
+      "net": "PAN_FAULT",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "38"
+    },
+    {
+      "ref": "JPI",
+      "pin": "39",
+      "x": 66.04,
+      "y": 55.879999999999995,
+      "net": "NC_JPI_39",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "39"
+    },
+    {
+      "ref": "JPI",
+      "pin": "40",
+      "x": 68.58000000000001,
+      "y": 55.879999999999995,
+      "net": "RING_3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "40"
+    },
+    {
+      "ref": "J5V",
+      "pin": "1",
+      "x": 10.16,
+      "y": 5.08,
+      "net": "5V_AUX",
+      "diameter": 3.0,
+      "drill": 1.2,
+      "label": "5V_AUX"
+    },
+    {
+      "ref": "J5V",
+      "pin": "2",
+      "x": 15.24,
+      "y": 5.08,
+      "net": "GND",
+      "diameter": 3.0,
+      "drill": 1.2,
+      "label": "GND"
+    },
+    {
+      "ref": "J12V",
+      "pin": "1",
+      "x": 129.54,
+      "y": 5.08,
+      "net": "12V",
+      "diameter": 3.0,
+      "drill": 1.2,
+      "label": "12V"
+    },
+    {
+      "ref": "J12V",
+      "pin": "2",
+      "x": 134.62,
+      "y": 5.08,
+      "net": "GND",
+      "diameter": 3.0,
+      "drill": 1.2,
+      "label": "GND"
+    },
+    {
+      "ref": "JOLED",
+      "pin": "1",
+      "x": 7.62,
+      "y": 12.7,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "GND"
+    },
+    {
+      "ref": "JOLED",
+      "pin": "2",
+      "x": 7.62,
+      "y": 15.239999999999998,
+      "net": "3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "3V3"
+    },
+    {
+      "ref": "JOLED",
+      "pin": "3",
+      "x": 7.62,
+      "y": 17.78,
+      "net": "SCL",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "SCL"
+    },
+    {
+      "ref": "JOLED",
+      "pin": "4",
+      "x": 7.62,
+      "y": 20.32,
+      "net": "SDA",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "SDA"
+    },
+    {
+      "ref": "JHC",
+      "pin": "1",
+      "x": 7.62,
+      "y": 30.48,
+      "net": "5V_AUX",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "5V_AUX"
+    },
+    {
+      "ref": "JHC",
+      "pin": "2",
+      "x": 7.62,
+      "y": 33.02,
+      "net": "TRIG_5V",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "TRIG_5V"
+    },
+    {
+      "ref": "JHC",
+      "pin": "3",
+      "x": 7.62,
+      "y": 35.56,
+      "net": "ECHO_5V",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "ECHO_5V"
+    },
+    {
+      "ref": "JHC",
+      "pin": "4",
+      "x": 7.62,
+      "y": 38.1,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "GND"
+    },
+    {
+      "ref": "JGREEN",
+      "pin": "1",
+      "x": 7.62,
+      "y": 43.18,
+      "net": "GREEN_A",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "GREEN_A"
+    },
+    {
+      "ref": "JGREEN",
+      "pin": "2",
+      "x": 10.16,
+      "y": 43.18,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "GND"
+    },
+    {
+      "ref": "JRED",
+      "pin": "1",
+      "x": 25.4,
+      "y": 43.18,
+      "net": "RED_A",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "RED_A"
+    },
+    {
+      "ref": "JRED",
+      "pin": "2",
+      "x": 27.939999999999998,
+      "y": 43.18,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "GND"
+    },
+    {
+      "ref": "JBUZ",
+      "pin": "1",
+      "x": 45.72,
+      "y": 5.08,
+      "net": "5V_AUX",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "5V_AUX"
+    },
+    {
+      "ref": "JBUZ",
+      "pin": "2",
+      "x": 48.26,
+      "y": 5.08,
+      "net": "BUZZ_C",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "BUZZ_C"
+    },
+    {
+      "ref": "JRING",
+      "pin": "1",
+      "x": 22.86,
+      "y": 5.08,
+      "net": "5V_AUX",
+      "diameter": 3.0,
+      "drill": 1.2,
+      "label": "5V_AUX"
+    },
+    {
+      "ref": "JRING",
+      "pin": "2",
+      "x": 27.939999999999998,
+      "y": 5.08,
+      "net": "GND",
+      "diameter": 3.0,
+      "drill": 1.2,
+      "label": "GND"
+    },
+    {
+      "ref": "JRING",
+      "pin": "3",
+      "x": 33.019999999999996,
+      "y": 5.08,
+      "net": "RING_DATA",
+      "diameter": 3.0,
+      "drill": 1.2,
+      "label": "RING_DATA"
+    },
+    {
+      "ref": "U1",
+      "pin": "1",
+      "x": 33.02,
+      "y": 20.32,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "U1",
+      "pin": "2",
+      "x": 33.02,
+      "y": 22.86,
+      "net": "RING_3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "U1",
+      "pin": "3",
+      "x": 33.02,
+      "y": 25.4,
+      "net": "RING_BUF",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "3"
+    },
+    {
+      "ref": "U1",
+      "pin": "4",
+      "x": 33.02,
+      "y": 27.94,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "4"
+    },
+    {
+      "ref": "U1",
+      "pin": "5",
+      "x": 33.02,
+      "y": 30.48,
+      "net": "TRIG_3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "5"
+    },
+    {
+      "ref": "U1",
+      "pin": "6",
+      "x": 33.02,
+      "y": 33.019999999999996,
+      "net": "TRIG_5V",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "6"
+    },
+    {
+      "ref": "U1",
+      "pin": "7",
+      "x": 33.02,
+      "y": 35.56,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "7"
+    },
+    {
+      "ref": "U1",
+      "pin": "8",
+      "x": 40.64,
+      "y": 35.56,
+      "net": "NC_U1_8",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "8"
+    },
+    {
+      "ref": "U1",
+      "pin": "9",
+      "x": 40.64,
+      "y": 33.019999999999996,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "9"
+    },
+    {
+      "ref": "U1",
+      "pin": "10",
+      "x": 40.64,
+      "y": 30.48,
+      "net": "5V_AUX",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "10"
+    },
+    {
+      "ref": "U1",
+      "pin": "11",
+      "x": 40.64,
+      "y": 27.94,
+      "net": "NC_U1_11",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "11"
+    },
+    {
+      "ref": "U1",
+      "pin": "12",
+      "x": 40.64,
+      "y": 25.4,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "12"
+    },
+    {
+      "ref": "U1",
+      "pin": "13",
+      "x": 40.64,
+      "y": 22.86,
+      "net": "5V_AUX",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "13"
+    },
+    {
+      "ref": "U1",
+      "pin": "14",
+      "x": 40.64,
+      "y": 20.32,
+      "net": "5V_AUX",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "14"
+    },
+    {
+      "ref": "C1",
+      "pin": "1",
+      "x": 40.64,
+      "y": 15.24,
+      "net": "5V_AUX",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "C1",
+      "pin": "2",
+      "x": 43.18,
+      "y": 15.24,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "C2",
+      "pin": "1",
+      "x": 22.86,
+      "y": 13.97,
+      "net": "5V_AUX",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "C2",
+      "pin": "2",
+      "x": 27.939999999999998,
+      "y": 13.97,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "R1",
+      "pin": "1",
+      "x": 16.51,
+      "y": 25.4,
+      "net": "RING_DATA",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "R1",
+      "pin": "2",
+      "x": 24.130000000000003,
+      "y": 25.4,
+      "net": "RING_BUF",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "R2",
+      "pin": "1",
+      "x": 16.51,
+      "y": 36.83,
+      "net": "ECHO_5V",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "R2",
+      "pin": "2",
+      "x": 24.130000000000003,
+      "y": 36.83,
+      "net": "ECHO_3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "R3",
+      "pin": "1",
+      "x": 20.32,
+      "y": 50.8,
+      "net": "ECHO_3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "R3",
+      "pin": "2",
+      "x": 27.94,
+      "y": 50.8,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "R4",
+      "pin": "1",
+      "x": 17.78,
+      "y": 55.88,
+      "net": "GREEN_A",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "R4",
+      "pin": "2",
+      "x": 17.78,
+      "y": 63.5,
+      "net": "GREEN_GPIO",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "R5",
+      "pin": "1",
+      "x": 27.94,
+      "y": 55.88,
+      "net": "RED_A",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "R5",
+      "pin": "2",
+      "x": 27.94,
+      "y": 63.5,
+      "net": "RED_GPIO",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "R6",
+      "pin": "1",
+      "x": 45.72,
+      "y": 43.18,
+      "net": "BUZZ_GPIO",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "R6",
+      "pin": "2",
+      "x": 45.72,
+      "y": 50.8,
+      "net": "BUZZ_B",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "R7",
+      "pin": "1",
+      "x": 53.34,
+      "y": 30.48,
+      "net": "BUZZ_B",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "R7",
+      "pin": "2",
+      "x": 53.34,
+      "y": 38.1,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "R8",
+      "pin": "1",
+      "x": 27.94,
+      "y": 20.32,
+      "net": "RING_3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "R8",
+      "pin": "2",
+      "x": 27.94,
+      "y": 27.94,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "R9",
+      "pin": "1",
+      "x": 33.02,
+      "y": 43.18,
+      "net": "TRIG_3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "R9",
+      "pin": "2",
+      "x": 33.02,
+      "y": 50.8,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "Q1",
+      "pin": "1",
+      "x": 45.72,
+      "y": 27.94,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "Q1",
+      "pin": "2",
+      "x": 48.26,
+      "y": 27.94,
+      "net": "BUZZ_B",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "Q1",
+      "pin": "3",
+      "x": 50.8,
+      "y": 27.94,
+      "net": "BUZZ_C",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "3"
+    },
+    {
+      "ref": "D1",
+      "pin": "1",
+      "x": 45.72,
+      "y": 12.7,
+      "net": "5V_AUX",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "D1",
+      "pin": "2",
+      "x": 53.339999999999996,
+      "y": 12.7,
+      "net": "BUZZ_C",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "DRV_PAN",
+      "pin": "L1",
+      "x": 99.06,
+      "y": 15.24,
+      "net": "DRV_EN",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "EN"
+    },
+    {
+      "ref": "DRV_PAN",
+      "pin": "R1",
+      "x": 114.3,
+      "y": 15.24,
+      "net": "12V",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "VMOT"
+    },
+    {
+      "ref": "DRV_PAN",
+      "pin": "L2",
+      "x": 99.06,
+      "y": 17.78,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "M0"
+    },
+    {
+      "ref": "DRV_PAN",
+      "pin": "R2",
+      "x": 114.3,
+      "y": 17.78,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "GND"
+    },
+    {
+      "ref": "DRV_PAN",
+      "pin": "L3",
+      "x": 99.06,
+      "y": 20.32,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "M1"
+    },
+    {
+      "ref": "DRV_PAN",
+      "pin": "R3",
+      "x": 114.3,
+      "y": 20.32,
+      "net": "PAN_B2",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "B2"
+    },
+    {
+      "ref": "DRV_PAN",
+      "pin": "L4",
+      "x": 99.06,
+      "y": 22.86,
+      "net": "3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "M2"
+    },
+    {
+      "ref": "DRV_PAN",
+      "pin": "R4",
+      "x": 114.3,
+      "y": 22.86,
+      "net": "PAN_B1",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "B1"
+    },
+    {
+      "ref": "DRV_PAN",
+      "pin": "L5",
+      "x": 99.06,
+      "y": 25.4,
+      "net": "3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "RST"
+    },
+    {
+      "ref": "DRV_PAN",
+      "pin": "R5",
+      "x": 114.3,
+      "y": 25.4,
+      "net": "PAN_A1",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "A1"
+    },
+    {
+      "ref": "DRV_PAN",
+      "pin": "L6",
+      "x": 99.06,
+      "y": 27.939999999999998,
+      "net": "3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "SLP"
+    },
+    {
+      "ref": "DRV_PAN",
+      "pin": "R6",
+      "x": 114.3,
+      "y": 27.939999999999998,
+      "net": "PAN_A2",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "A2"
+    },
+    {
+      "ref": "DRV_PAN",
+      "pin": "L7",
+      "x": 99.06,
+      "y": 30.48,
+      "net": "PAN_STEP",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "STEP"
+    },
+    {
+      "ref": "DRV_PAN",
+      "pin": "R7",
+      "x": 114.3,
+      "y": 30.48,
+      "net": "PAN_FAULT",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "FAULT"
+    },
+    {
+      "ref": "DRV_PAN",
+      "pin": "L8",
+      "x": 99.06,
+      "y": 33.02,
+      "net": "PAN_DIR",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "DIR"
+    },
+    {
+      "ref": "DRV_PAN",
+      "pin": "R8",
+      "x": 114.3,
+      "y": 33.02,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "GND"
+    },
+    {
+      "ref": "JM_PAN",
+      "pin": "1",
+      "x": 130.81,
+      "y": 22.86,
+      "net": "PAN_B2",
+      "diameter": 3.0,
+      "drill": 1.2,
+      "label": "B2"
+    },
+    {
+      "ref": "JM_PAN",
+      "pin": "2",
+      "x": 130.81,
+      "y": 27.939999999999998,
+      "net": "PAN_B1",
+      "diameter": 3.0,
+      "drill": 1.2,
+      "label": "B1"
+    },
+    {
+      "ref": "JM_PAN",
+      "pin": "3",
+      "x": 130.81,
+      "y": 33.019999999999996,
+      "net": "PAN_A1",
+      "diameter": 3.0,
+      "drill": 1.2,
+      "label": "A1"
+    },
+    {
+      "ref": "JM_PAN",
+      "pin": "4",
+      "x": 130.81,
+      "y": 38.1,
+      "net": "PAN_A2",
+      "diameter": 3.0,
+      "drill": 1.2,
+      "label": "A2"
+    },
+    {
+      "ref": "C_PAN",
+      "pin": "1",
+      "x": 120.65,
+      "y": 10.16,
+      "net": "12V",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "C_PAN",
+      "pin": "2",
+      "x": 125.73,
+      "y": 10.16,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "DRV_TILT",
+      "pin": "L1",
+      "x": 99.06,
+      "y": 53.34,
+      "net": "DRV_EN",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "EN"
+    },
+    {
+      "ref": "DRV_TILT",
+      "pin": "R1",
+      "x": 114.3,
+      "y": 53.34,
+      "net": "12V",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "VMOT"
+    },
+    {
+      "ref": "DRV_TILT",
+      "pin": "L2",
+      "x": 99.06,
+      "y": 55.88,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "M0"
+    },
+    {
+      "ref": "DRV_TILT",
+      "pin": "R2",
+      "x": 114.3,
+      "y": 55.88,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "GND"
+    },
+    {
+      "ref": "DRV_TILT",
+      "pin": "L3",
+      "x": 99.06,
+      "y": 58.42,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "M1"
+    },
+    {
+      "ref": "DRV_TILT",
+      "pin": "R3",
+      "x": 114.3,
+      "y": 58.42,
+      "net": "TILT_B2",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "B2"
+    },
+    {
+      "ref": "DRV_TILT",
+      "pin": "L4",
+      "x": 99.06,
+      "y": 60.96,
+      "net": "3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "M2"
+    },
+    {
+      "ref": "DRV_TILT",
+      "pin": "R4",
+      "x": 114.3,
+      "y": 60.96,
+      "net": "TILT_B1",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "B1"
+    },
+    {
+      "ref": "DRV_TILT",
+      "pin": "L5",
+      "x": 99.06,
+      "y": 63.5,
+      "net": "3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "RST"
+    },
+    {
+      "ref": "DRV_TILT",
+      "pin": "R5",
+      "x": 114.3,
+      "y": 63.5,
+      "net": "TILT_A1",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "A1"
+    },
+    {
+      "ref": "DRV_TILT",
+      "pin": "L6",
+      "x": 99.06,
+      "y": 66.04,
+      "net": "3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "SLP"
+    },
+    {
+      "ref": "DRV_TILT",
+      "pin": "R6",
+      "x": 114.3,
+      "y": 66.04,
+      "net": "TILT_A2",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "A2"
+    },
+    {
+      "ref": "DRV_TILT",
+      "pin": "L7",
+      "x": 99.06,
+      "y": 68.58,
+      "net": "TILT_STEP",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "STEP"
+    },
+    {
+      "ref": "DRV_TILT",
+      "pin": "R7",
+      "x": 114.3,
+      "y": 68.58,
+      "net": "TILT_FAULT",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "FAULT"
+    },
+    {
+      "ref": "DRV_TILT",
+      "pin": "L8",
+      "x": 99.06,
+      "y": 71.12,
+      "net": "TILT_DIR",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "DIR"
+    },
+    {
+      "ref": "DRV_TILT",
+      "pin": "R8",
+      "x": 114.3,
+      "y": 71.12,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "GND"
+    },
+    {
+      "ref": "JM_TILT",
+      "pin": "1",
+      "x": 130.81,
+      "y": 60.96,
+      "net": "TILT_B2",
+      "diameter": 3.0,
+      "drill": 1.2,
+      "label": "B2"
+    },
+    {
+      "ref": "JM_TILT",
+      "pin": "2",
+      "x": 130.81,
+      "y": 66.04,
+      "net": "TILT_B1",
+      "diameter": 3.0,
+      "drill": 1.2,
+      "label": "B1"
+    },
+    {
+      "ref": "JM_TILT",
+      "pin": "3",
+      "x": 130.81,
+      "y": 71.12,
+      "net": "TILT_A1",
+      "diameter": 3.0,
+      "drill": 1.2,
+      "label": "A1"
+    },
+    {
+      "ref": "JM_TILT",
+      "pin": "4",
+      "x": 130.81,
+      "y": 76.2,
+      "net": "TILT_A2",
+      "diameter": 3.0,
+      "drill": 1.2,
+      "label": "A2"
+    },
+    {
+      "ref": "C_TILT",
+      "pin": "1",
+      "x": 120.65,
+      "y": 48.260000000000005,
+      "net": "12V",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "C_TILT",
+      "pin": "2",
+      "x": 125.73,
+      "y": 48.260000000000005,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "JARM",
+      "pin": "1",
+      "x": 80.01,
+      "y": 57.15,
+      "net": "ENABLE_GPIO",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "ENABLE_GPIO"
+    },
+    {
+      "ref": "JARM",
+      "pin": "2",
+      "x": 82.55000000000001,
+      "y": 57.15,
+      "net": "DRV_EN",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "DRV_EN"
+    },
+    {
+      "ref": "R_EN",
+      "pin": "1",
+      "x": 88.9,
+      "y": 57.15,
+      "net": "DRV_EN",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "R_EN",
+      "pin": "2",
+      "x": 88.9,
+      "y": 64.77,
+      "net": "3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "R_HPAN",
+      "pin": "1",
+      "x": 58.42,
+      "y": 74.93,
+      "net": "3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "R_HPAN",
+      "pin": "2",
+      "x": 58.42,
+      "y": 82.55000000000001,
+      "net": "HOME_PAN",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "C_HPAN",
+      "pin": "1",
+      "x": 58.42,
+      "y": 86.36,
+      "net": "HOME_PAN",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "C_HPAN",
+      "pin": "2",
+      "x": 60.96,
+      "y": 86.36,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "JH_PAN",
+      "pin": "1",
+      "x": 58.42,
+      "y": 92.71,
+      "net": "HOME_PAN",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "HOME_PAN"
+    },
+    {
+      "ref": "JH_PAN",
+      "pin": "2",
+      "x": 60.96,
+      "y": 92.71,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "GND"
+    },
+    {
+      "ref": "R_HTILT",
+      "pin": "1",
+      "x": 73.66,
+      "y": 74.93,
+      "net": "3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "R_HTILT",
+      "pin": "2",
+      "x": 73.66,
+      "y": 82.55000000000001,
+      "net": "HOME_TILT",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "C_HTILT",
+      "pin": "1",
+      "x": 73.66,
+      "y": 86.36,
+      "net": "HOME_TILT",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "C_HTILT",
+      "pin": "2",
+      "x": 76.2,
+      "y": 86.36,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "JH_TILT",
+      "pin": "1",
+      "x": 73.66,
+      "y": 92.71,
+      "net": "HOME_TILT",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "HOME_TILT"
+    },
+    {
+      "ref": "JH_TILT",
+      "pin": "2",
+      "x": 76.2,
+      "y": 92.71,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "GND"
+    },
+    {
+      "ref": "TP_PI1",
+      "pin": "1",
+      "x": 60.96,
+      "y": 7.62,
+      "net": "3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PI3",
+      "pin": "1",
+      "x": 60.96,
+      "y": 10.16,
+      "net": "SDA",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PI5",
+      "pin": "1",
+      "x": 60.96,
+      "y": 12.7,
+      "net": "SCL",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PI6",
+      "pin": "1",
+      "x": 73.66,
+      "y": 12.7,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PI11",
+      "pin": "1",
+      "x": 60.96,
+      "y": 20.32,
+      "net": "TRIG_3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PI12",
+      "pin": "1",
+      "x": 73.66,
+      "y": 20.32,
+      "net": "PAN_STEP",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PI13",
+      "pin": "1",
+      "x": 60.96,
+      "y": 22.86,
+      "net": "ECHO_3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PI15",
+      "pin": "1",
+      "x": 60.96,
+      "y": 25.400000000000002,
+      "net": "GREEN_GPIO",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PI16",
+      "pin": "1",
+      "x": 73.66,
+      "y": 25.400000000000002,
+      "net": "RED_GPIO",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PI22",
+      "pin": "1",
+      "x": 73.66,
+      "y": 33.019999999999996,
+      "net": "TILT_FAULT",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PI29",
+      "pin": "1",
+      "x": 60.96,
+      "y": 43.18,
+      "net": "BUZZ_GPIO",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PI31",
+      "pin": "1",
+      "x": 60.96,
+      "y": 45.72,
+      "net": "HOME_PAN",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PI32",
+      "pin": "1",
+      "x": 73.66,
+      "y": 45.72,
+      "net": "PAN_DIR",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PI33",
+      "pin": "1",
+      "x": 60.96,
+      "y": 48.26,
+      "net": "TILT_STEP",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PI35",
+      "pin": "1",
+      "x": 60.96,
+      "y": 50.8,
+      "net": "TILT_DIR",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PI36",
+      "pin": "1",
+      "x": 73.66,
+      "y": 50.8,
+      "net": "HOME_TILT",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PI37",
+      "pin": "1",
+      "x": 60.96,
+      "y": 53.339999999999996,
+      "net": "ENABLE_GPIO",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PI38",
+      "pin": "1",
+      "x": 73.66,
+      "y": 53.339999999999996,
+      "net": "PAN_FAULT",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PI40",
+      "pin": "1",
+      "x": 73.66,
+      "y": 55.879999999999995,
+      "net": "RING_3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PAN_FAULT",
+      "pin": "1",
+      "x": 111.76,
+      "y": 30.48,
+      "net": "PAN_FAULT",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PAN_0",
+      "pin": "1",
+      "x": 96.52,
+      "y": 15.24,
+      "net": "DRV_EN",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PAN_15.24",
+      "pin": "1",
+      "x": 96.52,
+      "y": 30.48,
+      "net": "PAN_STEP",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PAN_17.78",
+      "pin": "1",
+      "x": 96.52,
+      "y": 33.02,
+      "net": "PAN_DIR",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PAN_7.62",
+      "pin": "1",
+      "x": 96.52,
+      "y": 22.86,
+      "net": "3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_TILT_FAULT",
+      "pin": "1",
+      "x": 111.76,
+      "y": 68.58,
+      "net": "TILT_FAULT",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_TILT_0",
+      "pin": "1",
+      "x": 96.52,
+      "y": 53.34,
+      "net": "DRV_EN",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_TILT_15.24",
+      "pin": "1",
+      "x": 96.52,
+      "y": 68.58,
+      "net": "TILT_STEP",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_TILT_17.78",
+      "pin": "1",
+      "x": 96.52,
+      "y": 71.12,
+      "net": "TILT_DIR",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_TILT_7.62",
+      "pin": "1",
+      "x": 96.52,
+      "y": 60.96,
+      "net": "3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_RING",
+      "pin": "1",
+      "x": 30.48,
+      "y": 22.86,
+      "net": "RING_3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_TRIG",
+      "pin": "1",
+      "x": 30.48,
+      "y": 30.48,
+      "net": "TRIG_3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_RDOUT",
+      "pin": "1",
+      "x": 13.97,
+      "y": 25.4,
+      "net": "RING_DATA",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_RDPORT",
+      "pin": "1",
+      "x": 35.56,
+      "y": 10.16,
+      "net": "RING_DATA",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_JOLED1",
+      "pin": "1",
+      "x": 11.43,
+      "y": 12.7,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_JOLED2",
+      "pin": "1",
+      "x": 11.43,
+      "y": 15.239999999999998,
+      "net": "3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_JOLED3",
+      "pin": "1",
+      "x": 11.43,
+      "y": 17.78,
+      "net": "SCL",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_JOLED4",
+      "pin": "1",
+      "x": 11.43,
+      "y": 20.32,
+      "net": "SDA",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_JHC1",
+      "pin": "1",
+      "x": 11.43,
+      "y": 30.48,
+      "net": "5V_AUX",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_JHC2",
+      "pin": "1",
+      "x": 11.43,
+      "y": 33.02,
+      "net": "TRIG_5V",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_JHC3",
+      "pin": "1",
+      "x": 11.43,
+      "y": 35.56,
+      "net": "ECHO_5V",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_JHC4",
+      "pin": "1",
+      "x": 11.43,
+      "y": 38.1,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_TRIG_OUT",
+      "pin": "1",
+      "x": 30.48,
+      "y": 33.02,
+      "net": "TRIG_5V",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_RING_BUF",
+      "pin": "1",
+      "x": 30.48,
+      "y": 25.4,
+      "net": "RING_BUF",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_GREEN_A",
+      "pin": "1",
+      "x": 7.62,
+      "y": 46.99,
+      "net": "GREEN_A",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_RED_A",
+      "pin": "1",
+      "x": 25.4,
+      "y": 46.99,
+      "net": "RED_A",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_ECHO_HI",
+      "pin": "1",
+      "x": 26.67,
+      "y": 34.29,
+      "net": "ECHO_3V3",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_ECHO_LOW",
+      "pin": "1",
+      "x": 20.32,
+      "y": 46.99,
+      "net": "ECHO_3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_BUZZ_PORT",
+      "pin": "1",
+      "x": 50.8,
+      "y": 7.62,
+      "net": "BUZZ_C",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_BUZZ_COL",
+      "pin": "1",
+      "x": 53.34,
+      "y": 25.4,
+      "net": "BUZZ_C",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_BUZZ_BASE",
+      "pin": "1",
+      "x": 48.26,
+      "y": 31.75,
+      "net": "BUZZ_B",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_BUZZ_GPIO",
+      "pin": "1",
+      "x": 43.18,
+      "y": 40.64,
+      "net": "BUZZ_GPIO",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_G_OUT",
+      "pin": "1",
+      "x": 15.24,
+      "y": 53.34,
+      "net": "GREEN_A",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_R_OUT",
+      "pin": "1",
+      "x": 30.48,
+      "y": 58.42,
+      "net": "RED_A",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_G_IN",
+      "pin": "1",
+      "x": 15.24,
+      "y": 66.04,
+      "net": "GREEN_GPIO",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_R_IN",
+      "pin": "1",
+      "x": 30.48,
+      "y": 66.04,
+      "net": "RED_GPIO",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_C1_GND",
+      "pin": "1",
+      "x": 46.99,
+      "y": 17.78,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_Q1_GND",
+      "pin": "1",
+      "x": 45.72,
+      "y": 22.86,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_C2_GND",
+      "pin": "1",
+      "x": 31.75,
+      "y": 15.24,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_U1_G1",
+      "pin": "1",
+      "x": 30.48,
+      "y": 20.32,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_U1_G4",
+      "pin": "1",
+      "x": 30.48,
+      "y": 27.94,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_U1_G7",
+      "pin": "1",
+      "x": 30.48,
+      "y": 35.56,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_U1_G9",
+      "pin": "1",
+      "x": 43.18,
+      "y": 33.02,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_U1_G12",
+      "pin": "1",
+      "x": 43.18,
+      "y": 25.4,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_R3_GND",
+      "pin": "1",
+      "x": 25.4,
+      "y": 53.34,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_R7_GND",
+      "pin": "1",
+      "x": 55.88,
+      "y": 40.64,
+      "net": "GND",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_5V_IN",
+      "pin": "1",
+      "x": 10.16,
+      "y": 10.16,
+      "net": "5V_AUX",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PI_3V3_EXTRA",
+      "pin": "1",
+      "x": 57.15,
+      "y": 7.62,
+      "net": "3V3",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "TP_PI_ECHO_EXTRA",
+      "pin": "1",
+      "x": 57.15,
+      "y": 22.86,
+      "net": "ECHO_3V3",
+      "diameter": 2.0,
+      "drill": 0,
+      "label": "1",
+      "wire_port": true
+    },
+    {
+      "ref": "W02",
+      "pin": "2",
+      "x": 48.26,
+      "y": 48.26,
+      "net": "BUZZ_B",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "W08",
+      "pin": "1",
+      "x": 82.55,
+      "y": 54.61,
+      "net": "ENABLE_GPIO",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "W20",
+      "pin": "1",
+      "x": 35.56,
+      "y": 40.64,
+      "net": "TRIG_3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "W20",
+      "pin": "2",
+      "x": 58.42,
+      "y": 17.78,
+      "net": "TRIG_3V3",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "W21",
+      "pin": "1",
+      "x": 60.96,
+      "y": 80.01,
+      "net": "HOME_PAN",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "W22",
+      "pin": "1",
+      "x": 60.96,
+      "y": 95.25,
+      "net": "HOME_PAN",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "W22",
+      "pin": "2",
+      "x": 55.88,
+      "y": 83.82,
+      "net": "HOME_PAN",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "W23",
+      "pin": "1",
+      "x": 76.2,
+      "y": 80.01,
+      "net": "HOME_TILT",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "W24",
+      "pin": "1",
+      "x": 76.2,
+      "y": 95.25,
+      "net": "HOME_TILT",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "W24",
+      "pin": "2",
+      "x": 71.12,
+      "y": 83.82,
+      "net": "HOME_TILT",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    },
+    {
+      "ref": "W27",
+      "pin": "1",
+      "x": 91.44,
+      "y": 54.61,
+      "net": "DRV_EN",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "1"
+    },
+    {
+      "ref": "W27",
+      "pin": "2",
+      "x": 99.06,
+      "y": 50.8,
+      "net": "DRV_EN",
+      "diameter": 2.0,
+      "drill": 1.0,
+      "label": "2"
+    }
+  ],
+  "traces": [
+    {
+      "net": "12V",
+      "points": [
+        [
+          129.54,
+          5.08
+        ],
+        [
+          91.44,
+          5.08
+        ],
+        [
+          91.44,
+          48.26
+        ],
+        [
+          114.3,
+          48.26
+        ],
+        [
+          114.3,
+          53.34
+        ]
+      ],
+      "width": 1.5
+    },
+    {
+      "net": "12V",
+      "points": [
+        [
+          91.44,
+          10.16
+        ],
+        [
+          114.3,
+          10.16
+        ],
+        [
+          114.3,
+          15.24
+        ]
+      ],
+      "width": 1.5
+    },
+    {
+      "net": "12V",
+      "points": [
+        [
+          114.3,
+          10.16
+        ],
+        [
+          120.65,
+          10.16
+        ]
+      ],
+      "width": 1.5
+    },
+    {
+      "net": "12V",
+      "points": [
+        [
+          114.3,
+          48.26
+        ],
+        [
+          120.65,
+          48.26
+        ]
+      ],
+      "width": 1.5
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          134.62,
+          5.08
+        ],
+        [
+          137.16,
+          5.08
+        ],
+        [
+          137.16,
+          86.36
+        ]
+      ],
+      "width": 1.5
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          114.3,
+          17.78
+        ],
+        [
+          137.16,
+          17.78
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          114.3,
+          33.02
+        ],
+        [
+          109.22,
+          33.02
+        ],
+        [
+          109.22,
+          17.78
+        ],
+        [
+          114.3,
+          17.78
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          125.73,
+          10.16
+        ],
+        [
+          125.73,
+          17.78
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          114.3,
+          55.88
+        ],
+        [
+          137.16,
+          55.88
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          114.3,
+          71.12
+        ],
+        [
+          109.22,
+          71.12
+        ],
+        [
+          109.22,
+          55.88
+        ],
+        [
+          114.3,
+          55.88
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          125.73,
+          48.260000000000005
+        ],
+        [
+          125.73,
+          55.88
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "PAN_B2",
+      "points": [
+        [
+          114.3,
+          20.32
+        ],
+        [
+          116.84,
+          20.32
+        ],
+        [
+          119.38,
+          22.86
+        ],
+        [
+          130.81,
+          22.86
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "PAN_B1",
+      "points": [
+        [
+          114.3,
+          22.86
+        ],
+        [
+          116.84,
+          22.86
+        ],
+        [
+          121.92,
+          27.939999999999998
+        ],
+        [
+          130.81,
+          27.939999999999998
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "PAN_A1",
+      "points": [
+        [
+          114.3,
+          25.4
+        ],
+        [
+          116.84,
+          25.4
+        ],
+        [
+          124.46000000000001,
+          33.019999999999996
+        ],
+        [
+          130.81,
+          33.019999999999996
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "PAN_A2",
+      "points": [
+        [
+          114.3,
+          27.94
+        ],
+        [
+          116.84,
+          27.94
+        ],
+        [
+          127.0,
+          38.1
+        ],
+        [
+          130.81,
+          38.1
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "TILT_B2",
+      "points": [
+        [
+          114.3,
+          58.42
+        ],
+        [
+          116.84,
+          58.42
+        ],
+        [
+          119.38000000000001,
+          60.96
+        ],
+        [
+          130.81,
+          60.96
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "TILT_B1",
+      "points": [
+        [
+          114.3,
+          60.96
+        ],
+        [
+          116.84,
+          60.96
+        ],
+        [
+          121.91999999999999,
+          66.04
+        ],
+        [
+          130.81,
+          66.04
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "TILT_A1",
+      "points": [
+        [
+          114.3,
+          63.5
+        ],
+        [
+          116.84,
+          63.5
+        ],
+        [
+          124.46000000000001,
+          71.12
+        ],
+        [
+          130.81,
+          71.12
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "TILT_A2",
+      "points": [
+        [
+          114.3,
+          66.04
+        ],
+        [
+          116.84,
+          66.04
+        ],
+        [
+          127.00000000000001,
+          76.2
+        ],
+        [
+          130.81,
+          76.2
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          15.24,
+          5.08
+        ],
+        [
+          17.78,
+          7.62
+        ],
+        [
+          17.78,
+          12.7
+        ],
+        [
+          3.175,
+          12.7
+        ],
+        [
+          3.175,
+          89.535
+        ],
+        [
+          137.16,
+          89.535
+        ],
+        [
+          137.16,
+          86.36
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "3V3",
+      "points": [
+        [
+          66.04,
+          7.62
+        ],
+        [
+          60.96,
+          7.62
+        ]
+      ],
+      "width": 0.8
+    },
+    {
+      "net": "SDA",
+      "points": [
+        [
+          66.04,
+          10.16
+        ],
+        [
+          60.96,
+          10.16
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "SCL",
+      "points": [
+        [
+          66.04,
+          12.7
+        ],
+        [
+          60.96,
+          12.7
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          68.58000000000001,
+          12.7
+        ],
+        [
+          73.66,
+          12.7
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "TRIG_3V3",
+      "points": [
+        [
+          66.04,
+          20.32
+        ],
+        [
+          60.96,
+          20.32
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "PAN_STEP",
+      "points": [
+        [
+          68.58000000000001,
+          20.32
+        ],
+        [
+          73.66,
+          20.32
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "ECHO_3V3",
+      "points": [
+        [
+          66.04,
+          22.86
+        ],
+        [
+          60.96,
+          22.86
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "GREEN_GPIO",
+      "points": [
+        [
+          66.04,
+          25.400000000000002
+        ],
+        [
+          60.96,
+          25.400000000000002
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "RED_GPIO",
+      "points": [
+        [
+          68.58000000000001,
+          25.400000000000002
+        ],
+        [
+          73.66,
+          25.400000000000002
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "TILT_FAULT",
+      "points": [
+        [
+          68.58000000000001,
+          33.019999999999996
+        ],
+        [
+          73.66,
+          33.019999999999996
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "BUZZ_GPIO",
+      "points": [
+        [
+          66.04,
+          43.18
+        ],
+        [
+          60.96,
+          43.18
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "HOME_PAN",
+      "points": [
+        [
+          66.04,
+          45.72
+        ],
+        [
+          60.96,
+          45.72
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "PAN_DIR",
+      "points": [
+        [
+          68.58000000000001,
+          45.72
+        ],
+        [
+          73.66,
+          45.72
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "TILT_STEP",
+      "points": [
+        [
+          66.04,
+          48.26
+        ],
+        [
+          60.96,
+          48.26
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "TILT_DIR",
+      "points": [
+        [
+          66.04,
+          50.8
+        ],
+        [
+          60.96,
+          50.8
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "HOME_TILT",
+      "points": [
+        [
+          68.58000000000001,
+          50.8
+        ],
+        [
+          73.66,
+          50.8
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "ENABLE_GPIO",
+      "points": [
+        [
+          66.04,
+          53.339999999999996
+        ],
+        [
+          60.96,
+          53.339999999999996
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "PAN_FAULT",
+      "points": [
+        [
+          68.58000000000001,
+          53.339999999999996
+        ],
+        [
+          73.66,
+          53.339999999999996
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "RING_3V3",
+      "points": [
+        [
+          68.58000000000001,
+          55.879999999999995
+        ],
+        [
+          73.66,
+          55.879999999999995
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "PAN_FAULT",
+      "points": [
+        [
+          114.3,
+          30.48
+        ],
+        [
+          111.76,
+          30.48
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "DRV_EN",
+      "points": [
+        [
+          99.06,
+          15.24
+        ],
+        [
+          96.52,
+          15.24
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "PAN_STEP",
+      "points": [
+        [
+          99.06,
+          30.48
+        ],
+        [
+          96.52,
+          30.48
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "PAN_DIR",
+      "points": [
+        [
+          99.06,
+          33.02
+        ],
+        [
+          96.52,
+          33.02
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "3V3",
+      "points": [
+        [
+          99.06,
+          22.86
+        ],
+        [
+          96.52,
+          22.86
+        ]
+      ],
+      "width": 0.8
+    },
+    {
+      "net": "TILT_FAULT",
+      "points": [
+        [
+          114.3,
+          68.58
+        ],
+        [
+          111.76,
+          68.58
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "DRV_EN",
+      "points": [
+        [
+          99.06,
+          53.34
+        ],
+        [
+          96.52,
+          53.34
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "TILT_STEP",
+      "points": [
+        [
+          99.06,
+          68.58
+        ],
+        [
+          96.52,
+          68.58
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "TILT_DIR",
+      "points": [
+        [
+          99.06,
+          71.12
+        ],
+        [
+          96.52,
+          71.12
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "3V3",
+      "points": [
+        [
+          99.06,
+          60.96
+        ],
+        [
+          96.52,
+          60.96
+        ]
+      ],
+      "width": 0.8
+    },
+    {
+      "net": "RING_3V3",
+      "points": [
+        [
+          33.02,
+          22.86
+        ],
+        [
+          30.48,
+          22.86
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "TRIG_3V3",
+      "points": [
+        [
+          33.02,
+          30.48
+        ],
+        [
+          30.48,
+          30.48
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "RING_DATA",
+      "points": [
+        [
+          16.51,
+          25.4
+        ],
+        [
+          13.97,
+          25.4
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "RING_DATA",
+      "points": [
+        [
+          33.02,
+          5.08
+        ],
+        [
+          35.56,
+          10.16
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          7.62,
+          12.7
+        ],
+        [
+          11.43,
+          12.7
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "3V3",
+      "points": [
+        [
+          7.62,
+          15.239999999999998
+        ],
+        [
+          11.43,
+          15.239999999999998
+        ]
+      ],
+      "width": 0.8
+    },
+    {
+      "net": "SCL",
+      "points": [
+        [
+          7.62,
+          17.78
+        ],
+        [
+          11.43,
+          17.78
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "SDA",
+      "points": [
+        [
+          7.62,
+          20.32
+        ],
+        [
+          11.43,
+          20.32
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "5V_AUX",
+      "points": [
+        [
+          7.62,
+          30.48
+        ],
+        [
+          11.43,
+          30.48
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "TRIG_5V",
+      "points": [
+        [
+          7.62,
+          33.02
+        ],
+        [
+          11.43,
+          33.02
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "ECHO_5V",
+      "points": [
+        [
+          7.62,
+          35.56
+        ],
+        [
+          11.43,
+          35.56
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          7.62,
+          38.1
+        ],
+        [
+          11.43,
+          38.1
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "TRIG_5V",
+      "points": [
+        [
+          33.02,
+          33.02
+        ],
+        [
+          30.48,
+          33.02
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "RING_BUF",
+      "points": [
+        [
+          33.02,
+          25.4
+        ],
+        [
+          30.48,
+          25.4
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "GREEN_A",
+      "points": [
+        [
+          7.62,
+          43.18
+        ],
+        [
+          7.62,
+          46.99
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "RED_A",
+      "points": [
+        [
+          25.4,
+          43.18
+        ],
+        [
+          25.4,
+          46.99
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "ECHO_3V3",
+      "points": [
+        [
+          24.13,
+          36.83
+        ],
+        [
+          26.67,
+          34.29
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "ECHO_3V3",
+      "points": [
+        [
+          20.32,
+          50.8
+        ],
+        [
+          20.32,
+          46.99
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "BUZZ_C",
+      "points": [
+        [
+          48.26,
+          5.08
+        ],
+        [
+          50.8,
+          7.62
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "BUZZ_C",
+      "points": [
+        [
+          50.8,
+          27.94
+        ],
+        [
+          53.34,
+          25.4
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "BUZZ_B",
+      "points": [
+        [
+          48.26,
+          27.94
+        ],
+        [
+          48.26,
+          31.75
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "BUZZ_GPIO",
+      "points": [
+        [
+          45.72,
+          43.18
+        ],
+        [
+          43.18,
+          40.64
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "GREEN_A",
+      "points": [
+        [
+          17.78,
+          55.88
+        ],
+        [
+          15.24,
+          53.34
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "RED_A",
+      "points": [
+        [
+          27.94,
+          55.88
+        ],
+        [
+          30.48,
+          58.42
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "GREEN_GPIO",
+      "points": [
+        [
+          17.78,
+          63.5
+        ],
+        [
+          15.24,
+          66.04
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "RED_GPIO",
+      "points": [
+        [
+          27.94,
+          63.5
+        ],
+        [
+          30.48,
+          66.04
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          43.18,
+          15.24
+        ],
+        [
+          46.99,
+          17.78
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          45.72,
+          27.94
+        ],
+        [
+          45.72,
+          22.86
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          27.94,
+          13.97
+        ],
+        [
+          31.75,
+          15.24
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          33.02,
+          20.32
+        ],
+        [
+          30.48,
+          20.32
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          33.02,
+          27.94
+        ],
+        [
+          30.48,
+          27.94
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          33.02,
+          35.56
+        ],
+        [
+          30.48,
+          35.56
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          40.64,
+          33.02
+        ],
+        [
+          43.18,
+          33.02
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          40.64,
+          25.4
+        ],
+        [
+          43.18,
+          25.4
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          27.94,
+          27.94
+        ],
+        [
+          33.02,
+          27.94
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          27.94,
+          50.8
+        ],
+        [
+          25.4,
+          53.34
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          27.94,
+          50.8
+        ],
+        [
+          33.02,
+          50.8
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          53.34,
+          38.1
+        ],
+        [
+          55.88,
+          40.64
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "5V_AUX",
+      "points": [
+        [
+          10.16,
+          5.08
+        ],
+        [
+          10.16,
+          10.16
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "3V3",
+      "points": [
+        [
+          60.96,
+          7.62
+        ],
+        [
+          57.15,
+          7.62
+        ]
+      ],
+      "width": 0.8
+    },
+    {
+      "net": "ECHO_3V3",
+      "points": [
+        [
+          60.96,
+          22.86
+        ],
+        [
+          57.15,
+          22.86
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "5V_AUX",
+      "points": [
+        [
+          22.86,
+          5.08
+        ],
+        [
+          22.86,
+          5.715
+        ],
+        [
+          22.225,
+          6.35
+        ],
+        [
+          22.225,
+          6.985
+        ],
+        [
+          21.59,
+          7.62
+        ],
+        [
+          21.59,
+          8.255
+        ],
+        [
+          20.955,
+          8.89
+        ],
+        [
+          20.955,
+          10.16
+        ],
+        [
+          20.32,
+          10.795
+        ],
+        [
+          20.32,
+          13.335
+        ],
+        [
+          17.78,
+          15.875
+        ],
+        [
+          17.78,
+          17.145
+        ],
+        [
+          17.145,
+          17.78
+        ],
+        [
+          17.145,
+          18.415
+        ],
+        [
+          11.43,
+          24.13
+        ],
+        [
+          11.43,
+          30.48
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "5V_AUX",
+      "points": [
+        [
+          22.86,
+          13.97
+        ],
+        [
+          20.32,
+          13.97
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "5V_AUX",
+      "points": [
+        [
+          40.64,
+          15.24
+        ],
+        [
+          39.37,
+          15.24
+        ],
+        [
+          38.1,
+          16.51
+        ],
+        [
+          36.195,
+          16.51
+        ],
+        [
+          35.56,
+          17.145
+        ],
+        [
+          33.655,
+          17.145
+        ],
+        [
+          33.02,
+          17.78
+        ],
+        [
+          29.845,
+          17.78
+        ],
+        [
+          29.21,
+          17.145
+        ],
+        [
+          28.575,
+          17.145
+        ],
+        [
+          27.94,
+          16.51
+        ],
+        [
+          26.67,
+          16.51
+        ],
+        [
+          25.4,
+          15.24
+        ],
+        [
+          24.765,
+          15.24
+        ],
+        [
+          24.13,
+          14.605
+        ],
+        [
+          23.495,
+          14.605
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "5V_AUX",
+      "points": [
+        [
+          40.64,
+          20.32
+        ],
+        [
+          40.005,
+          19.685
+        ],
+        [
+          40.005,
+          19.05
+        ],
+        [
+          39.37,
+          18.415
+        ],
+        [
+          39.37,
+          17.78
+        ],
+        [
+          38.735,
+          17.145
+        ],
+        [
+          38.735,
+          16.51
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "5V_AUX",
+      "points": [
+        [
+          40.64,
+          22.86
+        ],
+        [
+          40.64,
+          20.955
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "5V_AUX",
+      "points": [
+        [
+          45.72,
+          12.7
+        ],
+        [
+          41.91,
+          12.7
+        ],
+        [
+          40.64,
+          13.97
+        ],
+        [
+          40.64,
+          14.605
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "5V_AUX",
+      "points": [
+        [
+          45.72,
+          5.08
+        ],
+        [
+          45.72,
+          12.065
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "5V_AUX",
+      "points": [
+        [
+          40.64,
+          30.48
+        ],
+        [
+          39.37,
+          30.48
+        ],
+        [
+          38.1,
+          29.21
+        ],
+        [
+          38.1,
+          24.13
+        ],
+        [
+          39.37,
+          22.86
+        ],
+        [
+          40.005,
+          22.86
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "RING_DATA",
+      "points": [
+        [
+          16.51,
+          25.4
+        ],
+        [
+          17.78,
+          25.4
+        ],
+        [
+          19.05,
+          26.67
+        ],
+        [
+          20.955,
+          26.67
+        ],
+        [
+          21.59,
+          27.305
+        ],
+        [
+          22.86,
+          27.305
+        ],
+        [
+          28.575,
+          33.02
+        ],
+        [
+          28.575,
+          36.83
+        ],
+        [
+          29.21,
+          37.465
+        ],
+        [
+          41.91,
+          37.465
+        ],
+        [
+          45.72,
+          33.655
+        ],
+        [
+          49.53,
+          33.655
+        ],
+        [
+          50.8,
+          32.385
+        ],
+        [
+          54.61,
+          32.385
+        ],
+        [
+          55.245,
+          31.75
+        ],
+        [
+          55.245,
+          11.43
+        ],
+        [
+          52.705,
+          8.89
+        ],
+        [
+          52.705,
+          6.35
+        ],
+        [
+          49.53,
+          3.175
+        ],
+        [
+          44.45,
+          3.175
+        ],
+        [
+          38.1,
+          9.525
+        ],
+        [
+          37.465,
+          9.525
+        ],
+        [
+          36.83,
+          10.16
+        ],
+        [
+          36.195,
+          10.16
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "RING_BUF",
+      "points": [
+        [
+          24.13,
+          25.4
+        ],
+        [
+          29.845,
+          25.4
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "ECHO_5V",
+      "points": [
+        [
+          16.51,
+          36.83
+        ],
+        [
+          13.335,
+          36.83
+        ],
+        [
+          12.7,
+          36.195
+        ],
+        [
+          12.065,
+          36.195
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "BUZZ_C",
+      "points": [
+        [
+          53.34,
+          12.7
+        ],
+        [
+          53.34,
+          12.065
+        ],
+        [
+          51.435,
+          10.16
+        ],
+        [
+          51.435,
+          8.255
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "BUZZ_C",
+      "points": [
+        [
+          53.34,
+          25.4
+        ],
+        [
+          53.34,
+          13.335
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "BUZZ_B",
+      "points": [
+        [
+          45.72,
+          50.8
+        ],
+        [
+          48.26,
+          48.26
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "BUZZ_B",
+      "points": [
+        [
+          53.34,
+          30.48
+        ],
+        [
+          50.165,
+          30.48
+        ],
+        [
+          49.53,
+          31.115
+        ],
+        [
+          48.895,
+          31.115
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "GREEN_A",
+      "points": [
+        [
+          15.24,
+          53.34
+        ],
+        [
+          10.16,
+          48.26
+        ],
+        [
+          9.525,
+          48.26
+        ],
+        [
+          8.89,
+          47.625
+        ],
+        [
+          8.255,
+          47.625
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "RED_A",
+      "points": [
+        [
+          27.94,
+          55.88
+        ],
+        [
+          27.305,
+          55.245
+        ],
+        [
+          24.13,
+          55.245
+        ],
+        [
+          23.495,
+          54.61
+        ],
+        [
+          23.495,
+          52.07
+        ],
+        [
+          24.765,
+          50.8
+        ],
+        [
+          24.765,
+          50.165
+        ],
+        [
+          25.4,
+          49.53
+        ],
+        [
+          25.4,
+          48.895
+        ],
+        [
+          26.035,
+          48.26
+        ],
+        [
+          26.035,
+          47.625
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          68.58,
+          12.7
+        ],
+        [
+          73.66,
+          12.7
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          45.72,
+          22.86
+        ],
+        [
+          45.72,
+          19.685
+        ],
+        [
+          46.355,
+          19.05
+        ],
+        [
+          46.355,
+          18.415
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          43.18,
+          25.4
+        ],
+        [
+          45.72,
+          25.4
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          43.18,
+          33.02
+        ],
+        [
+          43.18,
+          32.385
+        ],
+        [
+          43.815,
+          31.75
+        ],
+        [
+          43.815,
+          31.115
+        ],
+        [
+          44.45,
+          30.48
+        ],
+        [
+          44.45,
+          29.845
+        ],
+        [
+          45.085,
+          29.21
+        ],
+        [
+          45.085,
+          28.575
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          33.02,
+          27.94
+        ],
+        [
+          34.29,
+          27.94
+        ],
+        [
+          36.195,
+          29.845
+        ],
+        [
+          36.195,
+          30.48
+        ],
+        [
+          38.1,
+          32.385
+        ],
+        [
+          38.735,
+          32.385
+        ],
+        [
+          39.37,
+          33.02
+        ],
+        [
+          40.005,
+          33.02
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          33.02,
+          35.56
+        ],
+        [
+          34.29,
+          35.56
+        ],
+        [
+          36.195,
+          33.655
+        ],
+        [
+          36.195,
+          33.02
+        ],
+        [
+          36.83,
+          32.385
+        ],
+        [
+          36.83,
+          31.75
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          33.02,
+          20.32
+        ],
+        [
+          34.29,
+          20.32
+        ],
+        [
+          35.56,
+          21.59
+        ],
+        [
+          35.56,
+          26.67
+        ],
+        [
+          34.29,
+          27.94
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          30.48,
+          20.32
+        ],
+        [
+          34.29,
+          20.32
+        ],
+        [
+          36.195,
+          22.225
+        ],
+        [
+          36.195,
+          30.48
+        ],
+        [
+          38.1,
+          32.385
+        ],
+        [
+          38.735,
+          32.385
+        ],
+        [
+          39.37,
+          33.02
+        ],
+        [
+          41.91,
+          33.02
+        ],
+        [
+          43.18,
+          31.75
+        ],
+        [
+          43.18,
+          27.94
+        ],
+        [
+          43.815,
+          27.305
+        ],
+        [
+          43.815,
+          26.67
+        ],
+        [
+          44.45,
+          26.035
+        ],
+        [
+          44.45,
+          25.4
+        ],
+        [
+          45.085,
+          24.765
+        ],
+        [
+          45.085,
+          24.13
+        ],
+        [
+          45.72,
+          23.495
+        ],
+        [
+          45.72,
+          22.86
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          27.94,
+          43.18
+        ],
+        [
+          29.21,
+          43.18
+        ],
+        [
+          31.75,
+          45.72
+        ],
+        [
+          36.83,
+          45.72
+        ],
+        [
+          44.45,
+          53.34
+        ],
+        [
+          57.15,
+          53.34
+        ],
+        [
+          59.69,
+          55.88
+        ],
+        [
+          62.23,
+          55.88
+        ],
+        [
+          64.77,
+          58.42
+        ],
+        [
+          74.93,
+          58.42
+        ],
+        [
+          76.2,
+          57.15
+        ],
+        [
+          76.2,
+          19.05
+        ],
+        [
+          69.85,
+          12.7
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          33.02,
+          50.8
+        ],
+        [
+          33.02,
+          45.72
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          27.94,
+          5.08
+        ],
+        [
+          27.94,
+          13.335
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          53.34,
+          38.1
+        ],
+        [
+          48.26,
+          43.18
+        ],
+        [
+          48.26,
+          44.45
+        ],
+        [
+          46.99,
+          45.72
+        ],
+        [
+          40.005,
+          45.72
+        ],
+        [
+          38.735,
+          46.99
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          15.24,
+          5.08
+        ],
+        [
+          15.24,
+          6.35
+        ],
+        [
+          13.97,
+          7.62
+        ],
+        [
+          13.97,
+          9.525
+        ],
+        [
+          13.335,
+          10.16
+        ],
+        [
+          13.335,
+          10.795
+        ],
+        [
+          11.43,
+          12.7
+        ],
+        [
+          6.35,
+          12.7
+        ],
+        [
+          5.08,
+          13.97
+        ],
+        [
+          5.08,
+          36.83
+        ],
+        [
+          6.35,
+          38.1
+        ],
+        [
+          12.065,
+          38.1
+        ],
+        [
+          12.7,
+          38.735
+        ],
+        [
+          14.605,
+          38.735
+        ],
+        [
+          15.24,
+          39.37
+        ],
+        [
+          25.4,
+          39.37
+        ],
+        [
+          27.94,
+          41.91
+        ],
+        [
+          27.94,
+          42.545
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          76.2,
+          86.36
+        ],
+        [
+          76.2,
+          89.535
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          60.96,
+          86.36
+        ],
+        [
+          60.96,
+          89.535
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          76.2,
+          92.71
+        ],
+        [
+          76.2,
+          89.535
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          60.96,
+          92.71
+        ],
+        [
+          60.96,
+          89.535
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          10.16,
+          43.18
+        ],
+        [
+          10.16,
+          40.005
+        ],
+        [
+          10.795,
+          39.37
+        ],
+        [
+          10.795,
+          38.735
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          99.06,
+          55.88
+        ],
+        [
+          109.22,
+          55.88
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          99.06,
+          58.42
+        ],
+        [
+          99.06,
+          56.515
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          99.06,
+          17.78
+        ],
+        [
+          109.22,
+          17.78
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "GND",
+      "points": [
+        [
+          99.06,
+          20.32
+        ],
+        [
+          99.06,
+          18.415
+        ]
+      ],
+      "width": 1.2
+    },
+    {
+      "net": "3V3",
+      "points": [
+        [
+          66.04,
+          7.62
+        ],
+        [
+          60.96,
+          7.62
+        ]
+      ],
+      "width": 0.8
+    },
+    {
+      "net": "3V3",
+      "points": [
+        [
+          99.06,
+          25.4
+        ],
+        [
+          99.06,
+          23.495
+        ]
+      ],
+      "width": 0.8
+    },
+    {
+      "net": "3V3",
+      "points": [
+        [
+          99.06,
+          27.94
+        ],
+        [
+          99.06,
+          26.035
+        ]
+      ],
+      "width": 0.8
+    },
+    {
+      "net": "3V3",
+      "points": [
+        [
+          99.06,
+          60.96
+        ],
+        [
+          98.425,
+          60.325
+        ],
+        [
+          97.155,
+          60.325
+        ],
+        [
+          96.52,
+          59.69
+        ],
+        [
+          96.52,
+          57.785
+        ],
+        [
+          95.885,
+          57.15
+        ],
+        [
+          95.885,
+          56.515
+        ],
+        [
+          94.615,
+          55.245
+        ],
+        [
+          94.615,
+          54.61
+        ],
+        [
+          89.535,
+          49.53
+        ],
+        [
+          89.535,
+          45.72
+        ],
+        [
+          88.9,
+          45.085
+        ],
+        [
+          88.9,
+          25.4
+        ],
+        [
+          88.265,
+          24.765
+        ],
+        [
+          88.265,
+          23.495
+        ],
+        [
+          70.485,
+          5.715
+        ],
+        [
+          66.675,
+          5.715
+        ],
+        [
+          66.675,
+          6.985
+        ]
+      ],
+      "width": 0.8
+    },
+    {
+      "net": "3V3",
+      "points": [
+        [
+          99.06,
+          63.5
+        ],
+        [
+          99.06,
+          61.595
+        ]
+      ],
+      "width": 0.8
+    },
+    {
+      "net": "3V3",
+      "points": [
+        [
+          99.06,
+          66.04
+        ],
+        [
+          99.06,
+          64.135
+        ]
+      ],
+      "width": 0.8
+    },
+    {
+      "net": "3V3",
+      "points": [
+        [
+          88.9,
+          64.77
+        ],
+        [
+          89.535,
+          64.77
+        ],
+        [
+          90.17,
+          64.135
+        ],
+        [
+          90.805,
+          64.135
+        ],
+        [
+          91.44,
+          63.5
+        ],
+        [
+          92.075,
+          63.5
+        ],
+        [
+          92.71,
+          62.865
+        ],
+        [
+          93.345,
+          62.865
+        ],
+        [
+          93.98,
+          62.23
+        ],
+        [
+          94.615,
+          62.23
+        ],
+        [
+          95.25,
+          61.595
+        ],
+        [
+          95.885,
+          61.595
+        ]
+      ],
+      "width": 0.8
+    },
+    {
+      "net": "3V3",
+      "points": [
+        [
+          73.66,
+          74.93
+        ],
+        [
+          79.375,
+          69.215
+        ],
+        [
+          80.645,
+          69.215
+        ],
+        [
+          81.28,
+          68.58
+        ],
+        [
+          81.915,
+          68.58
+        ],
+        [
+          82.55,
+          67.945
+        ],
+        [
+          83.185,
+          67.945
+        ],
+        [
+          83.82,
+          67.31
+        ],
+        [
+          84.455,
+          67.31
+        ],
+        [
+          85.09,
+          66.675
+        ],
+        [
+          85.725,
+          66.675
+        ],
+        [
+          86.36,
+          66.04
+        ],
+        [
+          86.995,
+          66.04
+        ],
+        [
+          87.63,
+          65.405
+        ],
+        [
+          88.265,
+          65.405
+        ]
+      ],
+      "width": 0.8
+    },
+    {
+      "net": "3V3",
+      "points": [
+        [
+          58.42,
+          74.93
+        ],
+        [
+          73.025,
+          74.93
+        ]
+      ],
+      "width": 0.8
+    },
+    {
+      "net": "3V3",
+      "points": [
+        [
+          57.15,
+          7.62
+        ],
+        [
+          64.77,
+          7.62
+        ],
+        [
+          66.675,
+          5.715
+        ],
+        [
+          70.485,
+          5.715
+        ],
+        [
+          75.565,
+          10.795
+        ],
+        [
+          75.565,
+          15.24
+        ],
+        [
+          78.105,
+          17.78
+        ],
+        [
+          78.105,
+          20.955
+        ],
+        [
+          78.74,
+          21.59
+        ],
+        [
+          78.74,
+          22.225
+        ],
+        [
+          79.375,
+          22.86
+        ],
+        [
+          79.375,
+          23.495
+        ],
+        [
+          80.01,
+          24.13
+        ],
+        [
+          80.01,
+          24.765
+        ],
+        [
+          80.645,
+          25.4
+        ],
+        [
+          80.645,
+          26.67
+        ],
+        [
+          81.28,
+          27.305
+        ],
+        [
+          81.28,
+          27.94
+        ],
+        [
+          81.915,
+          28.575
+        ],
+        [
+          81.915,
+          29.21
+        ],
+        [
+          82.55,
+          29.845
+        ],
+        [
+          82.55,
+          30.48
+        ],
+        [
+          83.185,
+          31.115
+        ],
+        [
+          83.185,
+          31.75
+        ],
+        [
+          83.82,
+          32.385
+        ],
+        [
+          83.82,
+          33.655
+        ],
+        [
+          84.455,
+          34.29
+        ],
+        [
+          84.455,
+          34.925
+        ],
+        [
+          85.09,
+          35.56
+        ],
+        [
+          85.09,
+          36.195
+        ],
+        [
+          85.725,
+          36.83
+        ],
+        [
+          85.725,
+          37.465
+        ],
+        [
+          86.36,
+          38.1
+        ],
+        [
+          86.36,
+          38.735
+        ],
+        [
+          86.995,
+          39.37
+        ],
+        [
+          86.995,
+          40.64
+        ],
+        [
+          87.63,
+          41.275
+        ],
+        [
+          87.63,
+          41.91
+        ],
+        [
+          88.265,
+          42.545
+        ],
+        [
+          88.265,
+          43.18
+        ],
+        [
+          88.9,
+          43.815
+        ],
+        [
+          88.9,
+          44.45
+        ],
+        [
+          89.535,
+          45.085
+        ],
+        [
+          89.535,
+          49.53
+        ],
+        [
+          93.345,
+          53.34
+        ],
+        [
+          93.345,
+          54.61
+        ],
+        [
+          93.98,
+          55.245
+        ],
+        [
+          93.98,
+          55.88
+        ],
+        [
+          94.615,
+          56.515
+        ],
+        [
+          94.615,
+          57.15
+        ],
+        [
+          95.25,
+          57.785
+        ],
+        [
+          95.25,
+          58.42
+        ],
+        [
+          95.885,
+          59.055
+        ],
+        [
+          95.885,
+          59.69
+        ],
+        [
+          96.52,
+          60.325
+        ],
+        [
+          96.52,
+          60.96
+        ]
+      ],
+      "width": 0.8
+    },
+    {
+      "net": "ENABLE_GPIO",
+      "points": [
+        [
+          80.01,
+          57.15
+        ],
+        [
+          80.645,
+          56.515
+        ],
+        [
+          80.645,
+          55.88
+        ],
+        [
+          81.915,
+          54.61
+        ],
+        [
+          82.55,
+          54.61
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "ENABLE_GPIO",
+      "points": [
+        [
+          66.04,
+          53.34
+        ],
+        [
+          60.96,
+          53.34
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "GREEN_GPIO",
+      "points": [
+        [
+          17.78,
+          63.5
+        ],
+        [
+          15.24,
+          66.04
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "RED_GPIO",
+      "points": [
+        [
+          27.94,
+          63.5
+        ],
+        [
+          30.48,
+          66.04
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "RED_GPIO",
+      "points": [
+        [
+          68.58,
+          25.4
+        ],
+        [
+          73.66,
+          25.4
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "BUZZ_GPIO",
+      "points": [
+        [
+          45.72,
+          43.18
+        ],
+        [
+          51.435,
+          37.465
+        ],
+        [
+          51.435,
+          36.83
+        ],
+        [
+          52.07,
+          36.195
+        ],
+        [
+          54.61,
+          36.195
+        ],
+        [
+          59.69,
+          41.275
+        ],
+        [
+          59.69,
+          41.91
+        ],
+        [
+          60.325,
+          42.545
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "TILT_STEP",
+      "points": [
+        [
+          66.04,
+          48.26
+        ],
+        [
+          60.96,
+          48.26
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "TILT_DIR",
+      "points": [
+        [
+          66.04,
+          50.8
+        ],
+        [
+          60.96,
+          50.8
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "TRIG_3V3",
+      "points": [
+        [
+          33.02,
+          30.48
+        ],
+        [
+          30.48,
+          30.48
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "TRIG_3V3",
+      "points": [
+        [
+          33.02,
+          43.18
+        ],
+        [
+          35.56,
+          40.64
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "TRIG_3V3",
+      "points": [
+        [
+          60.96,
+          20.32
+        ],
+        [
+          58.42,
+          17.78
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "HOME_PAN",
+      "points": [
+        [
+          58.42,
+          82.55
+        ],
+        [
+          60.96,
+          80.01
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "HOME_PAN",
+      "points": [
+        [
+          58.42,
+          86.36
+        ],
+        [
+          58.42,
+          83.185
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "HOME_PAN",
+      "points": [
+        [
+          58.42,
+          92.71
+        ],
+        [
+          59.055,
+          93.345
+        ],
+        [
+          59.055,
+          93.98
+        ],
+        [
+          60.325,
+          95.25
+        ],
+        [
+          60.96,
+          95.25
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "HOME_PAN",
+      "points": [
+        [
+          58.42,
+          86.36
+        ],
+        [
+          55.88,
+          83.82
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "HOME_TILT",
+      "points": [
+        [
+          73.66,
+          82.55
+        ],
+        [
+          76.2,
+          80.01
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "HOME_TILT",
+      "points": [
+        [
+          73.66,
+          86.36
+        ],
+        [
+          73.66,
+          83.185
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "HOME_TILT",
+      "points": [
+        [
+          73.66,
+          92.71
+        ],
+        [
+          74.295,
+          93.345
+        ],
+        [
+          74.295,
+          93.98
+        ],
+        [
+          75.565,
+          95.25
+        ],
+        [
+          76.2,
+          95.25
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "HOME_TILT",
+      "points": [
+        [
+          73.66,
+          86.36
+        ],
+        [
+          71.12,
+          83.82
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "RING_3V3",
+      "points": [
+        [
+          33.02,
+          22.86
+        ],
+        [
+          30.48,
+          22.86
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "RING_3V3",
+      "points": [
+        [
+          68.58,
+          55.88
+        ],
+        [
+          73.66,
+          55.88
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "RING_3V3",
+      "points": [
+        [
+          27.94,
+          20.32
+        ],
+        [
+          28.575,
+          20.955
+        ],
+        [
+          28.575,
+          21.59
+        ],
+        [
+          29.21,
+          22.225
+        ],
+        [
+          29.845,
+          22.225
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "DRV_EN",
+      "points": [
+        [
+          99.06,
+          53.34
+        ],
+        [
+          96.52,
+          53.34
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "DRV_EN",
+      "points": [
+        [
+          88.9,
+          57.15
+        ],
+        [
+          91.44,
+          54.61
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "DRV_EN",
+      "points": [
+        [
+          96.52,
+          53.34
+        ],
+        [
+          99.06,
+          50.8
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "DRV_EN",
+      "points": [
+        [
+          82.55,
+          57.15
+        ],
+        [
+          88.265,
+          57.15
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "ECHO_3V3",
+      "points": [
+        [
+          26.67,
+          34.29
+        ],
+        [
+          27.305,
+          34.925
+        ],
+        [
+          27.305,
+          38.1
+        ],
+        [
+          27.94,
+          38.735
+        ],
+        [
+          43.18,
+          38.735
+        ],
+        [
+          46.99,
+          34.925
+        ],
+        [
+          50.8,
+          34.925
+        ],
+        [
+          52.07,
+          33.655
+        ],
+        [
+          55.88,
+          33.655
+        ],
+        [
+          56.515,
+          33.02
+        ],
+        [
+          56.515,
+          23.495
+        ]
+      ],
+      "width": 0.6
+    },
+    {
+      "net": "ECHO_3V3",
+      "points": [
+        [
+          24.13,
+          36.83
+        ],
+        [
+          25.4,
+          36.83
+        ],
+        [
+          26.67,
+          38.1
+        ],
+        [
+          27.305,
+          38.1
+        ],
+        [
+          27.94,
+          38.735
+        ],
+        [
+          43.18,
+          38.735
+        ],
+        [
+          46.99,
+          34.925
+        ],
+        [
+          50.8,
+          34.925
+        ],
+        [
+          52.07,
+          33.655
+        ],
+        [
+          55.88,
+          33.655
+        ],
+        [
+          56.515,
+          33.02
+        ],
+        [
+          56.515,
+          32.385
+        ],
+        [
+          57.15,
+          31.75
+        ],
+        [
+          57.15,
+          31.115
+        ],
+        [
+          57.785,
+          30.48
+        ],
+        [
+          57.785,
+          29.21
+        ],
+        [
+          58.42,
+          28.575
+        ],
+        [
+          58.42,
+          27.94
+        ],
+        [
+          59.055,
+          27.305
+        ],
+        [
+          59.055,
+          24.13
+        ],
+        [
+          60.325,
+          22.86
+        ],
+        [
+          60.96,
+          22.86
+        ]
+      ],
+      "width": 0.6
+    }
+  ],
+  "jumpers": [
+    {
+      "ref": "W01",
+      "net": "5V_AUX",
+      "start": [
+        11.43,
+        30.48
+      ],
+      "end": [
+        10.16,
+        10.16
+      ],
+      "min_cut_length_mm": 40.4
+    },
+    {
+      "ref": "W02",
+      "net": "BUZZ_B",
+      "start": [
+        48.26,
+        31.75
+      ],
+      "end": [
+        48.26,
+        48.26
+      ],
+      "min_cut_length_mm": 36.5
+    },
+    {
+      "ref": "W03",
+      "net": "TRIG_5V",
+      "start": [
+        30.48,
+        33.02
+      ],
+      "end": [
+        11.43,
+        33.02
+      ],
+      "min_cut_length_mm": 39.0
+    },
+    {
+      "ref": "W04",
+      "net": "GND",
+      "start": [
+        46.99,
+        17.78
+      ],
+      "end": [
+        73.66,
+        12.7
+      ],
+      "min_cut_length_mm": 47.1
+    },
+    {
+      "ref": "W05",
+      "net": "GND",
+      "start": [
+        31.75,
+        15.24
+      ],
+      "end": [
+        45.72,
+        22.86
+      ],
+      "min_cut_length_mm": 35.9
+    },
+    {
+      "ref": "W06",
+      "net": "3V3",
+      "start": [
+        96.52,
+        22.86
+      ],
+      "end": [
+        60.96,
+        7.62
+      ],
+      "min_cut_length_mm": 58.7
+    },
+    {
+      "ref": "W07",
+      "net": "3V3",
+      "start": [
+        11.43,
+        15.239999999999998
+      ],
+      "end": [
+        96.52,
+        60.96
+      ],
+      "min_cut_length_mm": 116.6
+    },
+    {
+      "ref": "W08",
+      "net": "ENABLE_GPIO",
+      "start": [
+        82.55,
+        54.61
+      ],
+      "end": [
+        60.96,
+        53.339999999999996
+      ],
+      "min_cut_length_mm": 41.6
+    },
+    {
+      "ref": "W09",
+      "net": "SDA",
+      "start": [
+        11.43,
+        20.32
+      ],
+      "end": [
+        60.96,
+        10.16
+      ],
+      "min_cut_length_mm": 70.6
+    },
+    {
+      "ref": "W10",
+      "net": "SCL",
+      "start": [
+        11.43,
+        17.78
+      ],
+      "end": [
+        60.96,
+        12.7
+      ],
+      "min_cut_length_mm": 69.8
+    },
+    {
+      "ref": "W11",
+      "net": "PAN_STEP",
+      "start": [
+        96.52,
+        30.48
+      ],
+      "end": [
+        73.66,
+        20.32
+      ],
+      "min_cut_length_mm": 45.0
+    },
+    {
+      "ref": "W12",
+      "net": "GREEN_GPIO",
+      "start": [
+        15.24,
+        66.04
+      ],
+      "end": [
+        60.96,
+        25.400000000000002
+      ],
+      "min_cut_length_mm": 81.2
+    },
+    {
+      "ref": "W13",
+      "net": "RED_GPIO",
+      "start": [
+        30.48,
+        66.04
+      ],
+      "end": [
+        73.66,
+        25.400000000000002
+      ],
+      "min_cut_length_mm": 79.3
+    },
+    {
+      "ref": "W14",
+      "net": "TILT_FAULT",
+      "start": [
+        111.76,
+        68.58
+      ],
+      "end": [
+        73.66,
+        33.019999999999996
+      ],
+      "min_cut_length_mm": 72.1
+    },
+    {
+      "ref": "W15",
+      "net": "PAN_DIR",
+      "start": [
+        96.52,
+        33.02
+      ],
+      "end": [
+        73.66,
+        45.72
+      ],
+      "min_cut_length_mm": 46.2
+    },
+    {
+      "ref": "W16",
+      "net": "TILT_STEP",
+      "start": [
+        96.52,
+        68.58
+      ],
+      "end": [
+        60.96,
+        48.26
+      ],
+      "min_cut_length_mm": 61.0
+    },
+    {
+      "ref": "W17",
+      "net": "TILT_DIR",
+      "start": [
+        96.52,
+        71.12
+      ],
+      "end": [
+        60.96,
+        50.8
+      ],
+      "min_cut_length_mm": 61.0
+    },
+    {
+      "ref": "W18",
+      "net": "PAN_FAULT",
+      "start": [
+        111.76,
+        30.48
+      ],
+      "end": [
+        73.66,
+        53.339999999999996
+      ],
+      "min_cut_length_mm": 64.4
+    },
+    {
+      "ref": "W19",
+      "net": "TRIG_3V3",
+      "start": [
+        30.48,
+        30.48
+      ],
+      "end": [
+        60.96,
+        20.32
+      ],
+      "min_cut_length_mm": 52.1
+    },
+    {
+      "ref": "W20",
+      "net": "TRIG_3V3",
+      "start": [
+        35.56,
+        40.64
+      ],
+      "end": [
+        58.42,
+        17.78
+      ],
+      "min_cut_length_mm": 52.3
+    },
+    {
+      "ref": "W21",
+      "net": "HOME_PAN",
+      "start": [
+        60.96,
+        80.01
+      ],
+      "end": [
+        60.96,
+        45.72
+      ],
+      "min_cut_length_mm": 54.3
+    },
+    {
+      "ref": "W22",
+      "net": "HOME_PAN",
+      "start": [
+        60.96,
+        95.25
+      ],
+      "end": [
+        55.88,
+        83.82
+      ],
+      "min_cut_length_mm": 32.5
+    },
+    {
+      "ref": "W23",
+      "net": "HOME_TILT",
+      "start": [
+        76.2,
+        80.01
+      ],
+      "end": [
+        73.66,
+        50.8
+      ],
+      "min_cut_length_mm": 49.3
+    },
+    {
+      "ref": "W24",
+      "net": "HOME_TILT",
+      "start": [
+        76.2,
+        95.25
+      ],
+      "end": [
+        71.12,
+        83.82
+      ],
+      "min_cut_length_mm": 32.5
+    },
+    {
+      "ref": "W25",
+      "net": "RING_3V3",
+      "start": [
+        30.48,
+        22.86
+      ],
+      "end": [
+        73.66,
+        55.879999999999995
+      ],
+      "min_cut_length_mm": 74.4
+    },
+    {
+      "ref": "W26",
+      "net": "DRV_EN",
+      "start": [
+        96.52,
+        53.34
+      ],
+      "end": [
+        96.52,
+        15.24
+      ],
+      "min_cut_length_mm": 58.1
+    },
+    {
+      "ref": "W27",
+      "net": "DRV_EN",
+      "start": [
+        91.44,
+        54.61
+      ],
+      "end": [
+        99.06,
+        50.8
+      ],
+      "min_cut_length_mm": 28.5
+    },
+    {
+      "ref": "W28",
+      "net": "ECHO_3V3",
+      "start": [
+        20.32,
+        46.99
+      ],
+      "end": [
+        60.96,
+        22.86
+      ],
+      "min_cut_length_mm": 67.3
+    }
+  ],
+  "components": [
+    {
+      "ref": "JPI",
+      "value": "Pi GPIO 2x20 / IDC 1-to-1",
+      "body": [
+        62.5,
+        2.54,
+        72.12,
+        60.96
+      ],
+      "kind": "connector",
+      "note": "Pin 1 indicated on assembly map. Pi 5V pins2/4 NC. Top view. No Pi mounting footprint."
+    },
+    {
+      "ref": "J5V",
+      "value": "5V AUX IN",
+      "body": [
+        6.76,
+        1.6800000000000002,
+        18.64,
+        8.48
+      ],
+      "kind": "connector",
+      "note": ""
+    },
+    {
+      "ref": "J12V",
+      "value": "12V IN (fuse external)",
+      "body": [
+        126.13999999999999,
+        1.6800000000000002,
+        138.02,
+        8.48
+      ],
+      "kind": "connector",
+      "note": ""
+    },
+    {
+      "ref": "JOLED",
+      "value": "OLED 3V3",
+      "body": [
+        6.02,
+        11.1,
+        9.22,
+        21.92
+      ],
+      "kind": "connector",
+      "note": ""
+    },
+    {
+      "ref": "JHC",
+      "value": "HC-SR04",
+      "body": [
+        6.02,
+        28.88,
+        9.22,
+        39.7
+      ],
+      "kind": "connector",
+      "note": ""
+    },
+    {
+      "ref": "JGREEN",
+      "value": "GREEN LED",
+      "body": [
+        6.02,
+        41.58,
+        11.76,
+        44.78
+      ],
+      "kind": "connector",
+      "note": ""
+    },
+    {
+      "ref": "JRED",
+      "value": "RED LED",
+      "body": [
+        23.799999999999997,
+        41.58,
+        29.54,
+        44.78
+      ],
+      "kind": "connector",
+      "note": ""
+    },
+    {
+      "ref": "JBUZ",
+      "value": "ACTIVE BUZZER 5V <=50mA",
+      "body": [
+        44.12,
+        3.48,
+        49.86,
+        6.68
+      ],
+      "kind": "connector",
+      "note": ""
+    },
+    {
+      "ref": "JRING",
+      "value": "WS2812 12LED",
+      "body": [
+        19.46,
+        1.6800000000000002,
+        36.419999999999995,
+        8.48
+      ],
+      "kind": "connector",
+      "note": ""
+    },
+    {
+      "ref": "U1",
+      "value": "SN74AHCT125N DIP14",
+      "body": [
+        31.75,
+        18.4,
+        41.91,
+        37.5
+      ],
+      "kind": "ic",
+      "note": "Notch top; use AHCT, not HC. Unused gates disabled."
+    },
+    {
+      "ref": "C1",
+      "value": "100nF",
+      "body": [
+        39.910000000000004,
+        13.24,
+        43.910000000000004,
+        17.240000000000002
+      ],
+      "kind": "capacitor",
+      "note": "Pin 1 positive for electrolytic"
+    },
+    {
+      "ref": "C2",
+      "value": "1000uF 16V",
+      "body": [
+        20.4,
+        8.97,
+        30.4,
+        18.97
+      ],
+      "kind": "capacitor",
+      "note": "Pin 1 positive for electrolytic"
+    },
+    {
+      "ref": "R1",
+      "value": "330R",
+      "body": [
+        15.510000000000002,
+        24.4,
+        25.130000000000003,
+        26.4
+      ],
+      "kind": "resistor",
+      "note": ""
+    },
+    {
+      "ref": "R2",
+      "value": "2k2",
+      "body": [
+        15.510000000000002,
+        35.83,
+        25.130000000000003,
+        37.83
+      ],
+      "kind": "resistor",
+      "note": ""
+    },
+    {
+      "ref": "R3",
+      "value": "2k7",
+      "body": [
+        19.32,
+        49.8,
+        28.94,
+        51.8
+      ],
+      "kind": "resistor",
+      "note": ""
+    },
+    {
+      "ref": "R4",
+      "value": "330R",
+      "body": [
+        16.78,
+        54.88,
+        18.78,
+        64.5
+      ],
+      "kind": "resistor",
+      "note": ""
+    },
+    {
+      "ref": "R5",
+      "value": "330R",
+      "body": [
+        26.94,
+        54.88,
+        28.94,
+        64.5
+      ],
+      "kind": "resistor",
+      "note": ""
+    },
+    {
+      "ref": "R6",
+      "value": "1k",
+      "body": [
+        44.72,
+        42.18,
+        46.72,
+        51.8
+      ],
+      "kind": "resistor",
+      "note": ""
+    },
+    {
+      "ref": "R7",
+      "value": "10k",
+      "body": [
+        52.34,
+        29.48,
+        54.34,
+        39.1
+      ],
+      "kind": "resistor",
+      "note": ""
+    },
+    {
+      "ref": "R8",
+      "value": "100k",
+      "body": [
+        26.94,
+        19.32,
+        28.94,
+        28.94
+      ],
+      "kind": "resistor",
+      "note": ""
+    },
+    {
+      "ref": "R9",
+      "value": "100k",
+      "body": [
+        32.02,
+        42.18,
+        34.02,
+        51.8
+      ],
+      "kind": "resistor",
+      "note": ""
+    },
+    {
+      "ref": "Q1",
+      "value": "2N3904 TO92 E-B-C (spread 2.54)",
+      "body": [
+        44.7,
+        26.4,
+        51.8,
+        29.5
+      ],
+      "kind": "transistor",
+      "note": "E-B-C per onsemi; spread leads to 2.54mm."
+    },
+    {
+      "ref": "D1",
+      "value": "1N4148 (K at pin1)",
+      "body": [
+        44.72,
+        11.7,
+        54.339999999999996,
+        13.7
+      ],
+      "kind": "diode",
+      "note": ""
+    },
+    {
+      "ref": "DRV_PAN",
+      "value": "DRV8825 PAN",
+      "body": [
+        97.54,
+        13.74,
+        115.82,
+        34.52
+      ],
+      "kind": "module",
+      "note": "2x8 sockets, row gap15.24, pitch2.54. Pololu2133 pinout only."
+    },
+    {
+      "ref": "JM_PAN",
+      "value": "PAN MOTOR",
+      "body": [
+        127.41,
+        19.46,
+        134.21,
+        41.5
+      ],
+      "kind": "connector",
+      "note": ""
+    },
+    {
+      "ref": "C_PAN",
+      "value": "100uF 35V",
+      "body": [
+        119.19000000000001,
+        6.16,
+        127.19000000000001,
+        14.16
+      ],
+      "kind": "capacitor",
+      "note": "Pin 1 positive for electrolytic"
+    },
+    {
+      "ref": "DRV_TILT",
+      "value": "DRV8825 TILT",
+      "body": [
+        97.54,
+        51.84,
+        115.82,
+        72.62
+      ],
+      "kind": "module",
+      "note": "2x8 sockets, row gap15.24, pitch2.54. Pololu2133 pinout only."
+    },
+    {
+      "ref": "JM_TILT",
+      "value": "TILT MOTOR",
+      "body": [
+        127.41,
+        57.56,
+        134.21,
+        79.60000000000001
+      ],
+      "kind": "connector",
+      "note": ""
+    },
+    {
+      "ref": "C_TILT",
+      "value": "100uF 35V",
+      "body": [
+        119.19000000000001,
+        44.260000000000005,
+        127.19000000000001,
+        52.260000000000005
+      ],
+      "kind": "capacitor",
+      "note": "Pin 1 positive for electrolytic"
+    },
+    {
+      "ref": "JARM",
+      "value": "ARM (normally OPEN)",
+      "body": [
+        78.41000000000001,
+        55.55,
+        84.15,
+        58.75
+      ],
+      "kind": "connector",
+      "note": ""
+    },
+    {
+      "ref": "R_EN",
+      "value": "2k2",
+      "body": [
+        87.9,
+        56.15,
+        89.9,
+        65.77
+      ],
+      "kind": "resistor",
+      "note": ""
+    },
+    {
+      "ref": "R_HPAN",
+      "value": "10k",
+      "body": [
+        57.42,
+        73.93,
+        59.42,
+        83.55000000000001
+      ],
+      "kind": "resistor",
+      "note": ""
+    },
+    {
+      "ref": "C_HPAN",
+      "value": "100nF",
+      "body": [
+        57.690000000000005,
+        84.36,
+        61.690000000000005,
+        88.36
+      ],
+      "kind": "capacitor",
+      "note": "Pin 1 positive for electrolytic"
+    },
+    {
+      "ref": "JH_PAN",
+      "value": "PAN HOME NC",
+      "body": [
+        56.82,
+        91.11,
+        62.56,
+        94.30999999999999
+      ],
+      "kind": "connector",
+      "note": ""
+    },
+    {
+      "ref": "R_HTILT",
+      "value": "10k",
+      "body": [
+        72.66,
+        73.93,
+        74.66,
+        83.55000000000001
+      ],
+      "kind": "resistor",
+      "note": ""
+    },
+    {
+      "ref": "C_HTILT",
+      "value": "100nF",
+      "body": [
+        72.92999999999999,
+        84.36,
+        76.92999999999999,
+        88.36
+      ],
+      "kind": "capacitor",
+      "note": "Pin 1 positive for electrolytic"
+    },
+    {
+      "ref": "JH_TILT",
+      "value": "TILT HOME NC",
+      "body": [
+        72.06,
+        91.11,
+        77.8,
+        94.30999999999999
+      ],
+      "kind": "connector",
+      "note": ""
+    }
+  ],
+  "mounts": [
+    [
+      4,
+      4
+    ],
+    [
+      86,
+      4
+    ],
+    [
+      4,
+      96
+    ],
+    [
+      136,
+      96
+    ]
+  ],
+  "notes": [
+    "Bottom copper only; wire jumpers on insulated top side.",
+    "Pi powered separately via USB. Pi pins2/4 not routed.",
+    "Nano not used. DRV8825 direct3.3V STEP/DIR."
+  ]
+}
