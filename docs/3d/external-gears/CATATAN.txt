@@ -12,6 +12,27 @@ Geometri ini dibuat ulang untuk ukuran proyek; bukan salinan CAD video.
 Video memperlihatkan gear herringbone. Rev G memakai spur lurus agar mudah
 cetak dan disetel. Tidak ada gearbox planetary, bevel atau rem listrik.
 
+FOLDER MANDIRI DAN BUILD
+Seluruh sumber dan hasil mekanik berada di folder external-gears ini.
+Folder ini dapat disalin sendiri; tidak memerlukan file proyek di induknya.
+- rakitan.scad: rakitan utama, buka di OpenSCAD.
+- flap-shape-library.scad: geometri piring/rusuk 200x250mm.
+- gear_profiles.scad dan generate_gears.py: profil gear dan generator.
+- render_pan_tilt.py: renderer CPU lokal, dipakai oleh build.py.
+- stl/: bagian cetak serta model referensi hardware.
+- rakitan-3d.html / rakitan.glb: viewer offline dan rakitan berwarna.
+- previews/: gambar flap dan base; PNG rakitan ada di folder utama ini.
+
+Masih membutuhkan OpenSCAD di PATH dan Python dengan numpy, trimesh,
+Pillow, matplotlib dan shapely. Dari dalam folder ini jalankan:
+  python generate_gears.py
+  python build.py
+  python check_clearance.py
+Build menyimpan semua hasil ke folder ini, tidak menulis ke folder induk.
+Path di design-lock.json dihitung relatif terhadap folder external-gears.
+Hash STL dipertahankan dari baseline Rev G; perpindahan sumber bukan
+perubahan ukuran/geometri desain yang sudah dipilih.
+
 UKURAN
 Piring 200x250mm, dinding nominal3mm, bentuk cekung dan rusuk lama dipertahankan.
 Penguat silang, penyangga dan dua hub poros dicetak MENYATU dengan flap.

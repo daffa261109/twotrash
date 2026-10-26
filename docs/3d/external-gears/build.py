@@ -1,12 +1,11 @@
 """Rev G: regenerate actual meshes, empty-flap torque calculation and previews."""
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor,as_completed
-import subprocess,json,math,sys,base64,shutil,tempfile
+import subprocess,json,math,base64,tempfile
 import numpy as np
 import trimesh
 from PIL import Image,ImageDraw
 ROOT=Path(__file__).resolve().parent
-sys.path.insert(0,str(ROOT.parent))
 from render_pan_tilt import render,font,BG
 def body_count(m):
     par=list(range(len(m.vertices)))
@@ -19,7 +18,7 @@ def body_count(m):
 PARTS=['flap','tray_only','frame','flange','base_left','base_right','caps','retainers','pinion','driven','motor','pan_shaft','tilt_shaft','pan_bearings','tilt_bearings','pan_collars','tilt_collar','rails','backplates','rivets']
 def export(p):
     out=ROOT/'stl'/f'{p}.stl'
-    deps=[ROOT/'rakitan.scad',ROOT/'gear_profiles.scad',ROOT.parent/'flap-shape-library.scad']
+    deps=[ROOT/'rakitan.scad',ROOT/'gear_profiles.scad',ROOT/'flap-shape-library.scad']
     if out.exists() and out.stat().st_mtime>max(x.stat().st_mtime for x in deps):return p
     q=subprocess.run(['openscad','-o',str(out),'-D',f'part="{p}"',str(ROOT/'rakitan.scad')],capture_output=True,text=True)
     if q.returncode != 0:(ROOT/'stl'/f'{p}.log').write_text(q.stderr)
@@ -117,13 +116,14 @@ def main():
         d.text((40,1070),'MODEL PROTOTIPE — beban sampah 0 kg. Ukuran dan gerak diperiksa; kekuatan belum diuji fisik.',font=font(22,True),fill='#995328')
         canvas.save(ROOT/'rakitan-3d.png');detail.save(ROOT/'mekanisme-tanpa-flap.png')
     data={}
-    for p in set(o['part'] for o in objs):
+    for p in sorted(set(o['part'] for o in objs)):
         m=meshes[p];a=np.concatenate([m.triangles.reshape(-1,3),np.repeat(m.face_normals,3,axis=0)],axis=1).astype('<f4')
         data[p]=base64.b64encode(a.tobytes()).decode()
     html=(ROOT/'viewer-template.html').read_text().replace('__MESHES__',json.dumps(data)).replace('__OBJECTS__',json.dumps(objs)).replace('__MASS__',f'{mass*1000:.0f}').replace('__TORQUE__',f'{static:.3f}')
     (ROOT/'rakitan-3d.html').write_text(html)
-    for src,dest in [('stl/flap.stl','flap.stl'),('stl/flange.stl','frame-dudukan-bak.stl'),('rakitan-3d.png','preview-pan-tilt.png')]:shutil.copyfile(ROOT/src,ROOT.parent/dest)
-    for name,eye in [('flap-atas.png',(0,0,1)),('flap-bawah.png',(0,0,-1)),('flap-miring.png',(1.6,-2.5,1.5)),('flap-bawah-miring.png',(1.6,-2.5,-1.5))]:render([(ROOT/'stl/flap.stl',COLORS['flap'])],(1000,800),eye).save(ROOT.parent/name)
-    render([(ROOT/'stl/flange.stl',COLORS['frame'])],(1000,600),(0,0,1)).save(ROOT.parent/'frame-dudukan-bak-atas.png')
+    preview_dir=ROOT/'previews'
+    preview_dir.mkdir(exist_ok=True)
+    for name,eye in [('flap-atas.png',(0,0,1)),('flap-bawah.png',(0,0,-1)),('flap-miring.png',(1.6,-2.5,1.5)),('flap-bawah-miring.png',(1.6,-2.5,-1.5))]:render([(ROOT/'stl/flap.stl',COLORS['flap'])],(1000,800),eye).save(preview_dir/name)
+    render([(ROOT/'stl/flange.stl',COLORS['frame'])],(1000,600),(0,0,1)).save(preview_dir/'frame-dudukan-bak-atas.png')
     print(json.dumps(checks['assembly'],indent=2),flush=True)
 if __name__=='__main__':main()

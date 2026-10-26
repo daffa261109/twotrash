@@ -1,6 +1,6 @@
 // Rev G: empty flap only. External spur gears, 3:1 on each axis. Units mm.
 // This is a fit/motion prototype, not a tested payload rating.
-use <../flap-shape-library.scad>
+use <flap-shape-library.scad>
 use <gear_profiles.scad>
 $fn=64;
 part="assembly"; pan=0; tilt=-35; show_rails=true;
