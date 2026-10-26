@@ -1,14 +1,14 @@
 FLAP DENGAN KAKI SERVO
 26 Oktober 2026. Satuan mm.
 
-Piring 200×250 mm sama dengan flap Rev G. Kaki menggantung ke
-bawah, sama seperti dudukannya flap lama. Ukurannya dari gambar
-braket U.
+Piring 200×250 mm sama bentuknya dengan flap Rev G. Dinding
+piring 2 mm. Tulangan di bawahnya tetap 3 mm dan menonjol 7 mm.
+Kaki menggantung ke bawah. Ukurannya dari gambar braket U.
 
 DUA KAKI
-Lebar 25 mm. Ujung bawah setengah lingkaran, radius 12,5 mm.
-Tebal plastik 4 mm. Jarak dalam antar kaki 46 mm, badan servo
-masuk di antara keduanya.
+Lebar 25 mm, tebal 3 mm. Ujung bawah setengah lingkaran, radius
+12,5 mm. Jarak dalam antar kaki 46 mm, badan servo masuk di
+antara keduanya.
 Poros servo ada 50 mm di bawah dasar piring. Ujung kaki 12,5 mm
 di bawah poros, jadi panjang kaki dari dasar piring 62,5 mm.
 

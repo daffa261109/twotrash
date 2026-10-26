@@ -3,8 +3,10 @@
 // Satuan mm.
 include <../external-gears/flap-shape-library.scad>
 
+plate_t = 2;         // dinding piring. Tulangan tetap dari pustaka.
+
 leg_w = 25;          // lebar kaki, gambar 25,00
-leg_t = 4;           // tebal plastik. Besi aslinya tipis, plastik perlu lebih tebal
+leg_t = 3;           // tebal kaki
 leg_r = 12.5;        // ujung kaki setengah lingkaran, lebar 25
 axis_z = -50;        // poros servo 50 mm di bawah dasar piring. 62,50 - 12,50
 gap = 46;            // jarak dalam antar kaki, badan servo muat
