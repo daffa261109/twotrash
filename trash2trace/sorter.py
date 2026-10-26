@@ -7,7 +7,7 @@ from datetime import datetime
 
 import cv2
 from gpiozero import Buzzer, Device, DistanceSensor, LED
-from picamera2 import Picamera2
+from trash2trace.camera import open_camera
 
 from trash2trace.display import Display
 from trash2trace.bridge import BridgeVision
@@ -71,17 +71,7 @@ class Sorter:
         self.tilt.angle = 0
         self.illumination = LED(ILLUMINATION_PIN, pin_factory=lamp_pins)
         self.buzzer = Buzzer(BUZZER_PIN)
-        self.camera = Picamera2()
-        self.camera.configure(
-            self.camera.create_preview_configuration(
-                main={"format": "RGB888", "size": CAMERA_SIZE}
-            )
-        )
-        self.camera.start()
-        try:
-            self.camera.set_controls({"AwbEnable": True, "AwbMode": 4})
-        except Exception as exc:
-            print(f"[WARN] Warna kamera: {exc}")
+        self.camera = open_camera(CAMERA_SIZE)
         time.sleep(1.2)
         self.vision = _load_bridge()
         self._armed = True
@@ -117,7 +107,7 @@ class Sorter:
         print("[INFO] Berhenti.")
         self._safe(self._release_outputs)
         self._safe(self.distance.close)
-        self._safe(self.camera.stop)
+        self._safe(self.camera.close)
         self._safe(self.display.stop_idle)
         self.display.clear()
 

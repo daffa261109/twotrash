@@ -1,5 +1,9 @@
 # Wiring Pi Zero
 
+> **Konfigurasi lama.** Rancangan pengganti satu PCB carrier, pan-tilt untuk target
+> sampah 1 kg, dan kamera USB ada di [hardware-v2/README.md](hardware-v2/README.md).
+> Kedua rancangan memiliki distribusi daya berbeda; jangan mencampur koneksinya.
+
 Mesin punya dua tingkat. Kotak atas memegang elektronik yang dekat kamera. Rak bawah memegang listrik PLN, catu 5 V, dan dua servo.
 
 Mesin memakai **satu Raspberry Pi Zero** dan **dua servo MG996R**:

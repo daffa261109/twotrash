@@ -1,0 +1,17 @@
+{
+  "module_mm": 1.2,
+  "pressure_angle_deg": 25,
+  "pinion_teeth": 16,
+  "output_teeth": 48,
+  "ratio": 3,
+  "center_distance_mm": 38.4,
+  "face_width_mm": 8,
+  "backlash_per_member_mm": 0.12,
+  "sampled_output_angles": 721,
+  "max_overlap_mm2": 0,
+  "min_sampled_gap_mm": 0.10913056386882015,
+  "limitations": [
+    "Planar sampled unloaded geometry only; root uses radial approximation.",
+    "Print tolerance, friction, wear, shaft deflection and tooth strength not validated."
+  ]
+}

@@ -15,7 +15,7 @@ CAPTURE_DIR = ROOT / "captures"
 # Flap tidak digerakkan. Hasil model hanya ditulis ke log dulu.
 MOVE_FLAP = False
 
-CAMERA_SIZE = (320, 240)
+CAMERA_SIZE = (640, 480)  # USB MJPEG; unggahan API tetap dikecilkan terpisah.
 MIN_CONFIDENCE = 0.60
 # HC-SR04 dekat sering membaca sedikit di atas 3 cm. Pemicu 1–6 cm.
 DETECT_MIN_M = 0.01

@@ -12,7 +12,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import cv2
 from gpiozero import LED
-from picamera2 import Picamera2
+from trash2trace.camera import open_camera
 
 from servo.pins import ILLUMINATION_PIN
 from trash2trace.bridge import BridgeVision, ping
@@ -152,14 +152,7 @@ _LABELS = {
 class Camera:
     def __init__(self) -> None:
         self._lock = threading.Lock()
-        self._camera = Picamera2()
-        self._camera.configure(
-            self._camera.create_preview_configuration(
-                main={"format": "RGB888", "size": PREVIEW_SIZE}
-            )
-        )
-        self._camera.start()
-        _tune_colour(self._camera)
+        self._camera = open_camera(PREVIEW_SIZE)
         self._lamp_lock = threading.Lock()
         self._lamp = _lamp_on()
         time.sleep(1.0)
@@ -209,7 +202,8 @@ class Camera:
                 self._lamp.close()
             except Exception as exc:
                 print(f"[WARN] Mematikan lampu: {exc}")
-        self._camera.stop()
+        with self._lock:
+            self._camera.close()
 
 
 def _lamp_on():
@@ -230,13 +224,6 @@ def _lamp_on():
         print(f"[WARN] Lampu penerangan: {exc}")
         return None
 
-
-def _tune_colour(camera) -> None:
-    try:
-        # Daylight menekan warna merah dari lampu di dalam mesin.
-        camera.set_controls({"AwbEnable": True, "AwbMode": 4})
-    except Exception as exc:
-        print(f"[WARN] Warna kamera: {exc}")
 
 
 class SortMotion:

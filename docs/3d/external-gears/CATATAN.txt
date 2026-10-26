@@ -1,0 +1,119 @@
+REV G DIKUNCI — FLAP KOSONG, GEAR LUAR 3:1
+26 Oktober 2026. Unit CAD mm.
+
+LINGKUP
+Mengikuti keputusan pengguna terbaru: hitung flap saja; sampah 0 kg.
+Desain ini dipilih dan dikunci pengguna pada 26 Oktober 2026.
+Revisi percobaan sebelumnya dihapus. Baseline ada di design-lock.json.
+Status dikunci berarti keputusan desain, bukan kelulusan uji fisik.
+Arsitektur dua motor dan gear luar mengikuti inspirasi video:
+https://www.youtube.com/shorts/8Xbj0wWox98
+Geometri ini dibuat ulang untuk ukuran proyek; bukan salinan CAD video.
+Video memperlihatkan gear herringbone. Rev G memakai spur lurus agar mudah
+cetak dan disetel. Tidak ada gearbox planetary, bevel atau rem listrik.
+
+UKURAN
+Piring 200x250mm, dinding nominal3mm, bentuk cekung dan rusuk lama dipertahankan.
+Penguat silang, penyangga dan dua hub poros dicetak MENYATU dengan flap.
+Tidak ada adaptor flap atau penguat aluminium terpisah.
+Badan stasioner66mm lebar,98mm panjang; celah rail70mm, sisa2mm/sisi.
+Yang berukuran140mm adalah bentang ujung kuping, di ATAS kedua penampang.
+Kuping30mm lebar; rail ilustrasi35mm lebar,3mm tebal,220mm panjang.
+Empat lubang3.7mm, dua per kuping untuk rivet nominal3.5mm;
+pusat X=+/-52.5,Y=+/-8. Jarak lubang setiap kuping16mm.
+Flange6mm, backingplate2mm: grip rivet disesuaikan total tebal benda nyata.
+Motor pan turun40mm dari permukaan rail. Kartrid bearing turun20mm.
+Sumbu tilt100mm di atas rail. Pan +/-90deg, tilt +/-60deg.
+Ruang bebas putar flap konservatif sekitar diameter331mm; badan yang masuk
+celah70mm tidak berarti semua flap/mekanisme bergerak dibatasi70mm.
+
+PENGGERAK
+2 pasang gear lurus: pinion16, driven48, modul1.2, sudut tekan25deg,
+lebar gigi8mm, rasio3:1 setiap sumbu. Jarak sumbu38.4mm.
+Backlash profil0.12mm per anggota, total nominal0.24mm pada pitch.
+Diameter luar gear besar60mm; pinion21.6mm.
+Acuan motor biasa17HS15-1504S1,39+/-1mm panjang,42.3mm muka maksimum,
+poros5mm dengan flat, panjang nominal24mm. CAD menggunakan panjang badan40mm.
+Datasheet: https://www.omc-stepperonline.com/download/17HS15-1504S1.pdf
+Holding torque0.45Nm dan arus1.5A/fase adalah spesifikasi acuan, bukan
+bukti torsi berjalan pada driver yang belum diuji.
+Pengurangan gear membuat motor berputar3x putaran sumbu, berlawanan arah.
+Pan pinion=-3*pan. Tilt pinion=+3*tilt dalam koordinat poros lokal CAD
+karena arah sumbu lokalnya menghadap-Y. Firmware belum diubah.
+Tidak ada rem; gear spur dapat bergerak balik saat daya mati.
+
+HITUNGAN FLAP (rincian numerik final: verification.json)
+Asumsi PETG homogen1.27g/cm3, seluruh volume CAD terisi padat.
+Piring + rusuk saja sekitar233g.
+Flap lengkap termasuk penguat dan hub integral sekitar304g.
+Pusat massa sekitar54mm di atas sumbu tilt.
+Torsi gravitasi = m*g*abs(x_CG*cos(theta)+z_CG*sin(theta))/1000.
+Dengan theta -60..+60deg: maksimum sekitar0.140Nm.
+Pada posisi mendatar, pusat massa hampir tepat di atas poros, torsi hampir0.
+Inersia flap terhadap tilt sekitar0.00188kg.m2.
+Percepatan awal20deg/s2 menambahkan sekitar0.00066Nm.
+Faktor cadangan3 -> target torsi keluaran sekitar0.421Nm.
+Efisiensi gear diasumsikan75% -> motor membutuhkan sekitar0.187Nm.
+Kecepatan awal flap10deg/s -> motor5rpm.
+Ini hitungan kosong, bukan rating1kg. Massa hasil slicer/penimbangan akan
+berbeda bila infill, material atau orientasi cetak berubah.
+Faktor3 hanya cadangan rancangan; bukan model gesekan, jatuhan atau fatigue.
+Gear output dan shaft seimbang terhadap poros ideal; drag bearing, inertia
+head untuk pan, kabel dan distribusi massa pengikat masih memerlukan uji.
+Motor tidak boleh dipilih hanya berdasarkan ukuranNEMA17/holding torque.
+
+BAGIAN UNTUK PROTOTIPE
+- flap.stl:1, PETG; piring+penguat+hub menjadi satu benda.
+- frame.stl:1; caps.stl berisi2 tutup bearing; PETG awal.
+- base_left.stl dan base_right.stl:masing-masing1.
+  Base dibelah agar dua bearing pan dapat dimasukkan; baut sambunganM3x40
+  dua buah pada Y+/-12.5,Z-9, mur dan washer di sisi luar diameter34.
+  flange.stl adalah referensi gabungan, JANGAN dicetak sebagai base utuh:
+  bearing pan tidak bisa dimasukkan melalui lubang poros yang lebih kecil.
+- pinion.stl:2; driven.stl:2. PETG, orientasi sumbu gear tegak saat dicetak.
+  Coba profil kecil lebih dulu untuk backlash. CAD bukan toolpath produksi.
+- retainers.stl:4 cincin dengan lubang18.6, OD27,tebal1.6mm;
+  purwarupa cetak, delapan sekrupM2x4 pada kedua sisi dua bearing tilt.
+- 4 bearing608,8x22x7mm:2 pan,2 tilt. Nominal pocket22.1mm adalah awal fit.
+- poros baja8mm:pan63mm,tilt104mm. File shaft hanya referensi machining.
+  Buat flat lokal sesuai CAD; area dudukan bearing tetap bulat.
+- collar8mm ID,OD16,tebal5:3 buah;2 pan,1 tilt, dengan grubscrewM3.
+- murM3 biasa + grubscrew untuk dua pinion,dua gear besar,hub frame pan,
+  dan dua hub flap (total7 set). Slot masuk mur terbuka tegak lurus sekrup.
+  Periksa kesesuaian panjang sekrup terhadap permukaan flat poros.
+- bautM3 untuk empat lubang tiap motor; pilih panjang agar masuk motor
+  sesuai kedalaman ulir datasheet, tidak mentok rotor.
+- empat bautM3 untuk tutup bearing; lubang bawah2.5mm perlu tap/fit uji.
+- backingplate35x30x2mm:2, logam; rivet3.5mm:4, grip sesuai bak sebenarnya.
+- dua driver STEP/DIR + controller dan catu yang sesuai arus motor.
+  CarrierPCB, firmware stepper dan homing masih belum selesai/routed.
+  Sistem ini tidak membutuhkan kanal rem24V Rev F.
+Screw heads, kabel, sensor home dan guard gear belum dimodelkan lengkap.
+File motor/bearing/shaft/rail/rivet untuk pemeriksaan rakitan, bukan dicetak
+menggantikan hardware logam. Rakitan berwarna tersedia sebagai GLB/HTML.
+Flap memerlukan area cetak lebih dari250mm dengan brim; gunakan printer
+cukup besar. Support diperlukan di bawah dish dan hub sesuai orientasi.
+
+URUTAN RAKIT
+1. Uji cetak gear/pocket/nut terlebih dulu. Ream pocket sesuai hasil nyata.
+2. Pasang dua bearing pan, collar bawah dan poros dalam dua belahan base,
+   kencangkan dua baut belahan. Pasang backingplate dan rivet ke rail.
+3. Pasang motor pan dari bawah, collar atas, gear/pinion dan frame atas.
+4. Pasang motor tilt pada dinding belakang; dudukkan bearing tilt bawah.
+5. Masukkan poros melalui flap integral dan bearing; pasang gear, collar,
+   caps,retainers, mur dan semua sekrup pengunci. Periksa kelonggaran aksial.
+6. Selaraskan gigi dan permukaan flat poros sesuai CAD sebelum mengunci hub.
+7. Gerakkan tangan dengan daya mati, cek seluruh sudut dan kabel.
+8. Uji motor perlahan dengan flap kosong. Ukur arus, panas dan torsi; jangan
+   menyatakan kemampuan membawa sampah dari uji tanpa beban ini.
+
+VERIFIKASI DIGITAL
+build.py: semua mesh tertutup, winding konsisten, positif, jumlah body;
+200x250 flap; massa/CoG/inersia; jarak bergerak terhadap permukaanrail.
+generate_gears.py:721 posisi output, tidak ada overlap profil2D ideal.
+check_clearance.py:13 posisi tilt -60..60deg; flap integral tidak beririsan
+frame,cap,retainer,motor tilt. Bukan bukti gerak kontinu atau defleksi.
+ViewerHTML memakai mesh sama dan transformasi gear3:1. GLB pose netral,
+PNG pose-35deg dari rasterisasi STL. JavaScript diperiksa sintaks; viewer
+belum diuji dalam browser karena pembukaan file lokal dibatasi lingkungan.
+Bukan FEA, proof test, uji umur gear, PCB siap produksi atau rating keselamatan.
