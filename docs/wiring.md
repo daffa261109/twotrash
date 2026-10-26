@@ -12,9 +12,10 @@ Semua sumber, pemeriksaan dan keluaran ada di [pcb/](pcb/).
 - [01-transfer-toner-1to1.pdf](pcb/output/pdf/01-transfer-toner-1to1.pdf): **file yang dicetak untuk transfer toner**. Hitam adalah tembaga yang dipertahankan.
 - [02-tembaga-bawah-inspeksi.pdf](pcb/output/pdf/02-tembaga-bawah-inspeksi.pdf): tampilan sisi tembaga setelah transfer; untuk pembanding, bukan master transfer kedua.
 - [03-komponen-dan-bor.pdf](pcb/output/pdf/03-komponen-dan-bor.pdf): posisi komponen tampak atas dan panduan bor.
+- [04-peta-komponen-jelas.pdf](pcb/output/pdf/04-peta-komponen-jelas.pdf): peta berwarna diperbesar 2× pada A3, kode/nilai 37 komponen, polaritas, dan tabel pin konektor. Untuk membaca pemasangan, bukan transfer toner.
 - [Daftar jumper kawat](pcb/jumpers.csv), [BOM](pcb/bom.csv), [daftar kaki/net](pcb/pads.csv), dan [hasil pemeriksaan](pcb/drc-report.json).
 
-![Papan gabungan tampak atas](pcb/previews/pcb-atas.png)
+![Peta komponen berlabel dan daftar nilai](pcb/previews/04-peta-komponen-jelas-p1.png)
 
 Papan **140 × 100 mm**, FR4 satu sisi, tembaga nominal **35 µm / 1 oz**. Komponen berada di sisi tanpa tembaga. Modul driver dan IC buffer memakai soket. Soket driver setinggi minimal 8,5 mm menyediakan ruang jumper di bawah modul. Pi berada di luar PCB, dihubungkan dengan kabel IDC 40 pin **1-ke-1**, pendek sekitar 10–15 cm; pin 1 wajib bertemu pin 1. PCB ini menggantikan papan lubang lama, bukan pola untuk PCB lubang 2 × 8 cm.
 

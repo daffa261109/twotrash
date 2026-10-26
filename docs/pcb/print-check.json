@@ -1,10 +1,11 @@
 {
-  "pdf_count": 3,
-  "pages": 7,
-  "page_size": "A4",
+  "pdf_count": 4,
+  "pages": 9,
+  "page_size": "PDF 01-03: A4; PDF 04: A3 landscape",
   "calibration_line_mm": 50.00000576443142,
   "transfer_vs_bottom_mirror_pixel_mean_error": 0.004381223857613772,
   "jumper_count": 28,
   "relative_wiring_links": "all exist",
-  "status": "print geometry checks passed; physical prototype untested"
+  "status": "print geometry checks passed; physical prototype untested",
+  "component_map": "37 component references; enlarged 2x; not an etch master"
 }

@@ -191,4 +191,6 @@ def main():
     rows += [dict(ref='EXT_F12',qty=1,value='Inline fuse2A + holder',kind='external',note='In positive12V supply lead'),dict(ref='EXT_F5',qty=1,value='Inline fuse1.5A + holder',kind='external',note='In positive5V AUX supply lead'),dict(ref='EXT_HOME',qty=2,value='Microswitch COM/NC',kind='external',note='Match mechanical home locations'),dict(ref='EXT_PSU12',qty=1,value='Regulated12V3A DC adapter',kind='external',note='Motor power only'),dict(ref='EXT_PSU5',qty=1,value='Regulated5V2A DC supply',kind='external',note='Peripherals only; Pi uses its own USB PSU'),dict(ref='EXT_USB',qty=1,value='USB OTG adapter/cable for Pi Zero',kind='external',note='Webcam connects directly, not through etched copper')]
     writecsv(ROOT/'bom.csv',['ref','qty','value','kind','note'],rows)
     print('Exported',len(files)+1,'PDF files;',len(b['jumpers']),'wire jumpers')
+    from export_component_map import main as export_component_map
+    export_component_map()
 if __name__=='__main__':main()

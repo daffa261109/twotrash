@@ -9,6 +9,7 @@ Papan carrier satu sisi **140 × 100 mm**, dua motor NEMA17 42HD4027-01, tanpa N
 | **Cetak untuk transfer toner** | [output/pdf/01-transfer-toner-1to1.pdf](output/pdf/01-transfer-toner-1to1.pdf) |
 | Membandingkan hasil pada sisi tembaga | [output/pdf/02-tembaga-bawah-inspeksi.pdf](output/pdf/02-tembaga-bawah-inspeksi.pdf) |
 | Penempatan, bor, jumper dan tabel titik sambungan | [output/pdf/03-komponen-dan-bor.pdf](output/pdf/03-komponen-dan-bor.pdf) |
+| **Peta komponen yang diperjelas, nilai, polaritas dan pin konektor** | [output/pdf/04-peta-komponen-jelas.pdf](output/pdf/04-peta-komponen-jelas.pdf) |
 | Preview tampak atas | [previews/pcb-atas.png](previews/pcb-atas.png) |
 | Versi vektor | [output/svg/](output/svg/) |
 | Belanja komponen | [bom.csv](bom.csv) |
@@ -18,6 +19,8 @@ Papan carrier satu sisi **140 × 100 mm**, dua motor NEMA17 42HD4027-01, tanpa N
 | Pemeriksaan jalur/net | [drc-report.json](drc-report.json) |
 
 Cetak file **01** pada **100% / Actual size**, tanpa Fit dan **tanpa mirror tambahan**. Sisi toner ditempel ke tembaga; setelah transfer tampilan sisi tembaga harus sama dengan file **02**. Ukur garis 50 mm terlebih dahulu.
+
+File **04** adalah panduan baca dua halaman A3: peta komponen diperbesar 2×, daftar kode/nilai, dan urutan pin konektor. Titik biru menunjukkan kaki 1; tanda + menunjukkan kaki positif elko. Bentuk berwarna menunjukkan footprint, bukan bentuk pasti semua merek. File 04 bukan master etsa dan tidak menggantikan panduan 28 jumper pada file 03.
 
 Jalur tembaga saja belum merupakan rangkaian lengkap: **28 jumper berisolasi wajib dipasang**. Kedua ujung setiap jumper memakai lubang tersendiri; tidak berbagi lubang dengan kaki komponen. Titik yang hitam penuh pada pola adalah test point cadangan tanpa bor. Lubang mayoritas 1,0 mm; terminal sekrup 1,2 mm; dudukan 3,2 mm. Soket driver perlu tinggi minimal 8,5 mm agar ada ruang kawat di bawah modul; ujung jumper tidak diletakkan di bawah rumah IDC atau IC DIP.
 
@@ -33,6 +36,7 @@ PCB hanya DC: input 12 V motor dan 5 V AUX periferal. Pi memakai catu USB sendir
 - `validate_board.py`: pemeriksaan terpisah atas jarak tembaga, tepi PCB, annular ring, akses pad jumper, net dan mapping driver.
 - `export_board.py`: PDF/SVG/PNG serta CSV dari geometri yang sama; menolak ekspor jika laporan DRC gagal.
 - `draw_system.py`: diagram sistem daya dan sinyal untuk `wiring.md`.
+- `export_component_map.py`: peta berlabel dan tabel konektor; otomatis dipanggil `export_board.py`. Dapat dijalankan sendiri tanpa mengubah file transfer toner.
 
 Dengan Python dan paket dari `requirements.txt`, jalankan dari folder ini:
 

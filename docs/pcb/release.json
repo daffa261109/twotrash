@@ -14,13 +14,17 @@
     "design.py": "ffb13827262e1bc2a027961358d7a5db14dc55a8b6dcf8388893fcecb82befa9",
     "route_board.py": "88ab7b803da1d4692a75def9d752775e3046bc4488e042fcefe96a54c0a1d564",
     "validate_board.py": "ef6bf4ea84c0ee04eeb7ac8eba02d5ec49a3f0fbbc5ed90bfac8b6c6056c7dd0",
-    "export_board.py": "1c7051e20dd1935a9f8996e4d1b2a44ef27f794c45c3bf650b8212a66b7a9a1a",
+    "export_board.py": "bc6eca74a3bb5942bc59602cb803e295ff13688431cb5fb65ebd966195f721e1",
     "board.json": "ba5cbb6552e2faf8ddff3bc40a0be2788928f942915a38894133e555695ae0cc",
     "pinmap.json": "8a59f14d1fafe76bba31b256baa9b199c2bb30d901e4355a41ca16a3d9e81437",
     "drc-report.json": "8f790df6ef35bfa2bf6b779589b3882525dce461a2615bf592506f01056a5d5a",
-    "print-check.json": "7f621a5e82a83f62b002a3f5fe1286a6d2cded82a1a7f52f4026537156d1b70d",
+    "print-check.json": "085f89fb26e9314e0f704b2e2bf41bb8c3d2fa79657c9f6fd9d4e30a094ec28a",
     "output/pdf/01-transfer-toner-1to1.pdf": "8e3d470b6d18361e1bbf8c167c2faad94ba1c98717ab2761f2c770e04a4d78ac",
     "output/pdf/02-tembaga-bawah-inspeksi.pdf": "cda69a80104afe9189980b426a7f36f3706901ea67e6e27531309f81b6a35f7d",
-    "output/pdf/03-komponen-dan-bor.pdf": "c0a463cad8acfd3a1765e46db7a88786d69d78dfd148356df0de000ae1d4963b"
+    "output/pdf/03-komponen-dan-bor.pdf": "c0a463cad8acfd3a1765e46db7a88786d69d78dfd148356df0de000ae1d4963b",
+    "export_component_map.py": "21efc908b9cec1332eae1aba0cf4a1484bf6b0578276d7d7c4d62750b75d8112",
+    "component-map-check.json": "87d2d08347bee204e8a020884d1e08ae13a837ede230a146e8cf9765cfdfa651",
+    "output/pdf/04-peta-komponen-jelas.pdf": "355e0e379ce76cb8b44a39f679aac9ba3d9efdb2c553490dff5ce90ba7e63a26",
+    "output/svg/peta-komponen-jelas.svg": "7a5eb20d8bd7f83e70760ed65fdaeec9e30661d4fd6a3323daf4730d02535cd5"
   }
 }
