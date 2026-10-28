@@ -300,18 +300,18 @@ class Capture:
             print(f"[FOTO] {path}")
             started = time.monotonic()
             try:
-                label, _confidence = BridgeVision().classify(image)
+                reading = BridgeVision().classify(image)
             except (Exception, SystemExit) as exc:
                 print(f"[WARN] API: {exc}")
                 return {"text": "Foto disimpan", "detail": f"{path.name} · API gagal: {str(exc)[:140]}"}
             took = time.monotonic() - started
-            text = _LABELS.get(label, label.upper())
-            print(f"[HASIL] {text} ({took:.1f} detik)")
-            motion = self._motion.start(label)
-            return {
-                "text": text,
-                "detail": f"{took:.1f} detik · {motion}",
-            }
+            text = _LABELS.get(reading.label, reading.label.upper())
+            print(f"[HASIL] {text} {reading.item} ({took:.1f} detik)")
+            motion = self._motion.start(reading.label)
+            detail = f"{took:.1f} detik · {motion}"
+            if reading.item:
+                detail = f"{reading.item} · {detail}"
+            return {"text": text, "detail": detail}
 
 
 class ApiCheck:
@@ -334,17 +334,17 @@ class ApiCheck:
                 return {"text": "Gagal terhubung", "detail": str(exc)[:180]}
             started = time.monotonic()
             try:
-                label, _confidence = BridgeVision(config).classify(self._camera.jpeg())
+                reading = BridgeVision(config).classify(self._camera.jpeg())
             except Exception as exc:
                 return {"text": "Gagal klasifikasi", "detail": str(exc)[:180]}
             took = time.monotonic() - started
-            text = _LABELS.get(label, label.upper())
-            print(f"[API] {text} ({took:.1f} detik)")
-            motion = self._motion.start(label)
-            return {
-                "text": text,
-                "detail": f"{status} · {took:.1f} detik · {motion}",
-            }
+            text = _LABELS.get(reading.label, reading.label.upper())
+            print(f"[API] {text} {reading.item} ({took:.1f} detik)")
+            motion = self._motion.start(reading.label)
+            detail = f"{status} · {took:.1f} detik · {motion}"
+            if reading.item:
+                detail = f"{reading.item} · {detail}"
+            return {"text": text, "detail": detail}
 
 
 def make_handler(camera: Camera, capture: Capture, api: ApiCheck):

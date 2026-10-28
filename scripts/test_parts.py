@@ -520,14 +520,17 @@ def test_webcam_live(device: int = 0, port: int = 8081) -> None:
 
         started = time.monotonic()
         try:
-            label, _confidence = BridgeVision(load_bridge_config()).classify(image)
+            reading = BridgeVision(load_bridge_config()).classify(image)
         except BaseException as exc:
             print(f"[WARN] API: {exc}")
             return {"text": "Gagal", "detail": str(exc)[:180]}
-        text = labels.get(label, label.upper())
+        text = labels.get(reading.label, reading.label.upper())
         took = time.monotonic() - started
-        print(f"[HASIL] {text} ({took:.1f} detik)")
-        return {"text": text, "detail": f"{took:.1f} detik · https://twotrash.wbesoft.com/classify"}
+        print(f"[HASIL] {text} {reading.item} ({took:.1f} detik)")
+        detail = f"{took:.1f} detik · https://twotrash.wbesoft.com/classify"
+        if reading.item:
+            detail = f"{reading.item} · {detail}"
+        return {"text": text, "detail": detail}
 
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self) -> None:
@@ -667,11 +670,11 @@ def test_api(photo: Path | None = None) -> bool:
 
     started = time.monotonic()
     try:
-        label, confidence = BridgeVision(config).classify(jpeg.tobytes())
+        reading = BridgeVision(config).classify(jpeg.tobytes())
     except Exception as exc:
         print(f"  GAGAL klasifikasi: {exc}")
         return False
-    print(f"  hasil: {label}  yakin={confidence:.2f}  ({time.monotonic() - started:.1f} detik)")
+    print(f"  hasil: {reading.label}  benda={reading.item or '-'}  yakin={reading.confidence:.2f}  ({time.monotonic() - started:.1f} detik)")
     print("Selesai.")
     return True
 

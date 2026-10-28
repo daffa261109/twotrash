@@ -24,6 +24,9 @@ CLEAR_DISTANCE_M = 0.10
 # Buzzer sekali jika salah satu bacaan bukan di bawah angka ini.
 BUZZER_FROM_M = 0.045
 SETTLE_AFTER_DETECT_S = 0.18
+# Setelah HC melihat sampah, layar menghitung mundur selama ini baru foto dikirim.
+PLACE_WAIT_S = 3.0
+MONITOR_PORT = 8080
 # Satu foto per sampah, dibaca API bridge.
 FRAMES_PER_DECISION = 1
 FRAME_GAP_S = 0.07

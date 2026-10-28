@@ -9,6 +9,7 @@ fi
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 RUN_USER="${SUDO_USER:-pi}"
+RUN_UID="$(id -u "$RUN_USER")"
 
 apt-get update
 apt-get install -y pigpio python3-gpiozero python3-pigpio python3-opencv python3-picamera2 python3-pil libatomic1
@@ -25,7 +26,7 @@ usermod -aG video,i2c,gpio "$RUN_USER"
 cat > /etc/systemd/system/trash2trace.service << EOF
 [Unit]
 Description=TRASH2TRACE pemilah sampah
-After=network.target pigpiod.service
+After=network.target pigpiod.service graphical.target
 Wants=pigpiod.service
 
 [Service]
@@ -37,6 +38,8 @@ ExecStart=/usr/bin/python3 -m trash2trace
 Restart=on-failure
 RestartSec=10
 Environment=PYTHONUNBUFFERED=1
+Environment=DISPLAY=:0
+Environment=XDG_RUNTIME_DIR=/run/user/${RUN_UID}
 ${ATOMIC:+Environment=LD_PRELOAD=${ATOMIC}}
 EnvironmentFile=-${ROOT}/.env
 

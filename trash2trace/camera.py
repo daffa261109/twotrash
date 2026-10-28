@@ -62,6 +62,15 @@ class USBCamera:
             raise RuntimeError("Frame webcam kosong/rusak. Cek kabel dan daya USB.")
         return self._cv2.cvtColor(frame, self._cv2.COLOR_BGR2RGB)
 
+    def read_bgr(self):
+        """Satu frame BGR untuk layar. Tidak membuang antrean, supaya aliran tetap lancar."""
+        if self._capture is None:
+            raise RuntimeError("Webcam sudah ditutup")
+        ok, frame = self._capture.read()
+        if not ok or not self._usable(frame):
+            raise RuntimeError("Frame webcam kosong/rusak. Cek kabel dan daya USB.")
+        return frame
+
     def close(self) -> None:
         capture, self._capture = self._capture, None
         if capture is not None:
@@ -89,6 +98,11 @@ class CSICamera:
 
     def capture_array(self):
         return self._camera.capture_array()
+
+    def read_bgr(self):
+        import cv2
+
+        return cv2.cvtColor(self.capture_array(), cv2.COLOR_RGB2BGR)
 
     def close(self) -> None:
         try:

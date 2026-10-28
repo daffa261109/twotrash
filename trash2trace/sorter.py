@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 import time
 from datetime import datetime
 
@@ -10,6 +11,7 @@ from gpiozero import Buzzer, Device, DistanceSensor, LED
 from trash2trace.camera import open_camera
 
 from trash2trace.display import Display
+from trash2trace.monitor import Monitor
 from trash2trace.bridge import BridgeVision
 from trash2trace.network import wifi_connected
 from trash2trace.servo_driver import StableServo, connect_pigpio
@@ -23,6 +25,7 @@ from trash2trace.settings import (
     FRAME_GAP_S,
     FRAMES_PER_DECISION,
     MOVE_FLAP,
+    PLACE_WAIT_S,
     PREVIEW_EVERY_S,
     SERVO_HOLD_S,
     SETTLE_AFTER_DETECT_S,
@@ -72,6 +75,12 @@ class Sorter:
         self.illumination = LED(ILLUMINATION_PIN, pin_factory=lamp_pins)
         self.buzzer = Buzzer(BUZZER_PIN)
         self.camera = open_camera(CAMERA_SIZE)
+        self.monitor = Monitor(self.camera)
+        try:
+            self.monitor.start()
+            self.monitor.open_fullscreen()
+        except OSError as exc:
+            print(f"[WARN] Layar tidak dibuka: {exc}")
         time.sleep(1.2)
         self.vision = _load_bridge()
         self._armed = True
@@ -107,6 +116,7 @@ class Sorter:
         print("[INFO] Berhenti.")
         self._safe(self._release_outputs)
         self._safe(self.distance.close)
+        self._safe(self.monitor.close)
         self._safe(self.camera.close)
         self._safe(self.display.stop_idle)
         self.display.clear()
@@ -121,36 +131,74 @@ class Sorter:
         time.sleep(0.12)
         kedua_cm = self.distance.distance * 100
         print(f"[HC] {self.station.title} barang: {pertama_cm:.1f} cm, {kedua_cm:.1f} cm")
-        nama_foto = ""
-        path = None
-        try:
-            path = self._save_frame(self.camera.capture_array())
-            nama_foto = path.name
-        except Exception as exc:
-            print(f"[WARN] Foto: {exc}")
-        self.display.show("BENDA", f"{pertama_cm:.1f} / {kedua_cm:.1f}", nama_foto)
+        if self.distance.distance > CLEAR_DISTANCE_M:
+            self._show_idle()
+            return
+        seconds = max(1, math.ceil(PLACE_WAIT_S))
+        self.monitor.waiting(seconds)
+        self.display.show("TUNGGU", f"{seconds}")
         if pertama_cm >= BUZZER_FROM_M * 100 or kedua_cm >= BUZZER_FROM_M * 100:
             print("[BUZZER] sekali")
             self._beep()
+        if self._wait_before_capture():
+            self._show_idle()
+            return
+        frame = self.monitor.frame_bgr()
+        path = None
+        if frame is None:
+            print("[WARN] Foto: gambar tidak terbaca")
+            self.monitor.fail("Gambar tidak terbaca")
+            self.display.show("GAGAL", "Kamera")
+        else:
+            try:
+                path = self._save_frame(frame)
+            except Exception as exc:
+                print(f"[WARN] Foto: {exc}")
+                self.monitor.fail("Foto gagal disimpan")
+                self.display.show("GAGAL", "Foto")
         if path is not None:
             self._read_with_bridge(path)
+
+    def _wait_before_capture(self) -> bool:
+        """True kalau benda disingkirkan sebelum waktu tunggu selesai."""
+        deadline = time.monotonic() + PLACE_WAIT_S
+        shown = None
+        while self.running:
+            left = deadline - time.monotonic()
+            if left <= 0:
+                return self.distance.distance > CLEAR_DISTANCE_M
+            if self.distance.distance > CLEAR_DISTANCE_M:
+                return True
+            seconds = max(1, math.ceil(left))
+            self.monitor.waiting(seconds)
+            if seconds != shown:
+                self.display.show("TUNGGU", f"{seconds}")
+                shown = seconds
+            time.sleep(0.1)
+        return True
 
     def _read_with_bridge(self, path) -> None:
         """Kirim foto ke API bridge dan tampilkan jenis sampah di OLED."""
         if self.vision is None:
+            self.monitor.fail("API belum siap")
             return
         self.display.show("MEMBACA", "API...", path.name)
+        self.monitor.reading()
         started = time.monotonic()
         try:
-            label, _confidence = self.vision.classify(path.read_bytes())
+            reading = self.vision.classify(path.read_bytes())
         except Exception as exc:
             print(f"[WARN] API: {exc}")
             self.display.show("AI GAGAL", str(exc)[:20], path.name)
+            self.monitor.fail(str(exc)[:80])
             return
         took = time.monotonic() - started
+        label = reading.label
         text = _LABEL_TEXT.get(label, label.upper())
-        print(f"[AI] {label} | {took:.1f} detik | foto={path.name}")
-        self.display.show(text, f"{took:.1f} detik", path.name)
+        item = reading.item
+        print(f"[AI] {label} | {item or '-'} | {took:.1f} detik | foto={path.name}")
+        self.display.show(text, item or f"{took:.1f} detik", path.name)
+        self.monitor.result(label, f"{took:.1f} detik", item)
 
     def _set_illumination(self, ada_barang: bool) -> None:
         if ada_barang == self._lamp_on:
@@ -166,10 +214,10 @@ class Sorter:
         self._lamp_on = ada_barang
         print("[LAMPU] nyala" if ada_barang else "[LAMPU] mati")
 
-    def _save_frame(self, frame_rgb) -> str:
+    def _save_frame(self, frame_bgr):
         CAPTURE_DIR.mkdir(parents=True, exist_ok=True)
         path = CAPTURE_DIR / f"{datetime.now():%Y%m%d-%H%M%S}.jpg"
-        ok = cv2.imwrite(str(path), cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR))
+        ok = cv2.imwrite(str(path), frame_bgr)
         if not ok:
             raise RuntimeError(f"Gagal menyimpan {path}")
         print(f"[FOTO] {path}")
@@ -215,8 +263,10 @@ class Sorter:
     def _show_idle(self) -> None:
         if self._net_ok:
             self.display.idle()
+            self.monitor.ready()
         else:
             self.display.show(WELCOME_TITLE, "Menunggu Wi-Fi")
+            self.monitor.waiting_wifi()
 
     def _alert_off(self) -> None:
         self._safe(self.buzzer.off)

@@ -4,12 +4,11 @@ from __future__ import annotations
 
 import json
 import uuid
+from typing import NamedTuple
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-# Cloudflare menolak User-Agent Python-urllib dengan 403 kode 1010 sebelum permintaan sampai ke server.
-_USER_AGENT = "Mozilla/5.0 (X11; Linux aarch64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-
+from trash2trace.catalog import find_item
 from trash2trace.settings import (
     BRIDGE_TIMEOUT_S,
     LLM_IMAGE_QUALITY,
@@ -17,13 +16,22 @@ from trash2trace.settings import (
     load_bridge_config,
 )
 
+# Cloudflare menolak User-Agent Python-urllib dengan 403 kode 1010 sebelum permintaan sampai ke server.
+_USER_AGENT = "Mozilla/5.0 (X11; Linux aarch64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+
+
+class Reading(NamedTuple):
+    label: str
+    confidence: float
+    item: str = ""
+
 
 class BridgeVision:
     def __init__(self, config=None) -> None:
         self.config = config or load_bridge_config()
         print(f"[INFO] Bridge {self.config.endpoint}")
 
-    def classify(self, jpeg: bytes) -> tuple[str, float]:
+    def classify(self, jpeg: bytes) -> Reading:
         jpeg = _shrink(jpeg)
         boundary = f"----trash2trace{uuid.uuid4().hex}"
         body = _multipart(boundary, jpeg)
@@ -63,16 +71,37 @@ def ping(config=None) -> str:
         raise RuntimeError(f"Bridge tidak terjangkau: {exc.reason}") from exc
 
 
-def _parse_flags(payload: dict) -> tuple[str, float]:
+def _parse_flags(payload: dict) -> Reading:
+    item = _read_item(payload)
     organic = bool(payload.get("organic"))
     anorganic = bool(payload.get("anorganic") or payload.get("nonorganic"))
     other = bool(payload.get("other"))
     chosen = [name for name, flag in (("organic", organic), ("nonorganic", anorganic), ("other", other)) if flag]
     if len(chosen) == 1:
-        return chosen[0], 1.0
-    if not chosen:
+        label = chosen[0]
+    elif not chosen and item is not None:
+        label = item.category
+    elif not chosen:
         raise RuntimeError(f"Bridge tidak menandai jenis sampah: {payload}")
-    raise RuntimeError(f"Bridge menandai lebih dari satu jenis: {payload}")
+    else:
+        raise RuntimeError(f"Bridge menandai lebih dari satu jenis: {payload}")
+    name = item.name if item is not None else _raw_item(payload)
+    return Reading(label, 1.0, name)
+
+
+def _read_item(payload: dict):
+    raw = _raw_item(payload)
+    if not raw:
+        return None
+    return find_item(raw)
+
+
+def _raw_item(payload: dict) -> str:
+    for key in ("item", "sub", "subtype", "nama"):
+        value = payload.get(key)
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+    return ""
 
 
 def _multipart(boundary: str, jpeg: bytes) -> bytes:

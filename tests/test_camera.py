@@ -38,6 +38,14 @@ class CameraTests(unittest.TestCase):
         self.modules.start()
         self.addCleanup(self.modules.stop)
 
+    def test_live_preview_reads_one_bgr_frame(self):
+        camera = USBCamera("0", (640, 480), 15)
+        self.capture.read.reset_mock()
+        self.capture.grab.reset_mock()
+        frame = camera.read_bgr()
+        self.assertIs(frame, self.capture.read.return_value[1])
+        self.capture.grab.assert_not_called()
+
     def test_usb_frames_are_rgb_and_old_frames_are_discarded(self):
         camera = USBCamera("0", (640, 480), 15)
         self.assertEqual(camera.capture_array(), (200, 20, 10))

@@ -59,7 +59,7 @@ flap2
 
 Sudut servo ada di `trash2trace/settings.py`. Organik ke kiri (`-60`), nonorganik ke kanan (`+60`), other di tengah (`0`). Ubah angka itu kalau posisi flap di mekanik berbeda.
 
-Sampah dibaca oleh **API bridge** `https://twotrash.wbesoft.com/classify`. Isi `.env` dari `.env.example` dengan `API_TOKEN` yang sama dengan token di server. Saat HC-SR04 melihat benda, mesin mengambil satu foto, mengirimnya ke API, lalu menampilkan ORGANIK, NONORGANIK atau LAINNYA di OLED. Servo belum ikut bergerak. Tanpa token atau tanpa internet, foto tetap disimpan dan OLED menampilkan "AI GAGAL".
+Sampah dibaca oleh **API bridge** `https://twotrash.wbesoft.com/classify`. Isi `.env` dari `.env.example` dengan `API_TOKEN` yang sama dengan token di server. Saat program menyala, layar monitor terbuka penuh dan menampilkan webcam. Saat HC-SR04 melihat benda, layar menghitung **TUNGGU** selama `PLACE_WAIT_S` (3 detik), baru foto dikirim ke API. Hasil ORGANIK, NONORGANIK, atau LAINNYA tampil di monitor dan OLED. Kalau jawaban API memuat `item` (misalnya `kulit_pisang`, `botol`, atau `kaleng_minuman`), layar menulis nama subkategorinya. Daftarnya ada di `trash2trace/catalog.py`. Servo belum ikut bergerak. Tanpa token atau tanpa internet, foto tetap disimpan dan layar menampilkan GAGAL.
 
 ## Menjalankan
 
@@ -76,7 +76,7 @@ Setelah reboot, pemilah menyala sendiri. `station.txt` menentukan flap Pi itu. C
 systemctl status trash2trace
 ```
 
-Untuk menjalankan manual dari folder proyek:
+Untuk menjalankan manual dari folder proyek. Layar monitor terbuka sendiri dalam mode penuh:
 
 ```bash
 python3 -m trash2trace
