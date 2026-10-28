@@ -30,7 +30,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from gpiozero import Buzzer, Device, DistanceSensor, LED
+from gpiozero import Buzzer, Device, LED
 
 from trash2trace.servo_driver import StableServo, connect_pigpio
 from trash2trace.settings import CLEAR_DISTANCE_M, DETECT_MAX_M, DETECT_MIN_M, TILT_DOWN_DEG
@@ -72,28 +72,64 @@ def hc_status(jarak_cm: float) -> str:
     return "ANTARA"
 
 
+def _jarak_hc_cm(pi, timeout_us: int = 26000) -> float | None:
+    """Ukur gema dengan jam pigpio (1 µs). Timeout 26 ms mencakup sekitar 400 cm."""
+    import pigpio
+
+    pi.set_mode(TRIG_PIN, pigpio.OUTPUT)
+    pi.set_mode(ECHO_PIN, pigpio.INPUT)
+    pi.write(TRIG_PIN, 0)
+    time.sleep(0.0002)
+    edges: list[tuple[int, int]] = []
+
+    def _edge(_gpio: int, level: int, tick: int) -> None:
+        edges.append((level, tick))
+
+    callback = pi.callback(ECHO_PIN, pigpio.EITHER_EDGE, _edge)
+    try:
+        fired = pi.get_current_tick()
+        pi.gpio_trigger(TRIG_PIN, 10, 1)
+        deadline = time.monotonic() + timeout_us / 1_000_000 + 0.02
+        while time.monotonic() < deadline:
+            rise = fall = None
+            for level, tick in edges:
+                if pigpio.tickDiff(fired, tick) < 0:
+                    continue
+                if level == 1 and rise is None:
+                    rise = tick
+                elif level == 0 and rise is not None:
+                    fall = tick
+                    break
+            if fall is not None:
+                return pigpio.tickDiff(rise, fall) * 0.0343 / 2
+            time.sleep(0.001)
+        return None
+    finally:
+        callback.cancel()
+
+
 def test_hc() -> None:
     print("HC-SR04, TRIG GPIO 17 / pin 11, ECHO GPIO 27 / pin 13. Ctrl+C berhenti.")
+    print("Jarak diukur sampai sekitar 400 cm. Angka 12–13 cm berarti gema benar-benar dari situ.")
     print(
         f"ADA BARANG {DETECT_MIN_M * 100:.0f}–{DETECT_MAX_M * 100:.0f} cm. "
         f"KOSONG di atas {CLEAR_DISTANCE_M * 100:.0f} cm."
     )
-    sensor = DistanceSensor(
-        echo=ECHO_PIN,
-        trigger=TRIG_PIN,
-        max_distance=2.0,
-        queue_len=5,
-        partial=True,
-    )
+    pi = connect_pigpio()
+    if pi is None:
+        return
     try:
         while True:
-            jarak_cm = sensor.distance * 100
-            print(f"{hc_status(jarak_cm):10}  posisi {jarak_cm:6.1f} cm", flush=True)
+            jarak_cm = _jarak_hc_cm(pi)
+            if jarak_cm is None:
+                print("TIDAK ADA GEMA   lebih dari 400 cm", flush=True)
+            else:
+                print(f"{hc_status(jarak_cm):10}  posisi {jarak_cm:6.1f} cm", flush=True)
             time.sleep(0.2)
     except KeyboardInterrupt:
         print()
     finally:
-        sensor.close()
+        pi.stop()
 
 
 def test_led() -> None:

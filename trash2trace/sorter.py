@@ -16,7 +16,6 @@ from trash2trace.bridge import BridgeVision
 from trash2trace.network import wifi_connected
 from trash2trace.servo_driver import StableServo, connect_pigpio
 from trash2trace.settings import (
-    BUZZER_FROM_M,
     CAMERA_SIZE,
     CAPTURE_DIR,
     CLEAR_DISTANCE_M,
@@ -146,9 +145,6 @@ class Sorter:
         seconds = max(1, math.ceil(PLACE_WAIT_S))
         self.monitor.waiting(seconds)
         self.display.show("TUNGGU", f"{seconds}")
-        if pertama_cm >= BUZZER_FROM_M * 100 or kedua_cm >= BUZZER_FROM_M * 100:
-            print("[BUZZER] sekali")
-            self._beep()
         if self._wait_before_capture():
             self._show_idle()
             return
@@ -208,6 +204,8 @@ class Sorter:
         print(f"[AI] {label} | {item or '-'} | {took:.1f} detik | foto={path.name}")
         self.display.show(text, item or f"{took:.1f} detik", path.name)
         self.monitor.result(label, f"{took:.1f} detik", item)
+        print("[BUZZER] jawaban API")
+        self._beep()
 
     def _set_illumination(self, ada_barang: bool) -> None:
         if ada_barang == self._lamp_on:
@@ -237,7 +235,6 @@ class Sorter:
         text = self.station.text_for(label)
         print(f"[SORT] {self.station.title} {label} | yakin={confidence:.2f} | servo={angle:+.0f}°")
         self.display.show(text, f"AI {confidence * 100:.0f}%", self.station.title)
-        self._beep()
         self.servo.angle = angle
         time.sleep(SERVO_HOLD_S)
         self.servo.angle = 0

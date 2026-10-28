@@ -21,8 +21,6 @@ MIN_CONFIDENCE = 0.60
 DETECT_MIN_M = 0.01
 DETECT_MAX_M = 0.06
 CLEAR_DISTANCE_M = 0.10
-# Buzzer sekali jika salah satu bacaan bukan di bawah angka ini.
-BUZZER_FROM_M = 0.045
 SETTLE_AFTER_DETECT_S = 0.18
 # Setelah HC melihat sampah, layar menghitung mundur selama ini baru foto dikirim.
 PLACE_WAIT_S = 3.0
