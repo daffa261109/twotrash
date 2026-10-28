@@ -33,7 +33,7 @@ sys.path.insert(0, str(ROOT))
 from gpiozero import Buzzer, Device, DistanceSensor, LED
 
 from trash2trace.servo_driver import StableServo, connect_pigpio
-from trash2trace.settings import TILT_DOWN_DEG
+from trash2trace.settings import CLEAR_DISTANCE_M, DETECT_MAX_M, DETECT_MIN_M, TILT_DOWN_DEG
 from servo.pins import (
     BUZZER_PIN,
     ECHO_PIN,
@@ -63,9 +63,21 @@ def test_buzzer() -> None:
     print("Selesai.")
 
 
+def hc_status(jarak_cm: float) -> str:
+    """Sama dengan pemilah: 1–6 cm ada barang, di atas 10 cm kosong."""
+    if DETECT_MIN_M * 100 <= jarak_cm <= DETECT_MAX_M * 100:
+        return "ADA BARANG"
+    if jarak_cm > CLEAR_DISTANCE_M * 100:
+        return "KOSONG"
+    return "ANTARA"
+
+
 def test_hc() -> None:
     print("HC-SR04, TRIG GPIO 17 / pin 11, ECHO GPIO 27 / pin 13. Ctrl+C berhenti.")
-    print("Kalau ada barang, jarak dibaca dua kali. Buzzer bunyi sekali jika bukan di bawah 4,5 cm.")
+    print(
+        f"ADA BARANG {DETECT_MIN_M * 100:.0f}–{DETECT_MAX_M * 100:.0f} cm. "
+        f"KOSONG di atas {CLEAR_DISTANCE_M * 100:.0f} cm."
+    )
     sensor = DistanceSensor(
         echo=ECHO_PIN,
         trigger=TRIG_PIN,
@@ -73,30 +85,14 @@ def test_hc() -> None:
         queue_len=5,
         partial=True,
     )
-    buzzer = Buzzer(BUZZER_PIN)
-    print("Menunggu barang.")
     try:
         while True:
             jarak_cm = sensor.distance * 100
-            if jarak_cm < 1 or jarak_cm > 6:
-                time.sleep(0.05)
-                continue
-            time.sleep(0.12)
-            kedua = sensor.distance * 100
-            print(f"barang: {jarak_cm:.1f} cm, {kedua:.1f} cm")
-            if jarak_cm >= 4.5 or kedua >= 4.5:
-                print("  buzzer")
-                buzzer.on()
-                time.sleep(0.2)
-                buzzer.off()
-            while sensor.distance * 100 <= 10:
-                time.sleep(0.08)
-            print("Menunggu barang.")
+            print(f"{hc_status(jarak_cm):10}  posisi {jarak_cm:6.1f} cm", flush=True)
+            time.sleep(0.2)
     except KeyboardInterrupt:
         print()
     finally:
-        buzzer.off()
-        buzzer.close()
         sensor.close()
 
 
