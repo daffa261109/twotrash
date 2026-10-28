@@ -57,7 +57,11 @@ class Sorter:
         self.led_red.on()
         self._net_ok = False
         self._last_net_check = 0.0
+        self._clear_streak = 0
         _use_pigpio_if_available()
+        # Matikan dulu, sebelum kamera dan sensor. Restart sering meninggalkan pin ini HIGH.
+        self.buzzer = Buzzer(BUZZER_PIN, initial_value=False)
+        self.buzzer.off()
 
         self.display = Display()
         self.distance = DistanceSensor(
@@ -73,17 +77,19 @@ class Sorter:
         self.servo.angle = 0
         self.tilt.angle = 0
         self.illumination = LED(ILLUMINATION_PIN, pin_factory=lamp_pins)
-        self.buzzer = Buzzer(BUZZER_PIN)
-        self.camera = open_camera(CAMERA_SIZE)
-        self.monitor = Monitor(self.camera)
+        self.monitor = Monitor(None)
         try:
             self.monitor.start()
             self.monitor.open_fullscreen()
-        except OSError as exc:
-            print(f"[WARN] Layar tidak dibuka: {exc}")
+            self.camera = open_camera(CAMERA_SIZE)
+            self.monitor.attach_camera(self.camera)
+        except Exception:
+            self.monitor.close()
+            raise
         time.sleep(1.2)
         self.vision = _load_bridge()
-        self._armed = True
+        # Baru aktif setelah jarak kosong terbaca stabil, supaya restart tidak membunyikan buzzer.
+        self._armed = False
         self._lamp_on = False
         self._lamp_hold = False
         self._last_preview = 0.0
@@ -98,14 +104,17 @@ class Sorter:
             ada_barang = DETECT_MIN_M <= distance_m <= DETECT_MAX_M
             if ada_barang:
                 self._lamp_hold = True
+                self._clear_streak = 0
             elif distance_m > CLEAR_DISTANCE_M:
                 self._lamp_hold = False
+                if not self._armed:
+                    self._clear_streak += 1
+                    if self._clear_streak >= 4:
+                        self._rest("Menunggu sampah")
+                        self._armed = True
             self._set_illumination(self._lamp_hold)
             if ada_barang and self._armed:
                 self._sort_one_item(distance_m)
-            elif distance_m > CLEAR_DISTANCE_M and not self._armed:
-                self._rest("Menunggu sampah")
-                self._armed = True
             time.sleep(0.05)
 
     def stop(self) -> None:

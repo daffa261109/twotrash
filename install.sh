@@ -33,7 +33,6 @@ Wants=pigpiod.service
 Type=simple
 User=${RUN_USER}
 WorkingDirectory=${ROOT}
-ExecStartPre=/bin/sleep 8
 ExecStart=/usr/bin/python3 -m trash2trace
 Restart=on-failure
 RestartSec=10

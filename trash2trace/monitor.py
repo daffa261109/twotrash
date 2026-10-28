@@ -124,14 +124,6 @@ def display_env(base: dict | None = None) -> dict:
     return env
 
 
-def display_ready(env: dict) -> bool:
-    runtime = env.get("XDG_RUNTIME_DIR", "")
-    if runtime and os.path.exists(os.path.join(runtime, env.get("WAYLAND_DISPLAY", "wayland-0"))):
-        return True
-    number = env.get("DISPLAY", ":0").split(":")[-1].split(".")[0] or "0"
-    return os.path.exists(f"/tmp/.X11-unix/X{number}")
-
-
 class Monitor:
     def __init__(self, camera, port: int = MONITOR_PORT) -> None:
         self._camera = camera
@@ -163,13 +155,18 @@ class Monitor:
         self._server.daemon_threads = True
         self._server.block_on_close = False
         self.port = self._server.server_address[1]
-        if self._camera is not None:
-            self._pump = threading.Thread(target=self._read_camera, daemon=True)
-            self._pump.start()
+        self.attach_camera(self._camera)
         self._http = threading.Thread(target=self._server.serve_forever, daemon=True)
         self._http.start()
         name = socket.gethostname()
         print(f"[MONITOR] http://{name}.local:{self.port}")
+
+    def attach_camera(self, camera) -> None:
+        self._camera = camera
+        if camera is None or self._pump is not None:
+            return
+        self._pump = threading.Thread(target=self._read_camera, daemon=True)
+        self._pump.start()
 
     def open_fullscreen(self) -> None:
         self._opener = threading.Thread(target=self._open_when_ready, daemon=True)
@@ -252,21 +249,18 @@ class Monitor:
                 self._jpeg = encoded.tobytes()
 
     def _open_when_ready(self) -> None:
-        for _ in range(40):
+        # Jangan menunggu socket desktop. Saat service di-restart, layar sudah ada.
+        for _ in range(8):
             if self._stop.is_set():
                 return
-            env = display_env()
-            if display_ready(env):
-                break
-            time.sleep(0.5)
-        if self._stop.is_set():
-            return
-        print("[MONITOR] Membuka layar penuh")
-        self._browser = subprocess.Popen(screen_command(self.port), env=display_env())
-        time.sleep(0.8)
-        if self._browser.poll() is not None:
-            print("[MONITOR] Jendela gagal dibuka. Pasang dulu:")
-            print("  sudo apt install python3-tk python3-pil.imagetk")
+            print("[MONITOR] Membuka layar penuh")
+            self._browser = subprocess.Popen(screen_command(self.port), env=display_env())
+            time.sleep(0.6)
+            if self._browser.poll() is None:
+                return
+            time.sleep(0.4)
+        print("[MONITOR] Jendela gagal dibuka. Pasang dulu:")
+        print("  sudo apt install python3-tk python3-pil.imagetk")
 
     def _handler(self):
         monitor = self
