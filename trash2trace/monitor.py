@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import json
 import os
-import shutil
 import socket
 import subprocess
 import threading
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
+from trash2trace.screen import screen_command
 from trash2trace.settings import MONITOR_PORT
 
 # JPEG 1×1, dipakai hanya sampai frame kamera pertama datang.
@@ -111,36 +111,6 @@ _PAGE = """<!DOCTYPE html>
 """.encode("utf-8")
 
 
-def browser_command(binary: str, url: str) -> list[str]:
-    return [
-        binary,
-        "--kiosk",
-        "--start-fullscreen",
-        "--no-first-run",
-        "--disable-infobars",
-        "--disable-translate",
-        "--disable-features=TranslateUI",
-        "--noerrdialogs",
-        "--disable-session-crashed-bubble",
-        "--check-for-update-interval=31536000",
-        "--autoplay-policy=no-user-gesture-required",
-        "--password-store=basic",
-        "--overscroll-history-navigation=0",
-        url,
-    ]
-
-
-def find_browser() -> str | None:
-    for name in ("chromium", "chromium-browser", "google-chrome"):
-        found = shutil.which(name)
-        if found:
-            return found
-    for path in ("/usr/bin/chromium", "/usr/bin/chromium-browser"):
-        if os.path.isfile(path):
-            return path
-    return None
-
-
 def display_env(base: dict | None = None) -> dict:
     env = dict(base if base is not None else os.environ)
     env.setdefault("DISPLAY", ":0")
@@ -202,14 +172,7 @@ class Monitor:
         print(f"[MONITOR] http://{name}.local:{self.port}")
 
     def open_fullscreen(self) -> None:
-        binary = find_browser()
-        url = f"http://127.0.0.1:{self.port}/"
-        if binary is None:
-            print(f"[MONITOR] Chromium tidak ada. Buka {url}")
-            return
-        self._opener = threading.Thread(
-            target=self._open_when_ready, args=(binary, url), daemon=True
-        )
+        self._opener = threading.Thread(target=self._open_when_ready, daemon=True)
         self._opener.start()
 
     def ready(self) -> None:
@@ -288,7 +251,7 @@ class Monitor:
                 self._frame = frame
                 self._jpeg = encoded.tobytes()
 
-    def _open_when_ready(self, binary: str, url: str) -> None:
+    def _open_when_ready(self) -> None:
         for _ in range(40):
             if self._stop.is_set():
                 return
@@ -298,17 +261,12 @@ class Monitor:
             time.sleep(0.5)
         if self._stop.is_set():
             return
-        env = display_env()
-        print(f"[MONITOR] Membuka layar penuh {url}")
-        self._browser = subprocess.Popen(
-            browser_command(binary, url),
-            env=env,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        )
-        time.sleep(0.6)
+        print("[MONITOR] Membuka layar penuh")
+        self._browser = subprocess.Popen(screen_command(self.port), env=display_env())
+        time.sleep(0.8)
         if self._browser.poll() is not None:
-            print(f"[MONITOR] Jendela gagal dibuka. Buka manual {url}")
+            print("[MONITOR] Jendela gagal dibuka. Pasang dulu:")
+            print("  sudo apt install python3-tk python3-pil.imagetk")
 
     def _handler(self):
         monitor = self
@@ -321,6 +279,9 @@ class Monitor:
                 if self.path.startswith("/status"):
                     body = json.dumps(monitor._status()).encode("utf-8")
                     self._bytes(body, "application/json")
+                    return
+                if self.path.startswith("/frame.jpg"):
+                    self._bytes(monitor._jpeg_bytes(), "image/jpeg")
                     return
                 self._bytes(_PAGE, "text/html; charset=utf-8")
 

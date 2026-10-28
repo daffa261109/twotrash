@@ -12,7 +12,7 @@ RUN_USER="${SUDO_USER:-pi}"
 RUN_UID="$(id -u "$RUN_USER")"
 
 apt-get update
-apt-get install -y pigpio python3-gpiozero python3-pigpio python3-opencv python3-picamera2 python3-pil libatomic1
+apt-get install -y pigpio python3-gpiozero python3-pigpio python3-opencv python3-picamera2 python3-pil python3-pil.imagetk python3-tk libatomic1
 ATOMIC=""
 if [[ -e /usr/lib/arm-linux-gnueabihf/libatomic.so.1 ]]; then
   ATOMIC=/usr/lib/arm-linux-gnueabihf/libatomic.so.1

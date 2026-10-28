@@ -6,16 +6,19 @@ import unittest
 import urllib.error
 import urllib.request
 
-from trash2trace.monitor import Monitor, browser_command
+from trash2trace.monitor import Monitor
+from trash2trace.screen import presentation, screen_command
 
 
 class MonitorTests(unittest.TestCase):
-    def test_browser_command_is_kiosk_fullscreen(self):
-        command = browser_command("/usr/bin/chromium", "http://127.0.0.1:8080/")
-        self.assertEqual(command[0], "/usr/bin/chromium")
-        self.assertIn("--kiosk", command)
-        self.assertIn("--start-fullscreen", command)
-        self.assertEqual(command[-1], "http://127.0.0.1:8080/")
+    def test_fullscreen_window_does_not_launch_chromium(self):
+        command = screen_command(8080)
+        self.assertEqual(command[-1], "8080")
+        self.assertNotIn("chromium", " ".join(command).lower())
+        shown = presentation({"tone": "organic", "title": "ORGANIK", "headline": "Kulit pisang", "detail": "1.4 detik"})
+        self.assertEqual(shown["category"], "ORGANIK")
+        self.assertEqual(shown["headline"], "Kulit pisang")
+        self.assertEqual(shown["category_color"], "#3ddc6a")
 
     def test_screen_follows_wait_then_result_without_a_submit_button(self):
         monitor = Monitor(None, port=0)
@@ -27,6 +30,8 @@ class MonitorTests(unittest.TestCase):
         self.assertIn('class="logo"', page)
         self.assertLess(page.index('class="logo"'), page.index('src="/stream"'))
         self.assertNotIn("Proses", page)
+        with urllib.request.urlopen(f"http://127.0.0.1:{monitor.port}/frame.jpg", timeout=1) as response:
+            self.assertTrue(response.read().startswith(b"\xff\xd8"))
 
         self.assertEqual(self._status(monitor)["headline"], "MENUNGGU")
         monitor.waiting(3)

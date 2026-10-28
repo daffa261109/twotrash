@@ -76,7 +76,7 @@ Setelah reboot, pemilah menyala sendiri. `station.txt` menentukan flap Pi itu. C
 systemctl status trash2trace
 ```
 
-Untuk menjalankan manual dari folder proyek. Layar monitor terbuka sendiri dalam mode penuh:
+Untuk menjalankan manual dari folder proyek. Layar monitor terbuka sendiri dalam mode penuh. Pi Zero tidak bisa memakai Chromium karena prosesornya tidak punya NEON, jadi jendelanya jendela Python. Sekali saja, kalau belum terpasang: `sudo apt install python3-tk python3-pil.imagetk`.
 
 ```bash
 python3 -m trash2trace
