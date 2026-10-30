@@ -32,7 +32,7 @@ sys.path.insert(0, str(ROOT))
 
 from gpiozero import Buzzer, Device, LED
 
-from trash2trace.servo_driver import StableServo, connect_pigpio, run_servo1
+from trash2trace.servo_driver import StableServo, connect_pigpio, geser, run_sort, sort_plan
 from trash2trace.settings import CLEAR_DISTANCE_M, DETECT_MAX_M, DETECT_MIN_M, TILT_DOWN_DEG
 from servo.pins import (
     BUZZER_PIN,
@@ -193,11 +193,11 @@ def test_servo1() -> None:
     try:
         servo.angle = 60
         print("  dari 60° pelan ke -90°")
-        _geser(servo, -90)
+        geser(servo, -90)
         print("  -90°, tunggu 5 detik")
         time.sleep(5)
         print("  pelan kembali ke 60°")
-        _geser(servo, 60)
+        geser(servo, 60)
         while True:
             time.sleep(0.5)
     except KeyboardInterrupt:
@@ -251,19 +251,6 @@ def _test_urut(arah: str, sudut: float, turun: float) -> None:
     print("Selesai.")
 
 
-def _geser(servo: StableServo, target: float, detik: float | None = None) -> None:
-    """Pindah pelan, derajat demi derajat, supaya tidak loncat. Sekitar 45° per detik."""
-    start = 60.0 if servo.angle is None else servo.angle
-    jarak = abs(target - start)
-    steps = max(1, int(round(jarak)))
-    if detik is None:
-        detik = jarak / 45.0
-    pause = detik / steps
-    for step in range(1, steps + 1):
-        servo.angle = start + (target - start) * step / steps
-        time.sleep(pause)
-
-
 def test_servo2() -> None:
     print("Servo 2 pelan ke 150°, jeda 5 detik, lalu pelan kembali ke 60°. Sinyal GPIO 13 / pin 33.")
     print("Posisi akhir ditahan di 60°. Ctrl+C berhenti. Catu 6 V dinyalakan setelah Pi hidup.")
@@ -274,11 +261,11 @@ def test_servo2() -> None:
     try:
         servo.angle = 60
         print("  dari 60° pelan ke 150°")
-        _geser(servo, 150)
+        geser(servo, 150)
         print("  150°, tunggu 5 detik")
         time.sleep(5)
         print("  pelan kembali ke 60°")
-        _geser(servo, 60)
+        geser(servo, 60)
         while True:
             time.sleep(0.5)
     except KeyboardInterrupt:
@@ -574,33 +561,32 @@ def test_webcam_live(device: int = 0, port: int = 8081) -> None:
     lock = threading.Lock()
     motion_lock = threading.Lock()
     labels = {"organic": "ORGANIK", "nonorganic": "NONORGANIK", "other": "LAINNYA"}
-    from trash2trace.settings import SERVO1_ANGLES, SERVO1_KEMBALI, SERVO1_WAIT_S
+    from trash2trace.settings import SERVO1_KEMBALI
 
     pi = connect_pigpio()
     servo = StableServo(pi, SERVO_PIN)
+    servo2 = StableServo(pi, SERVO_TILT_PIN)
     if pi is not None:
         servo.angle = SERVO1_KEMBALI
+        servo2.angle = SERVO1_KEMBALI
 
     def start_servo(label: str) -> str:
-        angle = SERVO1_ANGLES.get(label)
+        plan = sort_plan(label)
         if pi is None:
             return "servo mati (pigpiod tidak aktif)"
-        if angle is None:
+        if plan is None:
             return "servo diam"
         if not motion_lock.acquire(blocking=False):
             return "servo masih bergerak"
 
         def job() -> None:
             try:
-                run_servo1(servo, label)
+                run_sort(servo, servo2, label)
             finally:
                 motion_lock.release()
 
         threading.Thread(target=job, daemon=True).start()
-        return (
-            f"servo 1 ke {angle:+.0f}°, tunggu {SERVO1_WAIT_S:g} detik, "
-            f"kembali {SERVO1_KEMBALI:+.0f}°"
-        )
+        return plan
 
     def jpeg() -> bytes | None:
         with lock:
@@ -690,6 +676,7 @@ def test_webcam_live(device: int = 0, port: int = 8081) -> None:
         camera.release()
         if pi is not None:
             servo.detach()
+            servo2.detach()
             pi.stop()
         print("Selesai. Lampu kembali merah karena kamera ditutup.")
 

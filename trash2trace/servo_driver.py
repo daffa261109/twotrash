@@ -63,21 +63,64 @@ class StableServo:
         self._angle = None
 
 
-def run_servo1(servo: StableServo, label: str) -> str:
-    """Pindah ke sudut jenis sampah, tunggu, lalu kembali. Sama dengan tes servo 1."""
-    from trash2trace.settings import SERVO1_ANGLES, SERVO1_KEMBALI, SERVO1_WAIT_S
+def geser(servo: StableServo, target: float) -> None:
+    """Pindah pelan, derajat demi derajat. Kecepatan dari SERVO_KECEPATAN."""
+    from trash2trace.settings import SERVO_KECEPATAN
 
     if servo._pi is None:
+        return
+    start = target if servo.angle is None else servo.angle
+    jarak = abs(target - start)
+    steps = max(1, int(round(jarak)))
+    speed = SERVO_KECEPATAN if SERVO_KECEPATAN > 0 else 45.0
+    pause = (jarak / speed) / steps
+    for step in range(1, steps + 1):
+        servo.angle = start + (target - start) * step / steps
+        time.sleep(pause)
+
+
+def sort_plan(label: str) -> str | None:
+    from trash2trace.settings import (
+        SERVO1_ANGLES,
+        SERVO1_KEMBALI,
+        SERVO1_WAIT_S,
+        SERVO2_BUANG,
+        SERVO2_WAIT_S,
+    )
+
+    angle = SERVO1_ANGLES.get(label)
+    if angle is None:
+        return None
+    return (
+        f"servo 1 ke {angle:+.0f}°, tunggu {SERVO1_WAIT_S:g} detik, "
+        f"servo 2 buang {SERVO2_BUANG:+.0f}°, tunggu {SERVO2_WAIT_S:g} detik, "
+        f"servo 2 ke {SERVO1_KEMBALI:+.0f}°, lalu servo 1 ke {SERVO1_KEMBALI:+.0f}°"
+    )
+
+
+def run_sort(servo1: StableServo, servo2: StableServo, label: str) -> str:
+    """Servo 1 ke tempat sampah, servo 2 buang, lalu keduanya kembali. Gerakan pelan."""
+    from trash2trace.settings import (
+        SERVO1_ANGLES,
+        SERVO1_KEMBALI,
+        SERVO1_WAIT_S,
+        SERVO2_BUANG,
+        SERVO2_WAIT_S,
+    )
+
+    if servo1._pi is None:
         return "servo mati (pigpiod tidak aktif)"
     angle = SERVO1_ANGLES.get(label)
     if angle is None:
         return "servo diam"
     print(f"[SERVO] servo 1 ke {angle:+.0f}°")
-    servo.angle = angle
+    geser(servo1, angle)
     time.sleep(max(0.0, SERVO1_WAIT_S))
+    print(f"[SERVO] servo 2 buang ke {SERVO2_BUANG:+.0f}°")
+    geser(servo2, SERVO2_BUANG)
+    time.sleep(max(0.0, SERVO2_WAIT_S))
+    print(f"[SERVO] servo 2 kembali ke {SERVO1_KEMBALI:+.0f}°")
+    geser(servo2, SERVO1_KEMBALI)
     print(f"[SERVO] servo 1 kembali ke {SERVO1_KEMBALI:+.0f}°")
-    servo.angle = SERVO1_KEMBALI
-    return (
-        f"servo 1 ke {angle:+.0f}°, tunggu {SERVO1_WAIT_S:g} detik, "
-        f"kembali {SERVO1_KEMBALI:+.0f}°"
-    )
+    geser(servo1, SERVO1_KEMBALI)
+    return sort_plan(label) or "servo diam"

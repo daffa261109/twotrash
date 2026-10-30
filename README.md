@@ -120,7 +120,7 @@ Uji cepat tanpa browser: `sudo python3 scripts/test_parts.py camera` menyalakan 
 
 Buka `http://<nama-pi>.local:8080` dari komputer yang satu Wi-Fi dengan Pi. Gambar kamera ada di kiri. Panel di kanan punya tiga bagian:
 
-- **Ambil dan analisis**: menyimpan satu foto dan membacanya dengan API. Setelah jawaban API, servo 1 pindah ke sudut jenis sampah, menunggu, lalu kembali. Organik, nonorganik, lainnya, waktu tunggu, dan sudut kembali ada di `.env` (`SERVO1_ORGANIK`, `SERVO1_NONORGANIK`, `SERVO1_LAINNYA`, `SERVO1_TUNGGU`, `SERVO1_KEMBALI`). Butuh `pigpiod` aktif.
+- **Ambil dan analisis**: menyimpan satu foto dan membacanya dengan API. Setelah jawaban API, servo 1 pelan mengarah ke tempat sampah dan menunggu, servo 2 pelan ke sudut buang dan menunggu, servo 2 kembali, lalu servo 1 kembali. Sudut, jeda, kecepatan, dan sudut buang ada di `.env` (`SERVO1_ORGANIK`, `SERVO1_NONORGANIK`, `SERVO1_LAINNYA`, `SERVO1_TUNGGU`, `SERVO2_TUNGGU`, `SERVO2_BUANG`, `SERVO_KECEPATAN`, `SERVO1_KEMBALI`). Butuh `pigpiod` aktif.
 - **Cincin LED**: tombol Putih, Merah, Hijau, Biru dan Mati. Butuh sudo. Kalau cincin tidak bisa dipakai, panel memberi tahu bahwa cincin tidak aktif.
 - **API**: mengecek server, lalu mengirim gambar kamera saat ini ke API dan menampilkan ORGANIK, NONORGANIK atau LAINNYA. Servo ikut bergerak seperti pada tombol di atas. Butuh `API_TOKEN` di `.env`. Ctrl+C menghentikan tes. Nyalakan pemilah lagi dengan:
 

@@ -132,10 +132,13 @@ def load_station(name: str | None) -> Station:
         raise SystemExit(f"station harus salah satu dari: {known}") from exc
 
 
-# Servo 1 setelah jawaban API. Angka di .env supaya bisa diubah tanpa menyentuh kode.
-# ORGANIK, NONORGANIK, dan LAINNYA ditahan selama SERVO1_TUNGGU, lalu kembali ke SERVO1_KEMBALI.
+# Setelah jawaban API: servo 1 ke tempat sampah, jeda, servo 2 buang, jeda, lalu keduanya kembali.
+# Kecepatan dalam derajat per detik. Angka di .env supaya bisa diubah tanpa menyentuh kode.
 _load_env_file(ENV_PATH)
-SERVO1_WAIT_S = _env_float("SERVO1_TUNGGU", 5.0)
+SERVO_KECEPATAN = _env_float("SERVO_KECEPATAN", 45.0)
+SERVO1_WAIT_S = _env_float("SERVO1_TUNGGU", 2.0)
+SERVO2_WAIT_S = _env_float("SERVO2_TUNGGU", 3.0)
+SERVO2_BUANG = _env_float("SERVO2_BUANG", 150.0)
 SERVO1_ORGANIK = _env_float("SERVO1_ORGANIK", -60.0)
 SERVO1_NONORGANIK = _env_float("SERVO1_NONORGANIK", -90.0)
 SERVO1_LAINNYA = _env_float("SERVO1_LAINNYA", 180.0)

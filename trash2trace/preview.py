@@ -17,13 +17,11 @@ from trash2trace.camera import open_camera
 from servo.pins import ILLUMINATION_PIN
 from trash2trace.bridge import BridgeVision, ping
 from trash2trace.ring import Ring
-from servo.pins import SERVO_PIN
-from trash2trace.servo_driver import StableServo, connect_pigpio, run_servo1
+from servo.pins import SERVO_PIN, SERVO_TILT_PIN
+from trash2trace.servo_driver import StableServo, connect_pigpio, run_sort, sort_plan
 from trash2trace.settings import (
     ROOT,
-    SERVO1_ANGLES,
     SERVO1_KEMBALI,
-    SERVO1_WAIT_S,
     load_bridge_config,
 )
 
@@ -224,31 +222,30 @@ def _lamp_on():
 
 
 class SortMotion:
-    """Gerakan servo 1 setelah jawaban API. Butuh pigpiod aktif."""
+    """Gerakan kedua servo setelah jawaban API. Butuh pigpiod aktif."""
 
     def __init__(self) -> None:
         self._pi = connect_pigpio()
         self._busy = threading.Lock()
         self._servo1 = StableServo(self._pi, SERVO_PIN)
+        self._servo2 = StableServo(self._pi, SERVO_TILT_PIN)
         self._servo1.angle = SERVO1_KEMBALI
+        self._servo2.angle = SERVO1_KEMBALI
 
     def start(self, label: str) -> str:
         if self._pi is None:
             return "servo mati (pigpiod tidak aktif)"
-        angle = SERVO1_ANGLES.get(label)
-        if angle is None:
+        plan = sort_plan(label)
+        if plan is None:
             return "servo diam"
         if not self._busy.acquire(blocking=False):
             return "servo masih bergerak"
         threading.Thread(target=self._sequence, args=(label,), daemon=True).start()
-        return (
-            f"servo 1 ke {angle:+.0f}°, tunggu {SERVO1_WAIT_S:g} detik, "
-            f"kembali {SERVO1_KEMBALI:+.0f}°"
-        )
+        return plan
 
     def _sequence(self, label: str) -> None:
         try:
-            print(f"[SERVO] {run_servo1(self._servo1, label)}")
+            print(f"[SERVO] {run_sort(self._servo1, self._servo2, label)}")
         except Exception as exc:
             print(f"[WARN] Gerakan servo: {exc}")
         finally:
@@ -258,8 +255,10 @@ class SortMotion:
         if self._pi is None:
             return
         self._servo1.angle = SERVO1_KEMBALI
+        self._servo2.angle = SERVO1_KEMBALI
         time.sleep(0.4)
         self._servo1.detach()
+        self._servo2.detach()
         self._pi.stop()
 
 
