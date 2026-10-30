@@ -77,6 +77,21 @@ class Display:
         with self._lock:
             self._push(image)
 
+    def show_result(self, category: str, name: str) -> None:
+        """Jenis sampah dan nama barang dari API. Tetap di layar sampai tampilan lain."""
+        if self._panel is None:
+            return
+        self._busy = True
+        image = Image.new("1", (OLED_WIDTH, OLED_HEIGHT), 0)
+        draw = ImageDraw.Draw(image)
+        large = self._font or ImageFont.load_default()
+        _draw_centered(draw, str(category)[:12], 4, large)
+        label = " ".join(str(name).replace("_", " ").split())
+        if label:
+            _draw_centered(draw, label[:18], 34, large)
+        with self._lock:
+            self._push(image)
+
     def _push(self, image) -> None:
         if OLED_FLIP:
             image = image.rotate(180)

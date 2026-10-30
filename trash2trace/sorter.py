@@ -88,6 +88,7 @@ class Sorter:
         self.vision = _load_bridge()
         # Baru aktif setelah jarak kosong terbaca stabil, supaya restart tidak membunyikan buzzer.
         self._armed = False
+        self._oled_result = False
         self._lamp_on = False
         self._lamp_hold = False
         self._last_preview = 0.0
@@ -134,6 +135,7 @@ class Sorter:
 
     def _sort_one_item(self, distance_m: float) -> None:
         self._armed = False
+        self._oled_result = False
         pertama_cm = distance_m * 100
         time.sleep(0.12)
         kedua_cm = self.distance.distance * 100
@@ -199,9 +201,10 @@ class Sorter:
         took = time.monotonic() - started
         label = reading.label
         text = _LABEL_TEXT.get(label, label.upper())
-        item = reading.item
+        item = " ".join(reading.item.replace("_", " ").split())
         print(f"[AI] {label} | {item or '-'} | {took:.1f} detik | foto={path.name}")
-        self.display.show(text, item or f"{took:.1f} detik", path.name)
+        self.display.show_result(text, item)
+        self._oled_result = True
         self.monitor.result(label, f"{took:.1f} detik", item)
         print("[BUZZER] jawaban API")
         self._beep()
@@ -264,7 +267,8 @@ class Sorter:
 
     def _show_idle(self) -> None:
         if self._net_ok:
-            self.display.idle()
+            if not self._oled_result:
+                self.display.idle()
             self.monitor.ready()
         else:
             self.display.show(WELCOME_TITLE, "Menunggu Wi-Fi")
