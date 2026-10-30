@@ -135,9 +135,7 @@ def test_hc() -> None:
 
 
 def test_ir() -> None:
-    print("E18-D80NK, OUT GPIO 27 / pin 13. Kaki hitam LOW saat ada benda. Ctrl+C berhenti.")
-    print("Kosong harus tertulis KOSONG. Benda di depan lensa ungu harus ADA BENDA.")
-    print("Sekrup di belakang mengatur jarak. Lantai kosong jangan sampai terbaca ada benda.")
+    print("E18-D80NK, GPIO 27 / pin 13. Angka mentah pin: 0 atau 1. Ctrl+C berhenti.")
     pi = connect_pigpio()
     if pi is None:
         return
@@ -147,8 +145,7 @@ def test_ir() -> None:
     pi.set_pull_up_down(IR_OUT_PIN, pigpio.PUD_OFF)
     try:
         while True:
-            ada = pi.read(IR_OUT_PIN) == 0
-            print("ADA BENDA   kaki hitam LOW" if ada else "KOSONG      kaki hitam HIGH", flush=True)
+            print(pi.read(IR_OUT_PIN), flush=True)
             time.sleep(0.2)
     except KeyboardInterrupt:
         print()
