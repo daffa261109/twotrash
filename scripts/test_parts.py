@@ -3,6 +3,7 @@
 
     python3 scripts/test_parts.py buzzer
     python3 scripts/test_parts.py hc
+    python3 scripts/test_parts.py ir
     python3 scripts/test_parts.py led
     python3 scripts/test_parts.py lamp
     python3 scripts/test_parts.py servo1
@@ -38,6 +39,7 @@ from servo.pins import (
     BUZZER_PIN,
     ECHO_PIN,
     ILLUMINATION_PIN,
+    IR_OUT_PIN,
     LED_GREEN_PIN,
     LED_RED_PIN,
     RING_DIN_PIN,
@@ -125,6 +127,28 @@ def test_hc() -> None:
                 print("TIDAK ADA GEMA   lebih dari 400 cm", flush=True)
             else:
                 print(f"{hc_status(jarak_cm):10}  posisi {jarak_cm:6.1f} cm", flush=True)
+            time.sleep(0.2)
+    except KeyboardInterrupt:
+        print()
+    finally:
+        pi.stop()
+
+
+def test_ir() -> None:
+    print("E18-D80NK, OUT GPIO 27 / pin 13. Kaki hitam LOW saat ada benda. Ctrl+C berhenti.")
+    print("Kosong harus tertulis KOSONG. Benda di depan lensa ungu harus ADA BENDA.")
+    print("Sekrup di belakang mengatur jarak. Lantai kosong jangan sampai terbaca ada benda.")
+    pi = connect_pigpio()
+    if pi is None:
+        return
+    import pigpio
+
+    pi.set_mode(IR_OUT_PIN, pigpio.INPUT)
+    pi.set_pull_up_down(IR_OUT_PIN, pigpio.PUD_OFF)
+    try:
+        while True:
+            ada = pi.read(IR_OUT_PIN) == 0
+            print("ADA BENDA   kaki hitam LOW" if ada else "KOSONG      kaki hitam HIGH", flush=True)
             time.sleep(0.2)
     except KeyboardInterrupt:
         print()
@@ -798,7 +822,7 @@ def test_cek() -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Uji satu komponen.")
-    parser.add_argument("bagian", choices=("buzzer", "hc", "led", "lamp", "servo", "servo1", "servo1_kanan90", "servo2", "urut_kiri", "urut_kanan", "oled", "ring", "camera", "webcam", "api", "cek"))
+    parser.add_argument("bagian", choices=("buzzer", "hc", "ir", "infrared", "led", "lamp", "servo", "servo1", "servo1_kanan90", "servo2", "urut_kiri", "urut_kanan", "oled", "ring", "camera", "webcam", "api", "cek"))
     parser.add_argument("--sudut", type=float, default=45.0, help="sudut servo 1 untuk urut_kiri/urut_kanan")
     parser.add_argument("--turun", type=float, default=TILT_DOWN_DEG, help="sudut servo 2 saat turun")
     parser.add_argument("--device", type=int, default=0, help="nomor webcam USB, biasanya 0")
@@ -817,6 +841,8 @@ def main() -> None:
     {
         "buzzer": test_buzzer,
         "hc": test_hc,
+        "ir": test_ir,
+        "infrared": test_ir,
         "led": test_led,
         "lamp": test_lamp,
         "servo": test_servo1,
