@@ -41,8 +41,6 @@ from servo.pins import (
     TRIG_PIN,
 )
 
-OLED_RESULT_HOLD_S = 10.0
-
 
 class Sorter:
     def __init__(self, station: Station) -> None:
@@ -90,8 +88,8 @@ class Sorter:
         self.vision = _load_bridge()
         # Baru aktif setelah jarak kosong terbaca stabil, supaya restart tidak membunyikan buzzer.
         self._armed = False
+        self._after_dump = False
         self._oled_result = False
-        self._oled_clear_at = None
         self._lamp_on = False
         self._lamp_hold = False
         self._last_preview = 0.0
@@ -107,15 +105,15 @@ class Sorter:
             if ada_barang:
                 self._lamp_hold = True
                 self._clear_streak = 0
-            elif is_penampang(distance_m):
+            elif is_penampang(distance_m) or self._after_dump:
                 self._lamp_hold = False
                 if not self._armed:
                     self._clear_streak += 1
                     if self._clear_streak >= 4:
                         self._rest("Menunggu sampah")
                         self._armed = True
+                        self._after_dump = False
             self._set_illumination(self._lamp_hold)
-            self._hold_oled_result(is_penampang(distance_m), ada_barang)
             if ada_barang and self._armed:
                 self._sort_one_item(distance_m)
             time.sleep(0.05)
@@ -139,8 +137,8 @@ class Sorter:
 
     def _sort_one_item(self, distance_m: float) -> None:
         self._armed = False
+        self._after_dump = False
         self._oled_result = False
-        self._oled_clear_at = None
         pertama_cm = distance_m * 100
         time.sleep(0.12)
         kedua_cm = self.distance.distance * 100
@@ -210,11 +208,11 @@ class Sorter:
         print(f"[AI] {label} | {item or '-'} | {took:.1f} detik | foto={path.name}")
         self.display.show_result(text, item)
         self._oled_result = True
-        self._oled_clear_at = None
         self.monitor.result(label, f"{took:.1f} detik", item)
         print("[BUZZER] jawaban API")
         self._beep()
         print(f"[SERVO] {run_sort(self.servo, self.tilt, label)}")
+        self._finish_dump()
 
     def _set_illumination(self, ada_barang: bool) -> None:
         if ada_barang == self._lamp_on:
@@ -271,21 +269,12 @@ class Sorter:
         print("[WIFI] terhubung, LED hijau menyala")
         self.display.start_idle()
 
-    def _hold_oled_result(self, kosong: bool, ada_barang: bool) -> None:
-        """Hasil API tetap, lalu layar awal 10 detik setelah penampang kosong."""
-        if not self._oled_result or ada_barang:
-            self._oled_clear_at = None
-            return
-        if not kosong:
-            return
-        now = time.monotonic()
-        if self._oled_clear_at is None:
-            self._oled_clear_at = now + OLED_RESULT_HOLD_S
-            return
-        if now < self._oled_clear_at:
-            return
+    def _finish_dump(self) -> None:
+        """Servo sudah di posisi awal. Layar sambutan, lalu siap terima sampah baru."""
         self._oled_result = False
-        self._oled_clear_at = None
+        self._clear_streak = 0
+        self._after_dump = True
+        print("[OLED] kembali ke layar awal")
         self.display.idle()
 
     def _show_idle(self) -> None:
