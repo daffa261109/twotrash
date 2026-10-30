@@ -250,15 +250,18 @@ def _test_urut(arah: str, sudut: float, turun: float) -> None:
 
 
 def test_servo2() -> None:
-    print("Servo 2 ditahan di 60°. Sinyal GPIO 13 / pin 33.")
-    print("Ctrl+C berhenti. Catu 6 V dinyalakan setelah Pi hidup.")
+    print("Servo 2 ke -60°, jeda 5 detik, lalu kembali ke 60°. Sinyal GPIO 13 / pin 33.")
+    print("Posisi akhir ditahan di 60°. Ctrl+C berhenti. Catu 6 V dinyalakan setelah Pi hidup.")
     pi = connect_pigpio()
     if pi is None:
         return
     servo = StableServo(pi, SERVO_TILT_PIN)
     try:
+        servo.angle = -60
+        print("  -60°, tunggu 5 detik")
+        time.sleep(5)
         servo.angle = 60
-        print("  60°, ditahan")
+        print("  kembali ke 60°")
         while True:
             time.sleep(0.5)
     except KeyboardInterrupt:
