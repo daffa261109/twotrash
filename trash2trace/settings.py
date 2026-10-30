@@ -150,6 +150,7 @@ SORT_ANGLES = dict(SERVO1_ANGLES)
 HC_BARANG_MIN_M = _env_float("HC_BARANG_MIN", 2.0) / 100.0
 HC_PENAMPANG_MIN_M = _env_float("HC_PENAMPANG_MIN", 56.0) / 100.0
 HC_PENAMPANG_MAX_M = _env_float("HC_PENAMPANG_MAX", 58.0) / 100.0
+HC_BARANG_YAKIN = 10
 DETECT_MIN_M = HC_BARANG_MIN_M
 DETECT_MAX_M = HC_PENAMPANG_MIN_M
 CLEAR_DISTANCE_M = HC_PENAMPANG_MIN_M
@@ -163,3 +164,14 @@ def is_penampang(distance_m: float) -> bool:
 def is_barang(distance_m: float) -> bool:
     """Benda di depan penampang: lebih dekat dari batas penampang."""
     return HC_BARANG_MIN_M <= distance_m < HC_PENAMPANG_MIN_M
+
+
+def is_kosong(distance_m: float) -> bool:
+    """Tidak ada sampah. Penampang atau lebih jauh, selain pantulan habis waktu."""
+    return HC_PENAMPANG_MIN_M <= distance_m < 1.9
+
+
+def baca_barang(streak: int, distance_m: float) -> tuple[int, bool]:
+    """Ada barang hanya setelah jarak dekat terbaca terus sebanyak HC_BARANG_YAKIN."""
+    streak = streak + 1 if is_barang(distance_m) else 0
+    return streak, streak >= HC_BARANG_YAKIN

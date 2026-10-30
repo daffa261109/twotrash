@@ -18,7 +18,9 @@ from trash2trace.servo_driver import StableServo, connect_pigpio, run_sort
 from trash2trace.settings import (
     CAMERA_SIZE,
     CAPTURE_DIR,
+    baca_barang,
     is_barang,
+    is_kosong,
     is_penampang,
     FRAME_GAP_S,
     FRAMES_PER_DECISION,
@@ -88,8 +90,9 @@ class Sorter:
         self.vision = _load_bridge()
         # Baru aktif setelah jarak kosong terbaca stabil, supaya restart tidak membunyikan buzzer.
         self._armed = False
-        self._after_dump = False
+        self._barang_streak = 0
         self._oled_result = False
+        self._last_hc_log = 0.0
         self._lamp_on = False
         self._lamp_hold = False
         self._last_preview = 0.0
@@ -100,19 +103,24 @@ class Sorter:
         self._show_idle()
         while self.running:
             self._check_network()
-            distance_m = self.distance.distance
-            ada_barang = is_barang(distance_m)
+            distance_m = self._read_distance()
+            if distance_m is None:
+                self._barang_streak = 0
+                time.sleep(0.05)
+                continue
+            self._barang_streak, ada_barang = baca_barang(self._barang_streak, distance_m)
             if ada_barang:
                 self._lamp_hold = True
                 self._clear_streak = 0
-            elif is_penampang(distance_m) or self._after_dump:
+                if not self._armed:
+                    self._log_hc(distance_m, "sampah belum dibaca, jarak kosong belum stabil")
+            elif is_kosong(distance_m):
                 self._lamp_hold = False
                 if not self._armed:
                     self._clear_streak += 1
                     if self._clear_streak >= 4:
                         self._rest("Menunggu sampah")
                         self._armed = True
-                        self._after_dump = False
             self._set_illumination(self._lamp_hold)
             if ada_barang and self._armed:
                 self._sort_one_item(distance_m)
@@ -135,9 +143,29 @@ class Sorter:
         distance_m = self.distance.distance
         return self._armed and is_barang(distance_m)
 
+    def _read_distance(self) -> float | None:
+        try:
+            return float(self.distance.distance)
+        except Exception as exc:
+            self._log_hc_warn(exc)
+            return None
+
+    def _log_hc(self, distance_m: float, message: str) -> None:
+        now = time.monotonic()
+        if now - self._last_hc_log < 1.0:
+            return
+        self._last_hc_log = now
+        print(f"[HC] {distance_m * 100:.1f} cm, {message}")
+
+    def _log_hc_warn(self, exc: Exception) -> None:
+        now = time.monotonic()
+        if now - self._last_hc_log < 1.0:
+            return
+        self._last_hc_log = now
+        print(f"[WARN] HC: {exc}")
+
     def _sort_one_item(self, distance_m: float) -> None:
         self._armed = False
-        self._after_dump = False
         self._oled_result = False
         pertama_cm = distance_m * 100
         time.sleep(0.12)
@@ -270,10 +298,9 @@ class Sorter:
         self.display.start_idle()
 
     def _finish_dump(self) -> None:
-        """Servo sudah di posisi awal. Layar sambutan, lalu siap terima sampah baru."""
+        """Servo sudah di posisi awal. Layar sambutan, lalu jarak kosong mengaktifkan sensor lagi."""
         self._oled_result = False
         self._clear_streak = 0
-        self._after_dump = True
         print("[OLED] kembali ke layar awal")
         self.display.idle()
 

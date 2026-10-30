@@ -36,9 +36,11 @@ from gpiozero import Buzzer, Device, LED
 from trash2trace.servo_driver import StableServo, connect_pigpio, geser, run_sort, sort_plan
 from trash2trace.settings import (
     HC_BARANG_MIN_M,
+    HC_BARANG_YAKIN,
     HC_PENAMPANG_MAX_M,
     HC_PENAMPANG_MIN_M,
     TILT_DOWN_DEG,
+    baca_barang,
     is_barang,
     is_penampang,
 )
@@ -123,18 +125,28 @@ def test_hc() -> None:
     print("Jarak diukur sampai sekitar 400 cm. Angka 12–13 cm berarti gema benar-benar dari situ.")
     print(
         f"PENAMPANG {HC_PENAMPANG_MIN_M * 100:.0f}–{HC_PENAMPANG_MAX_M * 100:.0f} cm. "
-        f"ADA BARANG {HC_BARANG_MIN_M * 100:.0f} cm sampai di bawah {HC_PENAMPANG_MIN_M * 100:.0f} cm."
+        f"ADA BARANG {HC_BARANG_MIN_M * 100:.0f} cm sampai di bawah {HC_PENAMPANG_MIN_M * 100:.0f} cm, "
+        f"{HC_BARANG_YAKIN} kali berturut-turut."
     )
     pi = connect_pigpio()
     if pi is None:
         return
+    streak = 0
     try:
         while True:
             jarak_cm = _jarak_hc_cm(pi)
             if jarak_cm is None:
+                streak = 0
                 print("TIDAK ADA GEMA   lebih dari 400 cm", flush=True)
             else:
-                print(f"{hc_status(jarak_cm):10}  posisi {jarak_cm:6.1f} cm", flush=True)
+                streak, yakin = baca_barang(streak, jarak_cm / 100.0)
+                if yakin:
+                    status = "ADA BARANG"
+                elif is_penampang(jarak_cm / 100.0) or is_barang(jarak_cm / 100.0):
+                    status = "PENAMPANG"
+                else:
+                    status = hc_status(jarak_cm)
+                print(f"{status:10}  posisi {jarak_cm:6.1f} cm", flush=True)
             time.sleep(0.2)
     except KeyboardInterrupt:
         print()
