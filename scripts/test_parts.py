@@ -32,7 +32,7 @@ sys.path.insert(0, str(ROOT))
 
 from gpiozero import Buzzer, Device, LED
 
-from trash2trace.servo_driver import StableServo, connect_pigpio
+from trash2trace.servo_driver import StableServo, connect_pigpio, run_servo1
 from trash2trace.settings import CLEAR_DISTANCE_M, DETECT_MAX_M, DETECT_MIN_M, TILT_DOWN_DEG
 from servo.pins import (
     BUZZER_PIN,
@@ -544,7 +544,35 @@ def test_webcam_live(device: int = 0, port: int = 8081) -> None:
     if camera is None or used is None:
         return
     lock = threading.Lock()
+    motion_lock = threading.Lock()
     labels = {"organic": "ORGANIK", "nonorganic": "NONORGANIK", "other": "LAINNYA"}
+    from trash2trace.settings import SERVO1_ANGLES, SERVO1_KEMBALI, SERVO1_WAIT_S
+
+    pi = connect_pigpio()
+    servo = StableServo(pi, SERVO_PIN)
+    if pi is not None:
+        servo.angle = SERVO1_KEMBALI
+
+    def start_servo(label: str) -> str:
+        angle = SERVO1_ANGLES.get(label)
+        if pi is None:
+            return "servo mati (pigpiod tidak aktif)"
+        if angle is None:
+            return "servo diam"
+        if not motion_lock.acquire(blocking=False):
+            return "servo masih bergerak"
+
+        def job() -> None:
+            try:
+                run_servo1(servo, label)
+            finally:
+                motion_lock.release()
+
+        threading.Thread(target=job, daemon=True).start()
+        return (
+            f"servo 1 ke {angle:+.0f}°, tunggu {SERVO1_WAIT_S:g} detik, "
+            f"kembali {SERVO1_KEMBALI:+.0f}°"
+        )
 
     def jpeg() -> bytes | None:
         with lock:
@@ -572,7 +600,8 @@ def test_webcam_live(device: int = 0, port: int = 8081) -> None:
         text = labels.get(reading.label, reading.label.upper())
         took = time.monotonic() - started
         print(f"[HASIL] {text} {reading.item} ({took:.1f} detik)")
-        detail = f"{took:.1f} detik · https://twotrash.wbesoft.com/classify"
+        motion = start_servo(reading.label)
+        detail = f"{took:.1f} detik · {motion} · https://twotrash.wbesoft.com/classify"
         if reading.item:
             detail = f"{reading.item} · {detail}"
         return {"text": text, "detail": detail}
@@ -631,6 +660,9 @@ def test_webcam_live(device: int = 0, port: int = 8081) -> None:
     finally:
         server.server_close()
         camera.release()
+        if pi is not None:
+            servo.detach()
+            pi.stop()
         print("Selesai. Lampu kembali merah karena kamera ditutup.")
 
 

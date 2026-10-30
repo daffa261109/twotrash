@@ -17,16 +17,13 @@ from trash2trace.camera import open_camera
 from servo.pins import ILLUMINATION_PIN
 from trash2trace.bridge import BridgeVision, ping
 from trash2trace.ring import Ring
-from servo.pins import SERVO_PIN, SERVO_TILT_PIN
-from trash2trace.servo_driver import StableServo, connect_pigpio
+from servo.pins import SERVO_PIN
+from trash2trace.servo_driver import StableServo, connect_pigpio, run_servo1
 from trash2trace.settings import (
     ROOT,
-    SORT_ANGLES,
-    SORT_SETTLE_S,
-    SORT_WAIT_S,
-    TILT_DOWN_DEG,
-    TILT_HOLD_S,
-    TILT_UP_SETTLE_S,
+    SERVO1_ANGLES,
+    SERVO1_KEMBALI,
+    SERVO1_WAIT_S,
     load_bridge_config,
 )
 
@@ -227,59 +224,42 @@ def _lamp_on():
 
 
 class SortMotion:
-    """Gerakan servo setelah sampah terbaca. Butuh pigpiod aktif.
-
-    Servo 1 memutar ke sudut jenis sampah dan tetap di sana. Servo 2 turun lalu naik
-    lagi ke tegak. Setelah jeda, servo 1 kembali ke titik awal.
-    """
+    """Gerakan servo 1 setelah jawaban API. Butuh pigpiod aktif."""
 
     def __init__(self) -> None:
         self._pi = connect_pigpio()
         self._busy = threading.Lock()
         self._servo1 = StableServo(self._pi, SERVO_PIN)
-        self._servo2 = StableServo(self._pi, SERVO_TILT_PIN)
-        self._servo1.angle = 0
-        self._servo2.angle = 0
+        self._servo1.angle = SERVO1_KEMBALI
 
     def start(self, label: str) -> str:
         if self._pi is None:
             return "servo mati (pigpiod tidak aktif)"
-        angle = SORT_ANGLES.get(label)
+        angle = SERVO1_ANGLES.get(label)
         if angle is None:
             return "servo diam"
         if not self._busy.acquire(blocking=False):
             return "servo masih bergerak"
-        threading.Thread(target=self._sequence, args=(angle,), daemon=True).start()
-        return f"servo 1 ke {angle:+.0f}°, servo 2 turun-naik"
+        threading.Thread(target=self._sequence, args=(label,), daemon=True).start()
+        return (
+            f"servo 1 ke {angle:+.0f}°, tunggu {SERVO1_WAIT_S:g} detik, "
+            f"kembali {SERVO1_KEMBALI:+.0f}°"
+        )
 
-    def _sequence(self, angle: float) -> None:
+    def _sequence(self, label: str) -> None:
         try:
-            print(f"[SERVO] servo 1 ke {angle:+.0f}°")
-            self._servo1.angle = angle
-            time.sleep(SORT_SETTLE_S)
-            print(f"[SERVO] servo 2 turun {TILT_DOWN_DEG:+.0f}°")
-            self._servo2.angle = TILT_DOWN_DEG
-            time.sleep(TILT_HOLD_S)
-            print("[SERVO] servo 2 naik, tegak")
-            self._servo2.angle = 0
-            time.sleep(TILT_UP_SETTLE_S + SORT_WAIT_S)
-            print("[SERVO] servo 1 kembali ke titik awal")
-            self._servo1.angle = 0
-            time.sleep(SORT_SETTLE_S)
+            print(f"[SERVO] {run_servo1(self._servo1, label)}")
         except Exception as exc:
             print(f"[WARN] Gerakan servo: {exc}")
         finally:
             self._busy.release()
-            print("[SERVO] selesai")
 
     def close(self) -> None:
         if self._pi is None:
             return
-        self._servo1.angle = 0
-        self._servo2.angle = 0
+        self._servo1.angle = SERVO1_KEMBALI
         time.sleep(0.4)
         self._servo1.detach()
-        self._servo2.detach()
         self._pi.stop()
 
 

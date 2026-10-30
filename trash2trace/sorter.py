@@ -14,7 +14,7 @@ from trash2trace.display import Display
 from trash2trace.monitor import Monitor
 from trash2trace.bridge import BridgeVision
 from trash2trace.network import wifi_connected
-from trash2trace.servo_driver import StableServo, connect_pigpio
+from trash2trace.servo_driver import StableServo, connect_pigpio, run_servo1
 from trash2trace.settings import (
     CAMERA_SIZE,
     CAPTURE_DIR,
@@ -26,7 +26,7 @@ from trash2trace.settings import (
     MOVE_FLAP,
     PLACE_WAIT_S,
     PREVIEW_EVERY_S,
-    SERVO_HOLD_S,
+    SERVO1_KEMBALI,
     SETTLE_AFTER_DETECT_S,
     WELCOME_TITLE,
     Station,
@@ -73,7 +73,7 @@ class Sorter:
         self._pi = connect_pigpio()
         self.servo = StableServo(self._pi, SERVO_PIN)
         self.tilt = StableServo(self._pi, SERVO_TILT_PIN)
-        self.servo.angle = 0
+        self.servo.angle = SERVO1_KEMBALI
         self.tilt.angle = 0
         self.illumination = LED(ILLUMINATION_PIN, pin_factory=lamp_pins)
         self.monitor = Monitor(None)
@@ -206,6 +206,7 @@ class Sorter:
         self.monitor.result(label, f"{took:.1f} detik", item)
         print("[BUZZER] jawaban API")
         self._beep()
+        print(f"[SERVO] {run_servo1(self.servo, label)}")
 
     def _set_illumination(self, ada_barang: bool) -> None:
         if ada_barang == self._lamp_on:
@@ -231,14 +232,10 @@ class Sorter:
         return path
 
     def _actuate(self, label: str, confidence: float) -> None:
-        angle = self.station.angle_for(label)
         text = self.station.text_for(label)
-        print(f"[SORT] {self.station.title} {label} | yakin={confidence:.2f} | servo={angle:+.0f}°")
+        print(f"[SORT] {self.station.title} {label} | yakin={confidence:.2f}")
         self.display.show(text, f"AI {confidence * 100:.0f}%", self.station.title)
-        self.servo.angle = angle
-        time.sleep(SERVO_HOLD_S)
-        self.servo.angle = 0
-        time.sleep(0.25)
+        run_servo1(self.servo, label)
 
     def _wait_until_clear(self) -> None:
         while self.running and self.distance.distance < CLEAR_DISTANCE_M:
@@ -287,7 +284,7 @@ class Sorter:
 
     def _rest(self, message: str) -> None:
         self._alert_off()
-        self.servo.angle = 0
+        self.servo.angle = SERVO1_KEMBALI
         self.tilt.angle = 0
         print(f"[AI] {self.station.title} {message}")
         self._show_idle()
@@ -296,7 +293,7 @@ class Sorter:
         # LED hijau/merah dibiarkan menyala sampai proses berhenti.
         self.illumination.off()
         self.buzzer.off()
-        self.servo.angle = 0
+        self.servo.angle = SERVO1_KEMBALI
         self.tilt.angle = 0
         time.sleep(0.2)
         self.servo.detach()

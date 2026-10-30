@@ -43,10 +43,6 @@ WIFI_INTERFACE = "wlan0"
 # Foto ke API dikecilkan dulu supaya unggahan lebih cepat.
 LLM_IMAGE_WIDTH = 320
 BRIDGE_TIMEOUT_S = 45
-# Gerakan setelah AI membaca sampah (dipakai preview). Jenis "other" tidak menggerakkan servo.
-# Servo 1 memutar ke sudut ini dan menunggu. Servo 2 turun, naik lagi ke tegak (0),
-# lalu setelah jeda servo 1 kembali ke 0.
-SORT_ANGLES = {"organic": -45.0, "nonorganic": 45.0}
 SORT_SETTLE_S = 1.0
 TILT_DOWN_DEG = -45.0
 TILT_HOLD_S = 1.5
@@ -103,6 +99,17 @@ def load_bridge_config() -> BridgeConfig:
     return config
 
 
+def _env_float(name: str, default: float) -> float:
+    raw = os.environ.get(name, "").strip()
+    if not raw:
+        return default
+    try:
+        return float(raw)
+    except ValueError:
+        print(f"[WARN] {name}={raw!r} bukan angka, dipakai {default:g}")
+        return default
+
+
 def _load_env_file(path: Path) -> None:
     if not path.exists():
         return
@@ -123,3 +130,19 @@ def load_station(name: str | None) -> Station:
     except KeyError as exc:
         known = ", ".join(STATIONS)
         raise SystemExit(f"station harus salah satu dari: {known}") from exc
+
+
+# Servo 1 setelah jawaban API. Angka di .env supaya bisa diubah tanpa menyentuh kode.
+# ORGANIK, NONORGANIK, dan LAINNYA ditahan selama SERVO1_TUNGGU, lalu kembali ke SERVO1_KEMBALI.
+_load_env_file(ENV_PATH)
+SERVO1_WAIT_S = _env_float("SERVO1_TUNGGU", 5.0)
+SERVO1_ORGANIK = _env_float("SERVO1_ORGANIK", -60.0)
+SERVO1_NONORGANIK = _env_float("SERVO1_NONORGANIK", -90.0)
+SERVO1_LAINNYA = _env_float("SERVO1_LAINNYA", 180.0)
+SERVO1_KEMBALI = _env_float("SERVO1_KEMBALI", 60.0)
+SERVO1_ANGLES = {
+    "organic": SERVO1_ORGANIK,
+    "nonorganic": SERVO1_NONORGANIK,
+    "other": SERVO1_LAINNYA,
+}
+SORT_ANGLES = dict(SERVO1_ANGLES)

@@ -120,7 +120,7 @@ Uji cepat tanpa browser: `sudo python3 scripts/test_parts.py camera` menyalakan 
 
 Buka `http://<nama-pi>.local:8080` dari komputer yang satu Wi-Fi dengan Pi. Gambar kamera ada di kiri. Panel di kanan punya tiga bagian:
 
-- **Ambil dan analisis**: menyimpan satu foto dan membacanya dengan API. Setelah hasilnya muncul, servo bergerak: servo 1 memutar ke -45° (organik) atau +45° (nonorganik) dan tetap di sana, servo 2 turun lalu naik lagi ke tegak, dan setelah jeda beberapa detik servo 1 kembali ke titik awal. Jenis LAINNYA tidak menggerakkan servo. Sudut dan jeda ada di `trash2trace/settings.py` (`SORT_ANGLES`, `TILT_DOWN_DEG`, `SORT_WAIT_S`). Butuh `pigpiod` aktif.
+- **Ambil dan analisis**: menyimpan satu foto dan membacanya dengan API. Setelah jawaban API, servo 1 pindah ke sudut jenis sampah, menunggu, lalu kembali. Organik, nonorganik, lainnya, waktu tunggu, dan sudut kembali ada di `.env` (`SERVO1_ORGANIK`, `SERVO1_NONORGANIK`, `SERVO1_LAINNYA`, `SERVO1_TUNGGU`, `SERVO1_KEMBALI`). Butuh `pigpiod` aktif.
 - **Cincin LED**: tombol Putih, Merah, Hijau, Biru dan Mati. Butuh sudo. Kalau cincin tidak bisa dipakai, panel memberi tahu bahwa cincin tidak aktif.
 - **API**: mengecek server, lalu mengirim gambar kamera saat ini ke API dan menampilkan ORGANIK, NONORGANIK atau LAINNYA. Servo ikut bergerak seperti pada tombol di atas. Butuh `API_TOKEN` di `.env`. Ctrl+C menghentikan tes. Nyalakan pemilah lagi dengan:
 
