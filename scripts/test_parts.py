@@ -249,19 +249,31 @@ def _test_urut(arah: str, sudut: float, turun: float) -> None:
     print("Selesai.")
 
 
+def _geser(servo: StableServo, target: float, detik: float = 2.0) -> None:
+    """Pindah pelan, derajat demi derajat, supaya tidak loncat."""
+    start = 60.0 if servo.angle is None else servo.angle
+    steps = max(1, int(round(abs(target - start))))
+    pause = detik / steps
+    for step in range(1, steps + 1):
+        servo.angle = start + (target - start) * step / steps
+        time.sleep(pause)
+
+
 def test_servo2() -> None:
-    print("Servo 2 ke 180°, jeda 5 detik, lalu kembali ke 60°. Sinyal GPIO 13 / pin 33.")
+    print("Servo 2 pelan ke 150°, jeda 5 detik, lalu pelan kembali ke 60°. Sinyal GPIO 13 / pin 33.")
     print("Posisi akhir ditahan di 60°. Ctrl+C berhenti. Catu 6 V dinyalakan setelah Pi hidup.")
     pi = connect_pigpio()
     if pi is None:
         return
     servo = StableServo(pi, SERVO_TILT_PIN)
     try:
-        servo.angle = 180
-        print("  180°, tunggu 5 detik")
-        time.sleep(5)
         servo.angle = 60
-        print("  kembali ke 60°")
+        print("  dari 60° pelan ke 150°")
+        _geser(servo, 150)
+        print("  150°, tunggu 5 detik")
+        time.sleep(5)
+        print("  pelan kembali ke 60°")
+        _geser(servo, 60)
         while True:
             time.sleep(0.5)
     except KeyboardInterrupt:
