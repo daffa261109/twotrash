@@ -26,28 +26,33 @@ usermod -aG video,i2c,gpio "$RUN_USER"
 cat > /etc/systemd/system/trash2trace.service << EOF
 [Unit]
 Description=TRASH2TRACE pemilah sampah
-After=network.target pigpiod.service graphical.target
+After=pigpiod.service
 Wants=pigpiod.service
 
 [Service]
 Type=simple
 User=${RUN_USER}
 WorkingDirectory=${ROOT}
+ExecStartPre=/bin/bash ${ROOT}/scripts/tunggu_layar.sh
 ExecStart=/usr/bin/python3 -m trash2trace
-Restart=on-failure
-RestartSec=10
+Restart=always
+RestartSec=8
+StartLimitIntervalSec=0
 Environment=PYTHONUNBUFFERED=1
 Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/${RUN_USER}/.Xauthority
 Environment=XDG_RUNTIME_DIR=/run/user/${RUN_UID}
 ${ATOMIC:+Environment=LD_PRELOAD=${ATOMIC}}
 EnvironmentFile=-${ROOT}/.env
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=graphical.target
 EOF
 
 systemctl daemon-reload
+systemctl disable trash2trace.service || true
 systemctl enable trash2trace.service
+systemctl restart trash2trace.service || true
 bash "${ROOT}/scripts/buzzer_mati.sh"
 if [[ ! -f "${ROOT}/.env" ]]; then
   cp "${ROOT}/.env.example" "${ROOT}/.env"
