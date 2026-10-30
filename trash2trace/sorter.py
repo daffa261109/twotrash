@@ -88,8 +88,9 @@ class Sorter:
             raise
         time.sleep(1.2)
         self.vision = _load_bridge()
-        # Baru aktif setelah jarak kosong terbaca stabil, supaya restart tidak membunyikan buzzer.
+        # Setelah satu sampah selesai, tunggu jarak menjauh dulu supaya tidak difoto ulang.
         self._armed = False
+        self._need_clear = False
         self._barang_streak = 0
         self._oled_result = False
         self._last_hc_log = 0.0
@@ -108,21 +109,26 @@ class Sorter:
                 self._barang_streak = 0
                 time.sleep(0.05)
                 continue
+            if self._need_clear:
+                if not is_barang(distance_m):
+                    self._need_clear = False
+                    self._barang_streak = 0
+                    self._lamp_hold = False
+                    print(f"[HC] {distance_m * 100:.1f} cm, siap sampah berikutnya")
+                else:
+                    self._lamp_hold = True
+                self._set_illumination(self._lamp_hold)
+                time.sleep(0.05)
+                continue
             self._barang_streak, ada_barang = baca_barang(self._barang_streak, distance_m)
             if ada_barang:
                 self._lamp_hold = True
                 self._clear_streak = 0
-                if not self._armed:
-                    self._log_hc(distance_m, "sampah belum dibaca, jarak kosong belum stabil")
+                self._armed = True
             elif is_kosong(distance_m):
                 self._lamp_hold = False
-                if not self._armed:
-                    self._clear_streak += 1
-                    if self._clear_streak >= 4:
-                        self._rest("Menunggu sampah")
-                        self._armed = True
             self._set_illumination(self._lamp_hold)
-            if ada_barang and self._armed:
+            if ada_barang:
                 self._sort_one_item(distance_m)
             time.sleep(0.05)
 
@@ -174,6 +180,7 @@ class Sorter:
         if is_penampang(self.distance.distance):
             self._show_idle()
             return
+        self._need_clear = True
         seconds = max(1, math.ceil(PLACE_WAIT_S))
         self.monitor.waiting(seconds)
         self.display.show("TUNGGU", f"{seconds}")
