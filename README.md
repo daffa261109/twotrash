@@ -16,8 +16,10 @@ webcam USB sekitar 100 × 30 mm, jarak lensa ke flap 30 cm. Target awal sampah 1
 ditangguhkan; revisi mekanik terbaru menghitung flap kosong saja.
 PCB TT-PZ2 memakai Pi Zero langsung ke dua DRV8825, tanpa Nano.
 WS2812 dan IC buffer dihapus; TRIG HC-SR04 langsung 3,3 V dan ECHO tetap memakai pembagi resistor.
-Pola transfer 1:1 dan panduan perakitan ada di [docs/wiring.md](docs/wiring.md).
-PCB dan mekanik masih memerlukan uji fisik.
+Pola transfer PCB NEMA17 ada di [docs/pcb/README.md](docs/pcb/README.md).
+Alat yang terpasang masih wiring servo, sebelum motor NEMA17, di [docs/wiring.md](docs/wiring.md).
+Tidak ada rel 5 V AUX. OLED dan infrared E18-D80NK mengambil 5 V dari pin 2 dan pin 4 Pi.
+Servo mengambil 5 V dari catu di rak bawah, bukan dari pin 5 V Pi.
 
 Preview dan sorter sekarang memilih **USB** secara default. Isi `.env` dengan
 `CAMERA_BACKEND=usb`, `CAMERA_DEVICE=/dev/video0`, dan `CAMERA_FPS=15` (atau path
@@ -25,18 +27,19 @@ stabil `/dev/v4l/by-id/...`). Kamera pita lama dapat dipilih dengan
 `CAMERA_BACKEND=csi`. Lebar pandangan tetap bergantung lensa webcam.
 Pengendali gerak aplikasi masih servo; kendali STEP/DIR langsung dari Pi, homing
 dan penanganan FAULT belum diimplementasikan. Jumper JARM PCB baru harus tetap terbuka.
-Bagian wiring/dua Pi di bawah mendokumentasikan konfigurasi lama.
 
-## Kabel konfigurasi servo lama (bukan PCB TT-PZ2)
+## Kabel Pi Zero (sebelum motor NEMA17)
 
 | Komponen | Dari | Ke |
 | --- | --- | --- |
+| OLED | VCC | 5 V Pi, pin 2 |
 | OLED | SDA / SCL | GPIO 2 / pin 3, GPIO 3 / pin 5 |
-| HC-SR04 | TRIG / ECHO | GPIO 17 / pin 11, GPIO 27 / pin 13 lewat pembagi |
-| Servo | Sinyal | GPIO 18 / pin 12, kabel 80 cm turun ke rak bawah |
+| E18-D80NK | Cokelat (VCC) | 5 V Pi, pin 4 |
+| E18-D80NK | Hitam (OUT) | 4,7 kΩ ke 5 V Pi, lalu 2,2 kΩ → GPIO 27 / pin 13, 2,7 kΩ ke GND |
+| E18-D80NK | Biru | GND |
+| Servo | Sinyal | GPIO 18 / pin 12 dan GPIO 13 / pin 33, kabel 80 cm turun ke rak bawah |
 | Servo | Merah | +5 V catu di rak bawah, bukan pin 5 V Pi |
 | LED hijau / merah | Anoda | GPIO 22 / pin 15, GPIO 23 / pin 16 |
-| Cincin WS2812 12 LED | DIN | GPIO 21 / pin 40, 5 V dari catu bawah |
 | Buzzer | Sinyal | GPIO 5 / pin 29 |
 
 Gambar susunan, soket AC, dan daftar panjang kabel ada di [docs/wiring.md](docs/wiring.md).
