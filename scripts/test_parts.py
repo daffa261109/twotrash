@@ -250,14 +250,22 @@ def _test_urut(arah: str, sudut: float, turun: float) -> None:
 
 
 def test_servo2() -> None:
-    # Arah positif mentok di batas mekanik. 25° ke bawah, lalu kembali ke rata.
-    _test_servo(
-        "Servo 2 (miring atas-bawah, buang sampah)",
-        SERVO_TILT_PIN,
-        33,
-        (("rata", 0), ("turun", -25), ("rata", 0)),
-        hold_s=2.0,
-    )
+    print("Servo 2 ditahan di 60°. Sinyal GPIO 13 / pin 33.")
+    print("Ctrl+C berhenti. Catu 6 V dinyalakan setelah Pi hidup.")
+    pi = connect_pigpio()
+    if pi is None:
+        return
+    servo = StableServo(pi, SERVO_TILT_PIN)
+    try:
+        servo.angle = 60
+        print("  60°, ditahan")
+        while True:
+            time.sleep(0.5)
+    except KeyboardInterrupt:
+        print("\nBerhenti di 60°.")
+    finally:
+        servo.detach()
+        pi.stop()
 
 
 def test_oled() -> None:
