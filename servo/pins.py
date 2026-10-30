@@ -15,8 +15,9 @@ ECHO_PIN = 27  # physical pin 13
 # Hitam (OUT, LOW saat ada benda) lewat 4,7 kΩ ke 5 V lalu pembagi 2,2 kΩ / 2,7 kΩ.
 IR_OUT_PIN = 27  # physical pin 13, pin yang sama dengan ECHO_PIN
 
-# MG996R, kabel sinyal. Physical pin 12. Daya merah dari 5 V eksternal.
-SERVO_PIN = 18  # servo 1, putar 360°, physical pin 12
+# Kabel sinyal. Daya merah dari catu 6,0 V 5 A di rak bawah, bukan pin 5 V Pi.
+# MG996R yang rusak diganti TD8120MG 20 kg, 180°. Pulsa tetap 500–2500 µs.
+SERVO_PIN = 18  # servo 1, pemilih jalur, physical pin 12
 SERVO_TILT_PIN = 13  # servo 2, miring atas-bawah, physical pin 33
 
 # LED indikator. Anoda lewat resistor, katoda ke GND.

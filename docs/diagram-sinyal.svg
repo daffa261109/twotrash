@@ -132,13 +132,13 @@
 <rect x="1000" y="72" width="300" height="76" rx="6" fill="#ffffff" stroke="#333333" stroke-width="2"/>
 <text x="1150" y="94" font-size="15" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">Servo 1 · putar 360°</text>
 <text x="1150" y="110" font-size="12" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">pemilih jalur sampah · sinyal kabel 80 cm</text>
-<text x="1150" y="126" font-size="12" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">merah → +V catu · cokelat → −V catu</text>
+<text x="1150" y="126" font-size="12" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">merah → +6,0 V catu · cokelat → −V catu</text>
 <circle cx="1000" cy="110" r="5" fill="#e0a000" stroke="#333" stroke-width="2"/>
 <polyline points="860,200 1000,200" fill="none" stroke="#e8731a" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 <rect x="1000" y="162" width="300" height="76" rx="6" fill="#ffffff" stroke="#333333" stroke-width="2"/>
 <text x="1150" y="184" font-size="15" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">Servo 2 · miring atas-bawah</text>
 <text x="1150" y="200" font-size="12" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">membuang sampah · sinyal kabel 80 cm</text>
-<text x="1150" y="216" font-size="12" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">merah → +V catu · cokelat → −V catu</text>
+<text x="1150" y="216" font-size="12" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">merah → +6,0 V catu · cokelat → −V catu</text>
 <circle cx="1000" cy="200" r="5" fill="#e8731a" stroke="#333" stroke-width="2"/>
 <rect x="1000" y="290" width="270" height="130" rx="6" fill="#ffffff" stroke="#333333" stroke-width="2"/>
 <text x="1135" y="320" font-size="15" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">Cincin tidak dipasang</text>

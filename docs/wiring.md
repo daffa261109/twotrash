@@ -3,20 +3,20 @@
 > Mekanik yang dikunci: [Rev G, flap kosong](3d/external-gears/CATATAN.txt).
 > Pengendali stepper belum diaktifkan; wiring di bawah masih untuk konfigurasi servo.
 
-Mesin punya dua tingkat. Kotak atas memegang elektronik yang dekat kamera. Rak bawah memegang listrik PLN, catu 5 V, dan dua servo.
+Mesin punya dua tingkat. Kotak atas memegang elektronik yang dekat kamera. Rak bawah memegang listrik PLN, catu servo 6 V, dan dua servo.
 
-Mesin memakai **satu Raspberry Pi Zero** dan **dua servo MG996R**:
+Mesin memakai **satu Raspberry Pi Zero**. Servo yang rusak diganti **TD8120MG** (metal gear, 20 kg, gerak 180°). Servo MG996R yang masih hidup tetap di rel yang sama.
 
-- **Servo 1** memutar flap 360° untuk memilih jalur sampah (GPIO 18).
+- **Servo 1** memilih jalur sampah (GPIO 18).
 - **Servo 2** memiringkan flap ke atas dan ke bawah untuk membuang sampah (GPIO 13).
 
-Kedua servo duduk di tengah rak bawah, diikat dengan braket MG996. Kabel dari Pi di atas ke servo dipotong **80 cm** (jalur terpakai sekitar 70 cm).
+TD8120MG dipasang di posisi MG996R yang rusak. Kabel sinyal tidak pindah GPIO. Badan servo ini ukuran standar, braket MG996 biasanya masih muat; pakai horn yang ikut di kotak servo baru. Kabel dari Pi di atas ke servo dipotong **80 cm** (jalur terpakai sekitar 70 cm).
 
 ![Susunan kotak atas dan rak bawah](rangkaian.jpg)
 
 ## Diagram rangkaian
 
-Diagram daya: alur listrik PLN, catu 5 V, dua servo, dan kabel naik 80 cm ke kotak atas.
+Diagram daya: alur listrik PLN, catu servo 6 V 5 A, dua servo, dan kabel naik 80 cm ke kotak atas.
 
 ![Diagram daya](diagram-daya.svg)
 
@@ -26,21 +26,26 @@ Diagram sinyal: sambungan tiap pin Pi Zero ke OLED, infrared E18-D80NK, LED, buz
 
 ## Rak bawah
 
-Dari kiri ke kanan: soket AC, catu switching 5 V, lalu dua servo di tengah.
+Dari kiri ke kanan: soket AC, catu servo 6 V 5 A, lalu dua servo di tengah.
+
+Catu yang dipakai adalah adaptor setel **UTech 5 A** (bodi yang lebih besar, kisaran 3–24 V). Unit 3 A jangan dipakai untuk dua servo. Kenop diputar sampai layar menunjukkan **6,0 V**, lalu diukur multimeter pada colokan sebelum kabel merah servo dipasang. Foto produk sering menampilkan 12 V atau 22 V; tegangan itu merusak servo. Setelah 6,0 V terbaca, kenop tidak diputar lagi.
+
+Colokan barrel 5,5 mm, isi 2,1 mm atau 2,5 mm, **ujung tengah positif**. Selongsong luar adalah GND. Ujung positif ke kabel merah servo. Selongsong ke kabel cokelat servo dan ke GND Pi.
 
 | Komponen | Dari | Ke |
 | --- | --- | --- |
 | Soket AC | L | sekring, lalu saklar, lalu L catu |
 | Soket AC | N | N catu |
 | Soket AC | PE | baut rangka logam, atau diisolasi jika kotak semua plastik |
-| Catu 5 V | +V | kabel merah kedua servo |
-| Catu 5 V | −V | kabel cokelat kedua servo dan GND Pi |
-| Servo 1 (putar 360°) | sinyal | GPIO 18 / pin 12 pada Pi, kabel 80 cm |
+| Catu 6,0 V 5 A | +V (ujung barrel) | kabel merah tiap servo |
+| Catu 6,0 V 5 A | −V (selongsong) | kabel cokelat tiap servo dan GND Pi |
+| Servo 1 (pemilih jalur) | sinyal | GPIO 18 / pin 12 pada Pi, kabel 80 cm |
 | Servo 2 (miring atas-bawah) | sinyal | GPIO 13 / pin 33 pada Pi, kabel 80 cm |
+| TD8120MG | merah / cokelat / oranye | sama seperti MG996R yang digantinya |
 
-Kabel merah servo tidak masuk ke pin 5 V Pi. Pi tetap makan dari kabel USB-nya sendiri.
+Kabel merah servo tidak masuk ke pin 5 V Pi. Pi tetap makan dari kabel USB-nya sendiri. OLED dan infrared tetap di 5 V pin Pi, bukan di catu 6 V ini.
 
-Catu di rak bawah memakai **5 V 5 A**. Dua servo MG996R saat macet menarik jauh di atas 2 A. Jangan membebani unit 2 A dengan kedua servo. Infrared tidak mengambil daya dari catu ini.
+TD8120MG dan MG996R sama-sama tahan 6,0 V. Pulsa sinyal tetap 50 Hz, 500 µs di satu ujung dan 2500 µs di ujung lain, jadi program sudut yang ada tidak diubah. TD8120MG hanya bergerak 180°, bukan berputar terus. Saat macet, satu servo 20 kg menarik sekitar 2–3 A. Catu 5 A cukup untuk satu servo macet dan satu servo bergerak. Jangan menahan kedua servo macet bersamaan.
 
 ## Kotak atas
 
@@ -62,8 +67,10 @@ Infrared yang dipasang adalah tabung kuning **E18-D80NK**, muka ungu dengan dua 
 | LED hijau | anoda | 330 Ω → GPIO 22 / pin 15 |
 | LED merah | anoda | 330 Ω → GPIO 23 / pin 16 |
 | Buzzer | sinyal | GPIO 5 / pin 29 |
-| Servo 1 (putar 360°) | sinyal | GPIO 18 / pin 12, kabel 80 cm turun |
+| Servo 1 (pemilih jalur) | sinyal | GPIO 18 / pin 12, kabel 80 cm turun |
 | Servo 2 (miring atas-bawah) | sinyal | GPIO 13 / pin 33, kabel 80 cm turun |
+| TD8120MG dan MG996R | merah | +6,0 V catu rak bawah |
+| TD8120MG dan MG996R | cokelat | −V catu rak bawah |
 
 Kalau kabel sensor berwarna merah, hitam, dan kuning: merah = 5 V Pi, hitam = GND, kuning = OUT. OUT tetap lewat pembagi. Jangan menyambung VCC sensor ke catu servo.
 
@@ -140,7 +147,7 @@ Panjang di bawah sudah termasuk sedikit lebih untuk dilipat di ujung. Kabel 80 c
 | Fasa | 1 | 15 cm | 0,75 mm² | L soket, lewat sekring dan saklar, ke L catu |
 | Netral | 1 | 15 cm | 0,75 mm² | N soket ke N catu |
 | Bumi | 1 | 15 cm | 0,75 mm² | PE soket ke rangka logam, atau diisolasi |
-| 5 V servo | 2 | 20 cm | 0,75 mm² | +V catu ke merah tiap servo |
+| 6 V servo | 2 | 20 cm | 0,75 mm² | +6,0 V catu ke merah tiap servo |
 | GND servo | 2 | 20 cm | 0,75 mm² | −V catu ke cokelat tiap servo |
 
 ### Naik ke kotak atas
@@ -164,11 +171,11 @@ Satu Pi, satu set kabel.
 ## Urutan pasang
 
 1. Cabut PLN dan USB Pi.
-2. Ikat dua servo di tengah rak bawah dengan braket. Merah dan cokelat hanya ke catu 5 V.
+2. Setel catu ke 6,0 V dan ukur dulu. Ikat servo di tengah rak bawah. Merah dan cokelat hanya ke catu 6 V. TD8120MG mengganti MG996R yang rusak di konektor yang sama.
 3. Pasang soket AC. Fasa wajib lewat sekring dulu, baru saklar, baru ke catu. Tutup semua sambungan PLN sebelum kotak ditutup.
-4. Naikkan dua sinyal servo dan GND sepanjang 80 cm. Jangan naikkan 5 V catu ke kotak atas.
+4. Naikkan dua sinyal servo dan GND sepanjang 80 cm. Jangan naikkan 6 V catu ke kotak atas.
 5. Di kotak atas, solder pull-up dan pembagi kaki hitam, resistor LED, dan header pada PCB 2 × 8 cm. Baru kemudian colok ke Pi.
-6. Nyalakan USB Pi dulu. Catu 5 V bawah dinyalakan setelah Pi hidup.
+6. Nyalakan USB Pi dulu. Catu 6 V bawah dinyalakan setelah Pi hidup.
 7. Hentikan program sebelum melepas kabel.
 
 GPIO 17 dan GPIO 21 tidak disambung. Program masih membaca HC-SR04 sampai deteksi diganti ke kaki hitam infrared.

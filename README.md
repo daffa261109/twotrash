@@ -19,7 +19,7 @@ WS2812 dan IC buffer dihapus; TRIG HC-SR04 langsung 3,3 V dan ECHO tetap memakai
 Pola transfer PCB NEMA17 ada di [docs/pcb/README.md](docs/pcb/README.md).
 Alat yang terpasang masih wiring servo, sebelum motor NEMA17, di [docs/wiring.md](docs/wiring.md).
 Tidak ada rel 5 V AUX. OLED dan infrared E18-D80NK mengambil 5 V dari pin 2 dan pin 4 Pi.
-Servo mengambil 5 V dari catu di rak bawah, bukan dari pin 5 V Pi.
+Servo mengambil 6,0 V dari catu 5 A di rak bawah, bukan dari pin 5 V Pi. MG996R yang rusak diganti TD8120MG 180°.
 
 Preview dan sorter sekarang memilih **USB** secara default. Isi `.env` dengan
 `CAMERA_BACKEND=usb`, `CAMERA_DEVICE=/dev/video0`, dan `CAMERA_FPS=15` (atau path
@@ -38,7 +38,7 @@ dan penanganan FAULT belum diimplementasikan. Jumper JARM PCB baru harus tetap t
 | E18-D80NK | Hitam (OUT) | 4,7 kΩ ke 5 V Pi, lalu 2,2 kΩ → GPIO 27 / pin 13, 2,7 kΩ ke GND |
 | E18-D80NK | Biru | GND |
 | Servo | Sinyal | GPIO 18 / pin 12 dan GPIO 13 / pin 33, kabel 80 cm turun ke rak bawah |
-| Servo | Merah | +5 V catu di rak bawah, bukan pin 5 V Pi |
+| Servo TD8120MG / MG996R | Merah | +6,0 V catu 5 A di rak bawah, bukan pin 5 V Pi |
 | LED hijau / merah | Anoda | GPIO 22 / pin 15, GPIO 23 / pin 16 |
 | Buzzer | Sinyal | GPIO 5 / pin 29 |
 

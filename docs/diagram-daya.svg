@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1340" height="1010" viewBox="0 0 1340 1010">
 <rect width="1340" height="1010" fill="#ffffff"/>
-<text x="30" y="28" font-size="20" text-anchor="start" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">Diagram daya: PLN, catu 5 V, dua servo, dan kabel naik 80 cm ke kotak atas (1 Pi Zero)</text>
+<text x="30" y="28" font-size="20" text-anchor="start" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">Diagram daya: PLN, catu 6 V 5 A, dua servo, dan kabel naik 80 cm ke kotak atas (1 Pi Zero)</text>
 <rect x="500" y="50" width="780" height="320" rx="10" fill="#eef4ff" stroke="#5b7fb8" stroke-width="2" stroke-dasharray="8 6"/>
 <text x="516" y="76" font-size="15" text-anchor="start" fill="#34548a" font-weight="bold" font-family="Helvetica, Arial, sans-serif">KOTAK ATAS</text>
 <rect x="30" y="420" width="1270" height="460" rx="10" fill="#fff6e8" stroke="#c08a3a" stroke-width="2" stroke-dasharray="8 6"/>
@@ -20,8 +20,8 @@
 <polyline points="170,590 200,590" fill="none" stroke="#2a9d3f" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="170,590 200,590" fill="none" stroke="#e0a000" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 6"/>
 <rect x="400" y="490" width="170" height="130" rx="6" fill="#ffffff" stroke="#333333" stroke-width="2"/>
-<text x="485" y="518" font-size="15" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">Catu switching</text>
-<text x="485" y="538" font-size="15" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">5 V  5 A</text>
+<text x="485" y="518" font-size="15" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">Catu setel 5 A</text>
+<text x="485" y="538" font-size="15" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">6,0 V</text>
 <text x="408" y="524" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">L</text>
 <text x="408" y="559" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">N</text>
 <text x="408" y="594" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">PE</text>
@@ -42,14 +42,14 @@
 <circle cx="570" cy="580" r="5" fill="#222222" stroke="#333" stroke-width="2"/>
 <rect x="840" y="500" width="160" height="140" rx="6" fill="#ffffff" stroke="#333333" stroke-width="2"/>
 <text x="920" y="528" font-size="15" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">Servo 1</text>
-<text x="920" y="548" font-size="13" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">MG996R</text>
-<text x="920" y="570" font-size="13" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">putar 360°</text>
-<text x="920" y="588" font-size="12" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">pemilih jalur</text>
+<text x="920" y="548" font-size="13" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">6 V · 180°</text>
+<text x="920" y="570" font-size="13" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">pemilih jalur</text>
+<text x="920" y="588" font-size="12" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">GPIO 18</text>
 <text x="870" y="630" font-size="12" text-anchor="middle" fill="#d62728" font-weight="normal" font-family="Helvetica, Arial, sans-serif">merah</text>
 <text x="970" y="630" font-size="12" text-anchor="middle" fill="#8b5a2b" font-weight="normal" font-family="Helvetica, Arial, sans-serif">cokelat</text>
 <rect x="1030" y="500" width="160" height="140" rx="6" fill="#ffffff" stroke="#333333" stroke-width="2"/>
 <text x="1110" y="528" font-size="15" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">Servo 2</text>
-<text x="1110" y="548" font-size="13" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">MG996R</text>
+<text x="1110" y="548" font-size="13" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">6 V · 180°</text>
 <text x="1110" y="570" font-size="13" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">miring atas-bawah</text>
 <text x="1110" y="588" font-size="12" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">buang sampah</text>
 <text x="1060" y="630" font-size="12" text-anchor="middle" fill="#d62728" font-weight="normal" font-family="Helvetica, Arial, sans-serif">merah</text>
@@ -58,7 +58,7 @@
 <polyline points="650,760 1060,760" fill="none" stroke="#d62728" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="570,580 620,580 620,800" fill="none" stroke="#222222" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="620,800 1230,800" fill="none" stroke="#222222" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
-<text x="725" y="750" font-size="14" text-anchor="start" fill="#d62728" font-weight="bold" font-family="Helvetica, Arial, sans-serif" stroke="#ffffff" stroke-width="5" paint-order="stroke">+5 V (merah)</text>
+<text x="725" y="750" font-size="14" text-anchor="start" fill="#d62728" font-weight="bold" font-family="Helvetica, Arial, sans-serif" stroke="#ffffff" stroke-width="5" paint-order="stroke">+6 V (merah)</text>
 <text x="630" y="826" font-size="14" text-anchor="start" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif" stroke="#ffffff" stroke-width="5" paint-order="stroke">−V = GND bersama (hitam)</text>
 <polyline points="870,640 870,760" fill="none" stroke="#d62728" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 <circle cx="870" cy="760" r="5" fill="#d62728"/>
@@ -106,12 +106,12 @@
 <polyline points="1230,250 1230,800" fill="none" stroke="#222222" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 <circle cx="1230" cy="800" r="5" fill="#222222"/>
 <text x="790" y="412" font-size="14" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif" stroke="#ffffff" stroke-width="5" paint-order="stroke">↓ kabel naik 80 cm: 2 sinyal servo dan GND Pi ↓</text>
-<text x="46" y="780" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">Kedua servo menarik daya langsung dari catu bawah.</text>
+<text x="46" y="780" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">Kenop catu di 6,0 V. MG996R rusak diganti TD8120MG, konektor sama.</text>
 <text x="46" y="798" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">Pin 5 V Pi untuk OLED dan infrared, bukan untuk servo.</text>
 <text x="46" y="816" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">Pi hidup dari kabel USB sendiri.</text>
 <text x="40" y="905" font-size="16" text-anchor="start" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">Warna kabel</text>
 <polyline points="40,929 86,929" fill="none" stroke="#d62728" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
-<text x="98" y="934" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">+5 V catu</text>
+<text x="98" y="934" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">+6 V catu servo</text>
 <polyline points="40,953 86,953" fill="none" stroke="#222222" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 <text x="98" y="958" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">GND / −V catu</text>
 <polyline points="40,977 86,977" fill="none" stroke="#e0a000" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
