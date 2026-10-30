@@ -1,20 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1010" viewBox="0 0 1500 1010">
 <rect width="1500" height="1010" fill="#ffffff"/>
-<text x="30" y="28" font-size="20" text-anchor="start" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">Diagram sinyal kotak atas: 1 Pi Zero, OLED, E18-D80NK, LED, buzzer, 2 servo</text>
+<text x="30" y="28" font-size="20" text-anchor="start" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">Diagram sinyal kotak atas: 1 Pi Zero, OLED, HC-SR04, LED, buzzer, 2 servo</text>
 <rect x="600" y="60" width="260" height="880" rx="10" fill="#f3f3f3" stroke="#333" stroke-width="3"/>
 <text x="730.0" y="90" font-size="20" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">Raspberry Pi Zero</text>
 <circle cx="600" cy="120" r="5" fill="#d62728" stroke="#333" stroke-width="2"/>
 <text x="614" y="125" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">pin 2 · 5 V</text>
 <circle cx="600" cy="180" r="5" fill="#d62728" stroke="#333" stroke-width="2"/>
-<text x="614" y="185" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">pin 4 · 5 V · cokelat IR</text>
+<text x="614" y="185" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">pin 4 · 5 V · VCC HC</text>
 <circle cx="600" cy="260" r="5" fill="#3fa7e0" stroke="#333" stroke-width="2"/>
 <text x="614" y="265" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">pin 3 · GPIO 2 · SDA</text>
 <circle cx="600" cy="320" r="5" fill="#3fa7e0" stroke="#333" stroke-width="2"/>
 <text x="614" y="325" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">pin 5 · GPIO 3 · SCL</text>
 <circle cx="600" cy="390" r="5" fill="#2a9d3f" stroke="#333" stroke-width="2"/>
-<text x="614" y="395" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">pin 11 · GPIO 17 · kosong</text>
+<text x="614" y="395" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">pin 11 · GPIO 17 · TRIG</text>
 <circle cx="600" cy="460" r="5" fill="#2a9d3f" stroke="#333" stroke-width="2"/>
-<text x="614" y="465" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">pin 13 · GPIO 27 · lewat 1 kΩ</text>
+<text x="614" y="465" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">pin 13 · GPIO 27 · lewat 2,2 kΩ</text>
 <circle cx="600" cy="620" r="5" fill="#2a9d3f" stroke="#333" stroke-width="2"/>
 <text x="614" y="625" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">pin 15 · GPIO 22</text>
 <circle cx="600" cy="700" r="5" fill="#d62728" stroke="#333" stroke-width="2"/>
@@ -59,12 +59,12 @@
 <polyline points="123,355 137,355" fill="none" stroke="#222222" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="127,360 133,360" fill="none" stroke="#222222" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
 <rect x="70" y="362" width="200" height="170" rx="6" fill="#ffffff" stroke="#333333" stroke-width="2"/>
-<text x="170" y="388" font-size="16" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">E18-D80NK</text>
-<text x="170" y="408" font-size="12" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">tiga kabel, tanpa kabel keempat</text>
+<text x="170" y="388" font-size="16" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">HC-SR04</text>
+<text x="170" y="408" font-size="12" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">VCC, TRIG, ECHO, GND</text>
 <circle cx="70" cy="380" r="5" fill="#d62728" stroke="#333" stroke-width="2"/>
-<text x="80" y="376" font-size="12" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">cokelat · 5 V</text>
+<text x="80" y="376" font-size="12" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">VCC · 5 V</text>
 <circle cx="270" cy="460" r="5" fill="#111" stroke="#333" stroke-width="2"/>
-<text x="262" y="452" font-size="12" text-anchor="end" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">hitam</text>
+<text x="262" y="452" font-size="12" text-anchor="end" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">ECHO</text>
 <circle cx="130" cy="520" r="5" fill="#1f5fbf" stroke="#333" stroke-width="2"/>
 <text x="140" y="516" font-size="12" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">biru · GND</text>
 <polyline points="40,180 40,380 70,380" fill="none" stroke="#d62728" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
@@ -75,23 +75,22 @@
 <polyline points="127,557 133,557" fill="none" stroke="#222222" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
 <circle cx="310" cy="460" r="6" fill="#111"/>
 <polyline points="270,460 310,460" fill="none" stroke="#111" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
-<polyline points="310,460 310,348 40,348 40,180" fill="none" stroke="#d62728" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
-<rect x="278" y="392" width="64" height="18" rx="3" fill="#fff" stroke="#333" stroke-width="2"/>
-<text x="310" y="405" font-size="12" text-anchor="middle" fill="#9b1c1c" font-weight="bold" font-family="Helvetica, Arial, sans-serif">4,7 kΩ</text>
-<text x="352" y="406" font-size="12" text-anchor="start" fill="#9b1c1c" font-family="Helvetica, Arial, sans-serif">ujung atas ke pin 4</text>
+<polyline points="600,390 270,390" fill="none" stroke="#2a9d3f" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="270" cy="390" r="5" fill="#2a9d3f" stroke="#333" stroke-width="2"/>
+<text x="262" y="386" font-size="12" text-anchor="end" fill="#1c6a2c" font-weight="bold" font-family="Helvetica, Arial, sans-serif">TRIG</text>
 <polyline points="310,460 600,460" fill="none" stroke="#2a9d3f" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 <rect x="340" y="450" width="70" height="20" rx="3" fill="#fff" stroke="#333" stroke-width="2"/>
-<text x="375" y="444" font-size="13" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">1 kΩ</text>
+<text x="375" y="444" font-size="13" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">2,2 kΩ</text>
 <circle cx="520" cy="460" r="6" fill="#2a9d3f"/>
 <polyline points="520,460 520,500" fill="none" stroke="#2a9d3f" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 <rect x="500" y="508" width="58" height="20" rx="3" fill="#ffffff" stroke="#333" stroke-width="2"/>
-<text x="529" y="522" font-size="12" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">10 kΩ</text>
+<text x="529" y="522" font-size="12" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">2,7 kΩ</text>
 <polyline points="520,528 520,560" fill="none" stroke="#222222" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="520,560 520,570" fill="none" stroke="#222222" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="509,570 531,570" fill="none" stroke="#222222" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="513,575 527,575" fill="none" stroke="#222222" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
 <polyline points="517,580 523,580" fill="none" stroke="#222222" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-<text x="430" y="430" font-size="12" text-anchor="middle" fill="#1c6a2c" font-weight="normal" font-family="Helvetica, Arial, sans-serif" stroke="#ffffff" stroke-width="4" paint-order="stroke">1 kΩ ke pin 13 · titik itu 10 kΩ ke GND</text>
+<text x="430" y="430" font-size="12" text-anchor="middle" fill="#1c6a2c" font-weight="normal" font-family="Helvetica, Arial, sans-serif" stroke="#ffffff" stroke-width="4" paint-order="stroke">2,2 kΩ ke pin 13 · titik itu 2,7 kΩ ke GND</text>
 <rect x="260" y="598" width="120" height="44" rx="6" fill="#ffffff" stroke="#333333" stroke-width="2"/>
 <text x="320" y="618" font-size="14" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">LED hijau</text>
 <text x="320" y="636" font-size="11" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">anoda →</text>
@@ -173,7 +172,7 @@
 <polyline points="1000,652 1046,652" fill="none" stroke="#3fa7e0" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 <text x="1058" y="657" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">I²C (OLED)</text>
 <polyline points="1000,676 1046,676" fill="none" stroke="#2a9d3f" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
-<text x="1058" y="681" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">infrared dan LED hijau</text>
+<text x="1058" y="681" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">ECHO HC dan LED hijau</text>
 <polyline points="1000,700 1046,700" fill="none" stroke="#e0a000" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 <text x="1058" y="705" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">sinyal servo putar</text>
 <polyline points="1000,724 1046,724" fill="none" stroke="#e8731a" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>

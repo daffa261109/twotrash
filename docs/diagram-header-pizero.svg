@@ -5,7 +5,7 @@
 <rect x="70" y="84" width="960" height="760" rx="12" fill="#f7f7f5" stroke="#ccc"/>
 <g font-family="Helvetica, Arial, sans-serif" font-size="15">
 <g>
-<text x="150" y="118" fill="#b45309" font-weight="bold">pin 1</text><text x="230" y="118" fill="#111">3,3 V</text><text x="360" y="118" fill="#555">pull-up 10 k© infrared, kalau dipakai</text>
+<text x="150" y="118" fill="#b45309" font-weight="bold">pin 1</text><text x="230" y="118" fill="#111">3,3 V</text>
 <circle cx="210" cy="113" r="6" fill="#f59e0b"/>
 <text x="700" y="118" fill="#b91c1c" font-weight="bold">pin 2</text><text x="780" y="118" fill="#111">5 V</text><text x="860" y="118" fill="#555">OLED VCC</text>
 <circle cx="760" cy="113" r="6" fill="#dc2626"/>
@@ -13,7 +13,7 @@
 <g>
 <text x="150" y="154" fill="#1d4ed8" font-weight="bold">pin 3</text><text x="230" y="154" fill="#111">GPIO 2 SDA</text><text x="400" y="154" fill="#555">OLED</text>
 <circle cx="210" cy="149" r="6" fill="#2563eb"/>
-<text x="700" y="154" fill="#b91c1c" font-weight="bold">pin 4</text><text x="780" y="154" fill="#111">5 V</text><text x="860" y="154" fill="#555">infrared cokelat</text>
+<text x="700" y="154" fill="#b91c1c" font-weight="bold">pin 4</text><text x="780" y="154" fill="#111">5 V</text><text x="860" y="154" fill="#555">HC-SR04 VCC</text>
 <circle cx="760" cy="149" r="6" fill="#dc2626"/>
 </g>
 <g>
@@ -23,21 +23,22 @@
 <circle cx="760" cy="185" r="6" fill="#111"/>
 </g>
 <g>
-<text x="150" y="226" fill="#9ca3af">pin 7 · GPIO 4 kosong</text>
-<text x="700" y="226" fill="#9ca3af">pin 8 · GPIO 14 kosong</text>
+<text x="150" y="226" fill="#9ca3af">pin 7 Â· GPIO 4 kosong</text>
+<text x="700" y="226" fill="#9ca3af">pin 8 Â· GPIO 14 kosong</text>
 </g>
 <g>
 <text x="150" y="262" fill="#111" font-weight="bold">pin 9</text><text x="230" y="262">GND</text>
 <circle cx="210" cy="257" r="6" fill="#111"/>
-<text x="700" y="262" fill="#9ca3af">pin 10 · GPIO 15 kosong</text>
+<text x="700" y="262" fill="#9ca3af">pin 10 Â· GPIO 15 kosong</text>
 </g>
 <g>
-<text x="150" y="298" fill="#9ca3af">pin 11 · GPIO 17 kosong</text>
+<text x="150" y="298" fill="#15803d" font-weight="bold">pin 11</text><text x="230" y="298" fill="#111">GPIO 17</text><text x="340" y="298" fill="#166534">HC TRIG, langsung</text>
+<circle cx="210" cy="293" r="6" fill="#16a34a"/>
 <text x="700" y="298" fill="#b45309" font-weight="bold">pin 12</text><text x="790" y="298" fill="#111">GPIO 18</text><text x="890" y="298" fill="#9a3412">servo 1, langsung</text>
 <circle cx="770" cy="293" r="6" fill="#d97706"/>
 </g>
 <g>
-<text x="150" y="334" fill="#15803d" font-weight="bold">pin 13</text><text x="230" y="334" fill="#111">GPIO 27</text><text x="340" y="334" fill="#166534">infrared hitam</text>
+<text x="150" y="334" fill="#15803d" font-weight="bold">pin 13</text><text x="230" y="334" fill="#111">GPIO 27</text><text x="340" y="334" fill="#166534">HC ECHO, lewat 2,2 kÎ©</text>
 <circle cx="210" cy="329" r="6" fill="#16a34a"/>
 <text x="700" y="334" fill="#111" font-weight="bold">pin 14</text><text x="790" y="334">GND</text>
 <circle cx="770" cy="329" r="6" fill="#111"/>
@@ -49,30 +50,30 @@
 <circle cx="770" cy="365" r="6" fill="#dc2626"/>
 </g>
 <g>
-<text x="150" y="406" fill="#b45309">pin 17 · 3,3 V</text>
-<text x="700" y="406" fill="#9ca3af">pin 18 · GPIO 24 kosong</text>
+<text x="150" y="406" fill="#b45309">pin 17 Â· 3,3 V</text>
+<text x="700" y="406" fill="#9ca3af">pin 18 Â· GPIO 24 kosong</text>
 </g>
 <g>
-<text x="150" y="442" fill="#9ca3af">pin 19 · GPIO 10 kosong</text>
+<text x="150" y="442" fill="#9ca3af">pin 19 Â· GPIO 10 kosong</text>
 <text x="700" y="442" fill="#111" font-weight="bold">pin 20</text><text x="790" y="442">GND</text>
 <circle cx="770" cy="437" r="6" fill="#111"/>
 </g>
 <g>
-<text x="150" y="478" fill="#9ca3af">pin 21 · GPIO 9 kosong</text>
-<text x="700" y="478" fill="#9ca3af">pin 22 · GPIO 25 kosong</text>
+<text x="150" y="478" fill="#9ca3af">pin 21 Â· GPIO 9 kosong</text>
+<text x="700" y="478" fill="#9ca3af">pin 22 Â· GPIO 25 kosong</text>
 </g>
 <g>
-<text x="150" y="514" fill="#9ca3af">pin 23 · GPIO 11 kosong</text>
-<text x="700" y="514" fill="#9ca3af">pin 24 · GPIO 8 kosong</text>
+<text x="150" y="514" fill="#9ca3af">pin 23 Â· GPIO 11 kosong</text>
+<text x="700" y="514" fill="#9ca3af">pin 24 Â· GPIO 8 kosong</text>
 </g>
 <g>
 <text x="150" y="550" fill="#111" font-weight="bold">pin 25</text><text x="240" y="550">GND</text>
 <circle cx="210" cy="545" r="6" fill="#111"/>
-<text x="700" y="550" fill="#9ca3af">pin 26 · GPIO 7 kosong</text>
+<text x="700" y="550" fill="#9ca3af">pin 26 Â· GPIO 7 kosong</text>
 </g>
 <g>
-<text x="150" y="586" fill="#9ca3af">pin 27 · GPIO 0 kosong</text>
-<text x="700" y="586" fill="#9ca3af">pin 28 · GPIO 1 kosong</text>
+<text x="150" y="586" fill="#9ca3af">pin 27 Â· GPIO 0 kosong</text>
+<text x="700" y="586" fill="#9ca3af">pin 28 Â· GPIO 1 kosong</text>
 </g>
 <g>
 <text x="150" y="622" fill="#111" font-weight="bold">pin 29</text><text x="230" y="622" fill="#111">GPIO 5</text><text x="330" y="622" fill="#333">buzzer</text>
@@ -81,8 +82,8 @@
 <circle cx="770" cy="617" r="6" fill="#111"/>
 </g>
 <g>
-<text x="150" y="658" fill="#9ca3af">pin 31 · GPIO 6 kosong</text>
-<text x="700" y="658" fill="#9ca3af">pin 32 · GPIO 12 kosong</text>
+<text x="150" y="658" fill="#9ca3af">pin 31 Â· GPIO 6 kosong</text>
+<text x="700" y="658" fill="#9ca3af">pin 32 Â· GPIO 12 kosong</text>
 </g>
 <g>
 <text x="150" y="694" fill="#b45309" font-weight="bold">pin 33</text><text x="230" y="694" fill="#111">GPIO 13</text><text x="340" y="694" fill="#9a3412">servo 2, langsung</text>
@@ -91,17 +92,17 @@
 <circle cx="770" cy="689" r="6" fill="#111"/>
 </g>
 <g>
-<text x="150" y="730" fill="#9ca3af">pin 35 · GPIO 19 kosong</text>
-<text x="700" y="730" fill="#9ca3af">pin 36 · GPIO 16 kosong</text>
+<text x="150" y="730" fill="#9ca3af">pin 35 Â· GPIO 19 kosong</text>
+<text x="700" y="730" fill="#9ca3af">pin 36 Â· GPIO 16 kosong</text>
 </g>
 <g>
-<text x="150" y="766" fill="#9ca3af">pin 37 · GPIO 26 kosong</text>
-<text x="700" y="766" fill="#9ca3af">pin 38 · GPIO 20 kosong</text>
+<text x="150" y="766" fill="#9ca3af">pin 37 Â· GPIO 26 kosong</text>
+<text x="700" y="766" fill="#9ca3af">pin 38 Â· GPIO 20 kosong</text>
 </g>
 <g>
 <text x="150" y="802" fill="#111" font-weight="bold">pin 39</text><text x="240" y="802">GND</text>
 <circle cx="210" cy="797" r="6" fill="#111"/>
-<text x="700" y="802" fill="#9ca3af">pin 40 · GPIO 21 kosong</text>
+<text x="700" y="802" fill="#9ca3af">pin 40 Â· GPIO 21 kosong</text>
 </g>
 </g>
 <text x="40" y="880" font-size="16" font-weight="bold" font-family="Helvetica, Arial, sans-serif" fill="#111">Yang tidak lewat header</text>

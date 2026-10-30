@@ -70,16 +70,16 @@
 <circle cx="1160" cy="800" r="5" fill="#8b5a2b"/>
 <text x="510" y="110" font-size="15" text-anchor="start" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">Kotak atas (1 Pi Zero)</text>
 <rect x="640" y="150" width="150" height="130" rx="6" fill="#ffffff" stroke="#333333" stroke-width="2"/>
-<text x="715" y="185" font-size="15" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">E18-D80NK</text>
-<text x="715" y="205" font-size="13" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">infrared</text>
+<text x="715" y="185" font-size="15" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">HC-SR04</text>
+<text x="715" y="205" font-size="13" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">ultrasonik</text>
 <text x="715" y="225" font-size="12" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">5 V dari pin 4 Pi</text>
 <text x="670" y="272" font-size="12" text-anchor="middle" fill="#d62728" font-weight="normal" font-family="Helvetica, Arial, sans-serif">5 V Pi</text>
 <text x="710" y="272" font-size="12" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">GND</text>
-<text x="783" y="250" font-size="12" text-anchor="end" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">OUT</text>
+<text x="783" y="250" font-size="12" text-anchor="end" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">ECHO</text>
 <circle cx="790" cy="215" r="5" fill="#ffffff" stroke="#333" stroke-width="2"/>
 <polyline points="790,215 900,215" fill="none" stroke="#7b3fc4" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
 <rect x="825" y="205" width="46" height="20" rx="3" fill="#fff" stroke="#333" stroke-width="2"/>
-<text x="848.0" y="199" font-size="13" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif" stroke="#ffffff" stroke-width="5" paint-order="stroke">1 kΩ</text>
+<text x="848.0" y="199" font-size="13" text-anchor="middle" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif" stroke="#ffffff" stroke-width="5" paint-order="stroke">2,2 kΩ</text>
 <circle cx="670" cy="280" r="5" fill="#d62728" stroke="#333" stroke-width="2"/>
 <circle cx="710" cy="280" r="5" fill="#222222" stroke="#333" stroke-width="2"/>
 <rect x="900" y="130" width="190" height="160" rx="6" fill="#ffffff" stroke="#333333" stroke-width="2"/>
@@ -107,7 +107,7 @@
 <circle cx="1230" cy="800" r="5" fill="#222222"/>
 <text x="790" y="412" font-size="14" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif" stroke="#ffffff" stroke-width="5" paint-order="stroke">↓ kabel naik 80 cm: 2 sinyal servo dan GND Pi ↓</text>
 <text x="46" y="780" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">Kenop catu di 6,0 V. MG996R rusak diganti TD8120MG, konektor sama.</text>
-<text x="46" y="798" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">Pin 5 V Pi untuk OLED dan infrared, bukan untuk servo.</text>
+<text x="46" y="798" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">Pin 5 V Pi untuk OLED dan HC-SR04, bukan untuk servo.</text>
 <text x="46" y="816" font-size="13" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">Pi hidup dari kabel USB sendiri.</text>
 <text x="40" y="905" font-size="16" text-anchor="start" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">Warna kabel</text>
 <polyline points="40,929 86,929" fill="none" stroke="#d62728" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
@@ -126,7 +126,7 @@
 <polyline points="420,977 466,977" fill="none" stroke="#2a9d3f" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
 <text x="478" y="982" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">PE (hijau-kuning)</text>
 <polyline points="420,1001 466,1001" fill="none" stroke="#7b3fc4" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
-<text x="478" y="1006" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">OUT infrared, GPIO 27</text>
+<text x="478" y="1006" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">ECHO HC, GPIO 27</text>
 <text x="900" y="925" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">Hop ◠ = kabel melompati kabel lain, tidak tersambung.</text>
 <text x="900" y="947" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">Titik hitam/merah = sambungan ke bus daya.</text>
 </svg>

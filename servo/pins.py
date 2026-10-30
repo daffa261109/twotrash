@@ -6,14 +6,13 @@ Nomor physical mengikuti header 40 pin Pi Zero; jangan aktifkan JARM dengan driv
 OLED_SDA_PIN = 2
 OLED_SCL_PIN = 3
 
-# HC-SR04 tidak ada pada wiring sekarang. Konstanta ini tetap ada karena
-# program masih mengukur jarak ultrasonik di pin yang sama.
-TRIG_PIN = 17  # physical pin 11, tidak disambung
+# HC-SR04. VCC ke 5 V Pi pin 4, GND ke GND.
+# TRIG langsung. ECHO lewat 2,2 kΩ ke pin ini, lalu 2,7 kΩ ke GND.
+TRIG_PIN = 17  # physical pin 11
 ECHO_PIN = 27  # physical pin 13
 
-# E18-D80NK. Cokelat ke 5 V Pi pin 4, biru ke GND.
-# Hitam (OUT, LOW saat ada benda) lewat 4,7 kΩ ke 5 V lalu pembagi 1 kΩ / 10 kΩ.
-IR_OUT_PIN = 27  # physical pin 13, pin yang sama dengan ECHO_PIN
+# Bekas uji E18. Pin yang sama dengan ECHO; jangan dipakai bersamaan dengan HC.
+IR_OUT_PIN = 27
 
 # Kabel sinyal. Daya merah dari catu 6,0 V 5 A di rak bawah, bukan pin 5 V Pi.
 # MG996R yang rusak diganti TD8120MG 20 kg, 180°. Pulsa tetap 500–2500 µs.

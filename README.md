@@ -18,7 +18,7 @@ PCB TT-PZ2 memakai Pi Zero langsung ke dua DRV8825, tanpa Nano.
 WS2812 dan IC buffer dihapus; TRIG HC-SR04 langsung 3,3 V dan ECHO tetap memakai pembagi resistor.
 Pola transfer PCB NEMA17 ada di [docs/pcb/README.md](docs/pcb/README.md).
 Alat yang terpasang masih wiring servo, sebelum motor NEMA17, di [docs/wiring.md](docs/wiring.md).
-Tidak ada rel 5 V AUX. OLED dan infrared E18-D80NK mengambil 5 V dari pin 2 dan pin 4 Pi.
+Tidak ada rel 5 V AUX. OLED dan HC-SR04 mengambil 5 V dari pin 2 dan pin 4 Pi.
 Servo mengambil 6,0 V dari catu 5 A di rak bawah, bukan dari pin 5 V Pi. MG996R yang rusak diganti TD8120MG 180°.
 
 Preview dan sorter sekarang memilih **USB** secara default. Isi `.env` dengan
@@ -34,9 +34,9 @@ dan penanganan FAULT belum diimplementasikan. Jumper JARM PCB baru harus tetap t
 | --- | --- | --- |
 | OLED | VCC | 5 V Pi, pin 2 |
 | OLED | SDA / SCL | GPIO 2 / pin 3, GPIO 3 / pin 5 |
-| E18-D80NK | Cokelat (VCC) | 5 V Pi, pin 4 |
-| E18-D80NK | Hitam (OUT) | 4,7 kΩ ke cokelat / 5 V, lalu 1 kΩ → GPIO 27 / pin 13, 10 kΩ ke GND |
-| E18-D80NK | Biru | GND |
+| HC-SR04 | VCC | 5 V Pi, pin 4 |
+| HC-SR04 | TRIG | GPIO 17 / pin 11, langsung |
+| HC-SR04 | ECHO | 2,2 kΩ → GPIO 27 / pin 13, lalu 2,7 kΩ ke GND |
 | Servo | Sinyal | GPIO 18 / pin 12 dan GPIO 13 / pin 33, kabel 80 cm turun ke rak bawah |
 | Servo TD8120MG / MG996R | Merah | +6,0 V catu 5 A di rak bawah, bukan pin 5 V Pi |
 | LED hijau / merah | Anoda | GPIO 22 / pin 15, GPIO 23 / pin 16 |
