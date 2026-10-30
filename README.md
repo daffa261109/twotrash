@@ -73,7 +73,7 @@ sudo ./install.sh
 sudo reboot
 ```
 
-Setelah reboot, pemilah menyala sendiri. `station.txt` menentukan flap Pi itu. Cek statusnya dengan:
+Setelah reboot, pemilah menyala sendiri. Buzzer GPIO 5 ikut dimatikan sejak boot, supaya tidak bunyi terus saat Pi baru dinyalakan. `station.txt` menentukan flap Pi itu. Cek statusnya dengan:
 
 ```bash
 systemctl status trash2trace

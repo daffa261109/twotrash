@@ -48,6 +48,7 @@ EOF
 
 systemctl daemon-reload
 systemctl enable trash2trace.service
+bash "${ROOT}/scripts/buzzer_mati.sh"
 if [[ ! -f "${ROOT}/.env" ]]; then
   cp "${ROOT}/.env.example" "${ROOT}/.env"
   chown "${RUN_USER}" "${ROOT}/.env"
