@@ -18,9 +18,8 @@ from trash2trace.servo_driver import StableServo, connect_pigpio, run_sort
 from trash2trace.settings import (
     CAMERA_SIZE,
     CAPTURE_DIR,
-    CLEAR_DISTANCE_M,
-    DETECT_MAX_M,
-    DETECT_MIN_M,
+    is_barang,
+    is_penampang,
     FRAME_GAP_S,
     FRAMES_PER_DECISION,
     MOVE_FLAP,
@@ -100,11 +99,11 @@ class Sorter:
         while self.running:
             self._check_network()
             distance_m = self.distance.distance
-            ada_barang = DETECT_MIN_M <= distance_m <= DETECT_MAX_M
+            ada_barang = is_barang(distance_m)
             if ada_barang:
                 self._lamp_hold = True
                 self._clear_streak = 0
-            elif distance_m > CLEAR_DISTANCE_M:
+            elif is_penampang(distance_m):
                 self._lamp_hold = False
                 if not self._armed:
                     self._clear_streak += 1
@@ -131,7 +130,7 @@ class Sorter:
 
     def _item_arrived(self) -> bool:
         distance_m = self.distance.distance
-        return self._armed and DETECT_MIN_M <= distance_m <= DETECT_MAX_M
+        return self._armed and is_barang(distance_m)
 
     def _sort_one_item(self, distance_m: float) -> None:
         self._armed = False
@@ -139,7 +138,7 @@ class Sorter:
         time.sleep(0.12)
         kedua_cm = self.distance.distance * 100
         print(f"[HC] {self.station.title} barang: {pertama_cm:.1f} cm, {kedua_cm:.1f} cm")
-        if self.distance.distance > CLEAR_DISTANCE_M:
+        if is_penampang(self.distance.distance):
             self._show_idle()
             return
         seconds = max(1, math.ceil(PLACE_WAIT_S))
@@ -171,8 +170,8 @@ class Sorter:
         while self.running:
             left = deadline - time.monotonic()
             if left <= 0:
-                return self.distance.distance > CLEAR_DISTANCE_M
-            if self.distance.distance > CLEAR_DISTANCE_M:
+                return is_penampang(self.distance.distance)
+            if is_penampang(self.distance.distance):
                 return True
             seconds = max(1, math.ceil(left))
             self.monitor.waiting(seconds)
@@ -238,7 +237,7 @@ class Sorter:
         run_sort(self.servo, self.tilt, label)
 
     def _wait_until_clear(self) -> None:
-        while self.running and self.distance.distance < CLEAR_DISTANCE_M:
+        while self.running and not is_penampang(self.distance.distance):
             time.sleep(0.08)
 
     def _preview_due(self) -> bool:

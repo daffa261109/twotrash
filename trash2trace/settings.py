@@ -17,10 +17,6 @@ MOVE_FLAP = False
 
 CAMERA_SIZE = (640, 480)  # USB MJPEG; unggahan API tetap dikecilkan terpisah.
 MIN_CONFIDENCE = 0.60
-# HC-SR04 dekat sering membaca sedikit di atas 3 cm. Pemicu 1–6 cm.
-DETECT_MIN_M = 0.01
-DETECT_MAX_M = 0.06
-CLEAR_DISTANCE_M = 0.10
 SETTLE_AFTER_DETECT_S = 0.18
 # Setelah HC melihat sampah, layar menghitung mundur selama ini baru foto dikirim.
 PLACE_WAIT_S = 3.0
@@ -149,3 +145,21 @@ SERVO1_ANGLES = {
     "other": SERVO1_LAINNYA,
 }
 SORT_ANGLES = dict(SERVO1_ANGLES)
+
+# Jarak dalam sentimeter. 56–58 cm = penampang kosong. Lebih dekat dari itu = ada barang.
+HC_BARANG_MIN_M = _env_float("HC_BARANG_MIN", 2.0) / 100.0
+HC_PENAMPANG_MIN_M = _env_float("HC_PENAMPANG_MIN", 56.0) / 100.0
+HC_PENAMPANG_MAX_M = _env_float("HC_PENAMPANG_MAX", 58.0) / 100.0
+DETECT_MIN_M = HC_BARANG_MIN_M
+DETECT_MAX_M = HC_PENAMPANG_MIN_M
+CLEAR_DISTANCE_M = HC_PENAMPANG_MIN_M
+
+
+def is_penampang(distance_m: float) -> bool:
+    """Hanya penampang kosong, tanpa sampah di atasnya."""
+    return HC_PENAMPANG_MIN_M <= distance_m <= HC_PENAMPANG_MAX_M
+
+
+def is_barang(distance_m: float) -> bool:
+    """Benda di depan penampang: lebih dekat dari batas penampang."""
+    return HC_BARANG_MIN_M <= distance_m < HC_PENAMPANG_MIN_M

@@ -34,7 +34,14 @@ sys.path.insert(0, str(ROOT))
 from gpiozero import Buzzer, Device, LED
 
 from trash2trace.servo_driver import StableServo, connect_pigpio, geser, run_sort, sort_plan
-from trash2trace.settings import CLEAR_DISTANCE_M, DETECT_MAX_M, DETECT_MIN_M, TILT_DOWN_DEG
+from trash2trace.settings import (
+    HC_BARANG_MIN_M,
+    HC_PENAMPANG_MAX_M,
+    HC_PENAMPANG_MIN_M,
+    TILT_DOWN_DEG,
+    is_barang,
+    is_penampang,
+)
 from servo.pins import (
     BUZZER_PIN,
     ECHO_PIN,
@@ -66,12 +73,13 @@ def test_buzzer() -> None:
 
 
 def hc_status(jarak_cm: float) -> str:
-    """Sama dengan pemilah: 1–6 cm ada barang, di atas 10 cm kosong."""
-    if DETECT_MIN_M * 100 <= jarak_cm <= DETECT_MAX_M * 100:
+    """56–58 cm hanya penampang. Lebih dekat dari itu ada barang."""
+    jarak_m = jarak_cm / 100.0
+    if is_penampang(jarak_m):
+        return "PENAMPANG"
+    if is_barang(jarak_m):
         return "ADA BARANG"
-    if jarak_cm > CLEAR_DISTANCE_M * 100:
-        return "KOSONG"
-    return "ANTARA"
+    return "LAIN"
 
 
 def _jarak_hc_cm(pi, timeout_us: int = 26000) -> float | None:
@@ -114,8 +122,8 @@ def test_hc() -> None:
     print("HC-SR04, TRIG GPIO 17 / pin 11, ECHO GPIO 27 / pin 13. Ctrl+C berhenti.")
     print("Jarak diukur sampai sekitar 400 cm. Angka 12–13 cm berarti gema benar-benar dari situ.")
     print(
-        f"ADA BARANG {DETECT_MIN_M * 100:.0f}–{DETECT_MAX_M * 100:.0f} cm. "
-        f"KOSONG di atas {CLEAR_DISTANCE_M * 100:.0f} cm."
+        f"PENAMPANG {HC_PENAMPANG_MIN_M * 100:.0f}–{HC_PENAMPANG_MAX_M * 100:.0f} cm. "
+        f"ADA BARANG {HC_BARANG_MIN_M * 100:.0f} cm sampai di bawah {HC_PENAMPANG_MIN_M * 100:.0f} cm."
     )
     pi = connect_pigpio()
     if pi is None:
