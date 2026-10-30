@@ -184,15 +184,19 @@ def _test_servo(
 
 
 def test_servo1() -> None:
-    print("Servo 1 ke 60° saat tes dinyalakan, sinyal GPIO 18 / pin 12.")
-    print("Posisi ditahan di 60°. Ctrl+C berhenti. Catu 6 V dinyalakan setelah Pi hidup.")
+    print("Servo 1 ke 180°, jeda 5 detik, lalu kembali ke 60°. Sinyal GPIO 18 / pin 12.")
+    print("Posisi akhir ditahan di 60°. Ctrl+C berhenti. Catu 6 V dinyalakan setelah Pi hidup.")
     pi = connect_pigpio()
     if pi is None:
         return
-    servo = StableServo(pi, SERVO_PIN)
+    # 60° tetap di pulsa yang sama. 180° adalah ujung perjalanan, 2500 µs.
+    servo = StableServo(pi, SERVO_PIN, min_angle=-90, max_angle=180, min_us=1000, max_us=2500)
     try:
+        servo.angle = 180
+        print("  180°, tunggu 5 detik")
+        time.sleep(5)
         servo.angle = 60
-        print("  60°")
+        print("  kembali ke 60°")
         while True:
             time.sleep(0.5)
     except KeyboardInterrupt:
