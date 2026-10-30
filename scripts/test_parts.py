@@ -184,18 +184,20 @@ def _test_servo(
 
 
 def test_servo1() -> None:
-    print("Servo 1 ke -90°, jeda 5 detik, lalu kembali ke 60°. Sinyal GPIO 18 / pin 12.")
+    print("Servo 1 pelan ke -90°, jeda 5 detik, lalu pelan kembali ke 60°. Sinyal GPIO 18 / pin 12.")
     print("Posisi akhir ditahan di 60°. Ctrl+C berhenti. Catu 6 V dinyalakan setelah Pi hidup.")
     pi = connect_pigpio()
     if pi is None:
         return
     servo = StableServo(pi, SERVO_PIN)
     try:
-        servo.angle = -90
+        servo.angle = 60
+        print("  dari 60° pelan ke -90°")
+        _geser(servo, -90)
         print("  -90°, tunggu 5 detik")
         time.sleep(5)
-        servo.angle = 60
-        print("  kembali ke 60°")
+        print("  pelan kembali ke 60°")
+        _geser(servo, 60)
         while True:
             time.sleep(0.5)
     except KeyboardInterrupt:
@@ -249,10 +251,13 @@ def _test_urut(arah: str, sudut: float, turun: float) -> None:
     print("Selesai.")
 
 
-def _geser(servo: StableServo, target: float, detik: float = 2.0) -> None:
-    """Pindah pelan, derajat demi derajat, supaya tidak loncat."""
+def _geser(servo: StableServo, target: float, detik: float | None = None) -> None:
+    """Pindah pelan, derajat demi derajat, supaya tidak loncat. Sekitar 45° per detik."""
     start = 60.0 if servo.angle is None else servo.angle
-    steps = max(1, int(round(abs(target - start))))
+    jarak = abs(target - start)
+    steps = max(1, int(round(jarak)))
+    if detik is None:
+        detik = jarak / 45.0
     pause = detik / steps
     for step in range(1, steps + 1):
         servo.angle = start + (target - start) * step / steps
