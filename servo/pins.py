@@ -12,7 +12,7 @@ TRIG_PIN = 17  # physical pin 11, tidak disambung
 ECHO_PIN = 27  # physical pin 13
 
 # E18-D80NK. Cokelat ke 5 V Pi pin 4, biru ke GND.
-# Hitam (OUT, LOW saat ada benda) lewat 4,7 kΩ ke 5 V lalu pembagi 2,2 kΩ / 2,7 kΩ.
+# Hitam (OUT, LOW saat ada benda) lewat 4,7 kΩ ke 5 V lalu pembagi 1 kΩ / 10 kΩ.
 IR_OUT_PIN = 27  # physical pin 13, pin yang sama dengan ECHO_PIN
 
 # Kabel sinyal. Daya merah dari catu 6,0 V 5 A di rak bawah, bukan pin 5 V Pi.

@@ -439,14 +439,14 @@
 <rect x="229.0" y="408.0" width="6" height="24" fill="#d62728"/>
 <rect x="241.0" y="408.0" width="6" height="24" fill="#d62728"/>
 <rect x="263.0" y="408.0" width="6" height="24" fill="#d4af37"/>
-<text x="240.0" y="400" font-size="14" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif" stroke="#ffffff" stroke-width="5" paint-order="stroke">2,2 kΩ</text>
+<text x="240.0" y="400" font-size="14" text-anchor="middle" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif" stroke="#ffffff" stroke-width="5" paint-order="stroke">1 kΩ</text>
 <polyline points="300,420 300,540" fill="none" stroke="#8a8a8a" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
 <rect x="288.0" y="438.0" width="24" height="84" rx="10" fill="#d9b98c" stroke="#7a5c2e" stroke-width="2"/>
 <rect x="288.0" y="457.0" width="24" height="6" fill="#d62728"/>
 <rect x="288.0" y="469.0" width="24" height="6" fill="#8a2be2"/>
 <rect x="288.0" y="481.0" width="24" height="6" fill="#d62728"/>
 <rect x="288.0" y="503.0" width="24" height="6" fill="#d4af37"/>
-<text x="322" y="465" font-size="14" text-anchor="start" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif" stroke="#ffffff" stroke-width="5" paint-order="stroke">2,7 kΩ</text>
+<text x="322" y="465" font-size="14" text-anchor="start" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif" stroke="#ffffff" stroke-width="5" paint-order="stroke">10 kΩ</text>
 <polyline points="420,420 540,420" fill="none" stroke="#8a8a8a" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
 <rect x="438.0" y="408.0" width="84" height="24" rx="10" fill="#d9b98c" stroke="#7a5c2e" stroke-width="2"/>
 <rect x="457.0" y="408.0" width="6" height="24" fill="#f28c28"/>
@@ -526,10 +526,10 @@
 <text x="40" y="828" font-size="14" text-anchor="start" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">Resistor</text>
 <text x="330" y="828" font-size="14" text-anchor="start" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">Lubang</text>
 <text x="470" y="828" font-size="14" text-anchor="start" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">Sambungan</text>
-<text x="40" y="854" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">2,2 kΩ (merah-merah-merah)</text>
+<text x="40" y="854" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">1 kΩ (cokelat-hitam-merah)</text>
 <text x="330" y="854" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">C2 ↔ C5</text>
 <text x="470" y="854" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">OUT infrared masuk di C2. Simpul C5 ke Pi pin 13.</text>
-<text x="40" y="878" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">2,7 kΩ (merah-ungu-merah)</text>
+<text x="40" y="878" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">10 kΩ (cokelat-hitam-hitam-merah)</text>
 <text x="330" y="878" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">C5 ↕ F5</text>
 <text x="470" y="878" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">Berdiri dari simpul C5 ke jalur GND.</text>
 <text x="40" y="902" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">330 Ω (oranye-oranye-cokelat)</text>
@@ -544,7 +544,7 @@
 <text x="40" y="1000" font-size="17" text-anchor="start" fill="#111" font-weight="bold" font-family="Helvetica, Arial, sans-serif">Cara pasang</text>
 <text x="40" y="1026" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">• Baris A dan baris F diikat dengan satu kawat telanjang di sisi solder dari kolom 1 sampai 28.</text>
 <text x="40" y="1048" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">• Kaki resistor dan kawat dari Pi disolder di lubang yang sama, atau di lubang tetangga lalu dijembatani solder.</text>
-<text x="40" y="1070" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">• Pembagi OUT: 4,7 kΩ ke 5 V, 2,2 kΩ ke pin 13, 2,7 kΩ ke GND. Sekitar 2,75 V saat kosong.</text>
+<text x="40" y="1070" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">• Pembagi OUT: 4,7 kΩ ke 5 V, 1 kΩ ke pin 13, 10 kΩ ke GND. Sekitar 3,2 V saat kosong.</text>
 <text x="40" y="1092" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">• Jalur 5 V Pi untuk VCC OLED dan infrared. Jangan sambung ke catu servo.</text>
 <text x="40" y="1114" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">• Kabel merah servo datang langsung dari catu bawah, tidak lewat papan ini.</text>
 <text x="40" y="1136" font-size="14" text-anchor="start" fill="#111" font-weight="normal" font-family="Helvetica, Arial, sans-serif">• SDA dan SCL OLED, dan buzzer (pin 29) langsung ke Pi. Pin 11 dan pin 40 kosong.</text>

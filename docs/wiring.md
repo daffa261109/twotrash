@@ -24,6 +24,10 @@ Diagram sinyal: sambungan tiap pin Pi Zero ke OLED, infrared E18-D80NK, LED, buz
 
 ![Diagram sinyal](diagram-sinyal.svg)
 
+Header 40 pin, urutan sama dengan pinout Pi Zero. Pin 1 adalah 3,3 V di ujung dekat kartu SD. Kabel oranye kedua servo masuk langsung, tanpa resistor.
+
+![Header Pi Zero](diagram-header-pizero.svg)
+
 ## Rak bawah
 
 Dari kiri ke kanan: soket AC, catu servo 6 V 5 A, lalu dua servo di tengah.
@@ -63,12 +67,14 @@ Infrared yang dipasang adalah tabung kuning **E18-D80NK**, muka ungu dengan dua 
 | OLED | SCL | GPIO 3 / pin 5 |
 | E18-D80NK | cokelat (VCC) | 5 V Pi (pin 4) |
 | E18-D80NK | biru (GND) | GND |
-| E18-D80NK | hitam (OUT) | 4,7 kΩ ke 5 V Pi, lalu 2,2 kΩ → GPIO 27 / pin 13, dan 2,7 kΩ ke GND |
+| E18-D80NK | hitam ke cokelat | 4,7 kΩ, sudah terpasang, ke 5 V Pi pin 4 |
+| E18-D80NK | dari titik hitam | 1 kΩ menuju GPIO 27 / pin 13 |
+| E18-D80NK | di kaki pin 13 | 10 kΩ turun ke GND |
 | LED hijau | anoda | 330 Ω → GPIO 22 / pin 15 |
 | LED merah | anoda | 330 Ω → GPIO 23 / pin 16 |
 | Buzzer | sinyal | GPIO 5 / pin 29 |
-| Servo 1 (pemilih jalur) | sinyal | GPIO 18 / pin 12, kabel 80 cm turun |
-| Servo 2 (miring atas-bawah) | sinyal | GPIO 13 / pin 33, kabel 80 cm turun |
+| Servo 1 (pemilih jalur) | oranye, tanpa resistor | GPIO 18 / pin 12, kabel 80 cm turun |
+| Servo 2 (miring atas-bawah) | oranye, tanpa resistor | GPIO 13 / pin 33, kabel 80 cm turun |
 | TD8120MG dan MG996R | merah | +6,0 V catu rak bawah |
 | TD8120MG dan MG996R | cokelat | −V catu rak bawah |
 
@@ -92,8 +98,8 @@ Ground memang berkumpul di jalur GND pada PCB ini. Satu kawat dari situ ke pin G
 Urutan dari kiri ke kanan pada papan:
 
 1. Header dupont ke Pi.
-2. Pull-up 4,7 kΩ dari jalur 5 V Pi ke kaki hitam infrared.
-3. Pembagi OUT: 2,2 kΩ lalu 2,7 kΩ. Ujung bawah 2,7 kΩ ke jalur GND.
+2. Pull-up 4,7 kΩ dari jalur 5 V Pi ke kaki hitam infrared. Yang sudah terpasang dibiarkan.
+3. Pembagi OUT: 1 kΩ lalu 10 kΩ. Ujung bawah 10 kΩ ke jalur GND.
 4. Dua resistor 330 Ω untuk LED hijau dan LED merah. Katoda LED ke jalur GND.
 5. Buzzer, kaki negatif ke jalur GND.
 6. Di ujung kanan, header untuk kabel 80 cm: dua sinyal servo dan GND.
@@ -108,15 +114,15 @@ Versi ini memakai papan dengan 6 baris (A sampai F) dan 28 kolom. Baris A jadi j
 
 | Resistor | Lubang | Sambungan |
 | --- | --- | --- |
-| 4,7 kΩ | A2 ↕ C2 | Dari jalur 5 V Pi ke kaki hitam infrared |
-| 2,2 kΩ | C2 ↔ C5 | Kaki hitam masuk di C2. Simpul C5 ke Pi pin 13 |
-| 2,7 kΩ | C5 ↕ F5 | Dari simpul C5 ke jalur GND |
+| 4,7 kΩ | A2 ↕ C2 | Sudah terpasang, dari 5 V Pi ke kaki hitam infrared |
+| 1 kΩ | C2 ↔ C5 | Kaki hitam masuk di C2. Simpul C5 ke Pi pin 13 |
+| 10 kΩ | C5 ↕ F5 | Dari simpul C5 ke jalur GND |
 | 330 Ω | C8 ↔ C11 | Pi pin 15 masuk di C8. C11 ke anoda LED hijau |
 | 330 Ω | C13 ↔ C16 | Pi pin 16 masuk di C13. C16 ke anoda LED merah |
 
 Lubang C18 dan C21 kosong. Resistor 100 Ω cincin tidak dipasang.
 
-Stok yang dibutuhkan: satu 4,7 kΩ, satu 2,2 kΩ, satu 2,7 kΩ, dan dua 330 Ω.
+Stok yang dibutuhkan: 4,7 kΩ yang sudah terpasang (kuning-ungu-merah), satu 1 kΩ (cokelat-hitam-merah-emas), satu 10 kΩ (biru, cokelat-hitam-hitam-merah), dan dua 330 Ω.
 
 ## Pembagi OUT infrared
 
@@ -125,16 +131,16 @@ Kaki hitam E18-D80NK naik mendekati 5 V saat kosong dan tertarik ke GND saat ada
 ```
 5 V Pi ---- 4,7 kΩ ----+---- hitam (OUT)
                        |
-                    2,2 kΩ
+                     1 kΩ
                        |
                        +---- GPIO 27 / pin 13
                        |
-                    2,7 kΩ
+                    10 kΩ
                        |
                       GND
 ```
 
-Saat kosong, tegangan ke GPIO: 5 V × 2,7 / (2,2 + 2,7) = 2,75 V. Saat ada benda, simpul itu mendekati 0 V. Jangan menyambung kaki hitam langsung ke pin 13.
+Saat kosong, tegangan ke GPIO sekitar 3,2 V. Saat ada benda, simpul itu mendekati 0 V. Jangan menyambung kaki hitam langsung ke pin 13.
 
 ## Kebutuhan kabel
 

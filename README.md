@@ -35,7 +35,7 @@ dan penanganan FAULT belum diimplementasikan. Jumper JARM PCB baru harus tetap t
 | OLED | VCC | 5 V Pi, pin 2 |
 | OLED | SDA / SCL | GPIO 2 / pin 3, GPIO 3 / pin 5 |
 | E18-D80NK | Cokelat (VCC) | 5 V Pi, pin 4 |
-| E18-D80NK | Hitam (OUT) | 4,7 kΩ ke 5 V Pi, lalu 2,2 kΩ → GPIO 27 / pin 13, 2,7 kΩ ke GND |
+| E18-D80NK | Hitam (OUT) | 4,7 kΩ ke cokelat / 5 V, lalu 1 kΩ → GPIO 27 / pin 13, 10 kΩ ke GND |
 | E18-D80NK | Biru | GND |
 | Servo | Sinyal | GPIO 18 / pin 12 dan GPIO 13 / pin 33, kabel 80 cm turun ke rak bawah |
 | Servo TD8120MG / MG996R | Merah | +6,0 V catu 5 A di rak bawah, bukan pin 5 V Pi |
