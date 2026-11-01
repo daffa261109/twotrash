@@ -84,17 +84,24 @@ def sort_plan(label: str) -> str | None:
         SERVO1_ANGLES,
         SERVO1_KEMBALI,
         SERVO1_WAIT_S,
+        SERVO2_ANGLES,
         SERVO2_BUANG,
         SERVO2_KEMBALI,
         SERVO2_WAIT_S,
     )
 
-    angle = SERVO1_ANGLES.get(label)
-    if angle is None:
+    if label not in SERVO1_ANGLES and label not in SERVO2_ANGLES:
         return None
+    angle = SERVO1_ANGLES.get(label)
+    tilt = SERVO2_ANGLES.get(label, SERVO2_BUANG)
+    if angle is None:
+        return (
+            f"servo 1 diam, servo 2 buang {tilt:+.0f}°, tunggu {SERVO2_WAIT_S:g} detik, "
+            f"servo 2 ke {SERVO2_KEMBALI:+.0f}°"
+        )
     return (
         f"servo 1 ke {angle:+.0f}°, tunggu {SERVO1_WAIT_S:g} detik, "
-        f"servo 2 buang {SERVO2_BUANG:+.0f}°, tunggu {SERVO2_WAIT_S:g} detik, "
+        f"servo 2 buang {tilt:+.0f}°, tunggu {SERVO2_WAIT_S:g} detik, "
         f"servo 2 ke {SERVO2_KEMBALI:+.0f}°, lalu servo 1 ke {SERVO1_KEMBALI:+.0f}°"
     )
 
@@ -105,6 +112,7 @@ def run_sort(servo1: StableServo, servo2: StableServo, label: str) -> str:
         SERVO1_ANGLES,
         SERVO1_KEMBALI,
         SERVO1_WAIT_S,
+        SERVO2_ANGLES,
         SERVO2_BUANG,
         SERVO2_KEMBALI,
         SERVO2_WAIT_S,
@@ -112,17 +120,22 @@ def run_sort(servo1: StableServo, servo2: StableServo, label: str) -> str:
 
     if servo1._pi is None:
         return "servo mati (pigpiod tidak aktif)"
-    angle = SERVO1_ANGLES.get(label)
-    if angle is None:
+    if label not in SERVO1_ANGLES and label not in SERVO2_ANGLES:
         return "servo diam"
-    print(f"[SERVO] servo 1 ke {angle:+.0f}°")
-    geser(servo1, angle)
-    time.sleep(max(0.0, SERVO1_WAIT_S))
-    print(f"[SERVO] servo 2 buang ke {SERVO2_BUANG:+.0f}°")
-    geser(servo2, SERVO2_BUANG)
+    angle = SERVO1_ANGLES.get(label)
+    tilt = SERVO2_ANGLES.get(label, SERVO2_BUANG)
+    if angle is not None:
+        print(f"[SERVO] servo 1 ke {angle:+.0f}°")
+        geser(servo1, angle)
+        time.sleep(max(0.0, SERVO1_WAIT_S))
+    else:
+        print("[SERVO] servo 1 diam")
+    print(f"[SERVO] servo 2 buang ke {tilt:+.0f}°")
+    geser(servo2, tilt)
     time.sleep(max(0.0, SERVO2_WAIT_S))
     print(f"[SERVO] servo 2 kembali ke {SERVO2_KEMBALI:+.0f}°")
     geser(servo2, SERVO2_KEMBALI)
-    print(f"[SERVO] servo 1 kembali ke {SERVO1_KEMBALI:+.0f}°")
-    geser(servo1, SERVO1_KEMBALI)
+    if angle is not None:
+        print(f"[SERVO] servo 1 kembali ke {SERVO1_KEMBALI:+.0f}°")
+        geser(servo1, SERVO1_KEMBALI)
     return sort_plan(label) or "servo diam"
