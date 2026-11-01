@@ -39,6 +39,7 @@ from trash2trace.settings import (
     HC_BARANG_YAKIN,
     HC_PENAMPANG_MAX_M,
     HC_PENAMPANG_MIN_M,
+    SERVO1_KEMBALI,
     TILT_DOWN_DEG,
     baca_barang,
     is_barang,
@@ -293,25 +294,23 @@ def _test_urut(arah: str, sudut: float, turun: float) -> None:
 
 
 def test_servo2() -> None:
-    print("Servo 2 pelan ke 150°, jeda 5 detik, lalu pelan kembali ke 60°. Sinyal GPIO 13 / pin 33.")
-    print("Posisi akhir ditahan di 60°. Ctrl+C berhenti. Catu 6 V dinyalakan setelah Pi hidup.")
+    awal = SERVO1_KEMBALI
+    print(f"Servo 2 pelan kembali ke posisi awal {awal:+.0f}°. Sinyal GPIO 13 / pin 33.")
+    print("Posisi itu ditahan. Ctrl+C berhenti. Catu 6 V dinyalakan setelah Pi hidup.")
     pi = connect_pigpio()
     if pi is None:
         return
     servo = StableServo(pi, SERVO_TILT_PIN)
     try:
-        servo.angle = 60
-        print("  dari 60° pelan ke 150°")
-        geser(servo, 150)
-        print("  150°, tunggu 5 detik")
-        time.sleep(5)
-        print("  pelan kembali ke 60°")
-        geser(servo, 60)
+        print(f"  pelan ke {awal:+.0f}°")
+        geser(servo, awal)
+        print(f"  ditahan di {awal:+.0f}°")
         while True:
             time.sleep(0.5)
     except KeyboardInterrupt:
-        print("\nBerhenti di 60°.")
+        print(f"\nBerhenti di {awal:+.0f}°.")
     finally:
+        geser(servo, awal)
         servo.detach()
         pi.stop()
 
