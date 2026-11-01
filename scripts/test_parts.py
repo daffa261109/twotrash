@@ -6,7 +6,7 @@
     python3 scripts/test_parts.py ir
     python3 scripts/test_parts.py led
     python3 scripts/test_parts.py lamp
-    python3 scripts/test_parts.py servo1
+    python3 scripts/test_parts.py servo1 --sudut -60
     python3 scripts/test_parts.py servo1_kanan90
     python3 scripts/test_parts.py servo2
     python3 scripts/test_parts.py urut_kiri [--sudut 45] [--turun -45]
@@ -39,6 +39,7 @@ from trash2trace.settings import (
     HC_BARANG_YAKIN,
     HC_PENAMPANG_MAX_M,
     HC_PENAMPANG_MIN_M,
+    SERVO1_KEMBALI,
     SERVO2_KEMBALI,
     TILT_DOWN_DEG,
     baca_barang,
@@ -225,26 +226,29 @@ def _test_servo(
     print("Selesai.")
 
 
-def test_servo1() -> None:
-    print("Servo 1 pelan ke -90°, jeda 5 detik, lalu pelan kembali ke 60°. Sinyal GPIO 18 / pin 12.")
-    print("Posisi akhir ditahan di 60°. Ctrl+C berhenti. Catu 6 V dinyalakan setelah Pi hidup.")
+def test_servo1(sudut: float = -90.0) -> None:
+    awal = SERVO1_KEMBALI
+    print(f"Servo 1 pelan ke {sudut:+.0f}°, jeda 5 detik, lalu pelan kembali ke {awal:+.0f}°.")
+    print("Sinyal GPIO 18 / pin 12. Posisi akhir ditahan. Ctrl+C berhenti.")
+    print("Catu 6 V dinyalakan setelah Pi hidup. Contoh: --sudut -60")
     pi = connect_pigpio()
     if pi is None:
         return
     servo = StableServo(pi, SERVO_PIN)
     try:
-        servo.angle = 60
-        print("  dari 60° pelan ke -90°")
-        geser(servo, -90)
-        print("  -90°, tunggu 5 detik")
+        servo.angle = awal
+        print(f"  dari {awal:+.0f}° pelan ke {sudut:+.0f}°")
+        geser(servo, sudut)
+        print(f"  {sudut:+.0f}°, tunggu 5 detik")
         time.sleep(5)
-        print("  pelan kembali ke 60°")
-        geser(servo, 60)
+        print(f"  pelan kembali ke {awal:+.0f}°")
+        geser(servo, awal)
         while True:
             time.sleep(0.5)
     except KeyboardInterrupt:
-        print("\nBerhenti di 60°.")
+        print(f"\nBerhenti di {awal:+.0f}°.")
     finally:
+        geser(servo, awal)
         servo.detach()
         pi.stop()
 
@@ -839,14 +843,17 @@ def test_cek() -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Uji satu komponen.")
     parser.add_argument("bagian", choices=("buzzer", "hc", "ir", "infrared", "led", "lamp", "servo", "servo1", "servo1_kanan90", "servo2", "urut_kiri", "urut_kanan", "oled", "ring", "camera", "webcam", "api", "cek"))
-    parser.add_argument("--sudut", type=float, default=45.0, help="sudut servo 1 untuk urut_kiri/urut_kanan")
+    parser.add_argument("--sudut", type=float, default=None, help="derajat servo 1, contoh --sudut -60")
     parser.add_argument("--turun", type=float, default=TILT_DOWN_DEG, help="sudut servo 2 saat turun")
     parser.add_argument("--device", type=int, default=0, help="nomor webcam USB, biasanya 0")
     parser.add_argument("--live", action="store_true", help="tampilkan webcam langsung di browser")
     parser.add_argument("--port", type=int, default=8081, help="port browser untuk webcam --live")
     args = parser.parse_args()
+    if args.bagian in ("servo", "servo1"):
+        test_servo1(-90.0 if args.sudut is None else args.sudut)
+        return
     if args.bagian in ("urut_kiri", "urut_kanan"):
-        _test_urut(args.bagian.removeprefix("urut_"), args.sudut, args.turun)
+        _test_urut(args.bagian.removeprefix("urut_"), 45.0 if args.sudut is None else args.sudut, args.turun)
         return
     if args.bagian == "webcam":
         if args.live:
