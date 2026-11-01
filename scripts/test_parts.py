@@ -39,7 +39,7 @@ from trash2trace.settings import (
     HC_BARANG_YAKIN,
     HC_PENAMPANG_MAX_M,
     HC_PENAMPANG_MIN_M,
-    SERVO1_KEMBALI,
+    SERVO2_KEMBALI,
     TILT_DOWN_DEG,
     baca_barang,
     is_barang,
@@ -294,7 +294,7 @@ def _test_urut(arah: str, sudut: float, turun: float) -> None:
 
 
 def test_servo2() -> None:
-    awal = SERVO1_KEMBALI
+    awal = SERVO2_KEMBALI
     print(f"Servo 2 pelan kembali ke posisi awal {awal:+.0f}°. Sinyal GPIO 13 / pin 33.")
     print("Posisi itu ditahan. Ctrl+C berhenti. Catu 6 V dinyalakan setelah Pi hidup.")
     pi = connect_pigpio()
@@ -601,14 +601,14 @@ def test_webcam_live(device: int = 0, port: int = 8081) -> None:
     lock = threading.Lock()
     motion_lock = threading.Lock()
     labels = {"organic": "ORGANIK", "nonorganic": "NONORGANIK", "other": "LAINNYA"}
-    from trash2trace.settings import SERVO1_KEMBALI
+    from trash2trace.settings import SERVO1_KEMBALI, SERVO2_KEMBALI
 
     pi = connect_pigpio()
     servo = StableServo(pi, SERVO_PIN)
     servo2 = StableServo(pi, SERVO_TILT_PIN)
     if pi is not None:
         servo.angle = SERVO1_KEMBALI
-        servo2.angle = SERVO1_KEMBALI
+        servo2.angle = SERVO2_KEMBALI
 
     def start_servo(label: str) -> str:
         plan = sort_plan(label)

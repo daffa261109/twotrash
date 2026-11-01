@@ -85,6 +85,7 @@ def sort_plan(label: str) -> str | None:
         SERVO1_KEMBALI,
         SERVO1_WAIT_S,
         SERVO2_BUANG,
+        SERVO2_KEMBALI,
         SERVO2_WAIT_S,
     )
 
@@ -94,7 +95,7 @@ def sort_plan(label: str) -> str | None:
     return (
         f"servo 1 ke {angle:+.0f}°, tunggu {SERVO1_WAIT_S:g} detik, "
         f"servo 2 buang {SERVO2_BUANG:+.0f}°, tunggu {SERVO2_WAIT_S:g} detik, "
-        f"servo 2 ke {SERVO1_KEMBALI:+.0f}°, lalu servo 1 ke {SERVO1_KEMBALI:+.0f}°"
+        f"servo 2 ke {SERVO2_KEMBALI:+.0f}°, lalu servo 1 ke {SERVO1_KEMBALI:+.0f}°"
     )
 
 
@@ -105,6 +106,7 @@ def run_sort(servo1: StableServo, servo2: StableServo, label: str) -> str:
         SERVO1_KEMBALI,
         SERVO1_WAIT_S,
         SERVO2_BUANG,
+        SERVO2_KEMBALI,
         SERVO2_WAIT_S,
     )
 
@@ -119,8 +121,8 @@ def run_sort(servo1: StableServo, servo2: StableServo, label: str) -> str:
     print(f"[SERVO] servo 2 buang ke {SERVO2_BUANG:+.0f}°")
     geser(servo2, SERVO2_BUANG)
     time.sleep(max(0.0, SERVO2_WAIT_S))
-    print(f"[SERVO] servo 2 kembali ke {SERVO1_KEMBALI:+.0f}°")
-    geser(servo2, SERVO1_KEMBALI)
+    print(f"[SERVO] servo 2 kembali ke {SERVO2_KEMBALI:+.0f}°")
+    geser(servo2, SERVO2_KEMBALI)
     print(f"[SERVO] servo 1 kembali ke {SERVO1_KEMBALI:+.0f}°")
     geser(servo1, SERVO1_KEMBALI)
     return sort_plan(label) or "servo diam"

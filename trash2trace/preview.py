@@ -22,6 +22,7 @@ from trash2trace.servo_driver import StableServo, connect_pigpio, run_sort, sort
 from trash2trace.settings import (
     ROOT,
     SERVO1_KEMBALI,
+    SERVO2_KEMBALI,
     load_bridge_config,
 )
 
@@ -230,7 +231,7 @@ class SortMotion:
         self._servo1 = StableServo(self._pi, SERVO_PIN)
         self._servo2 = StableServo(self._pi, SERVO_TILT_PIN)
         self._servo1.angle = SERVO1_KEMBALI
-        self._servo2.angle = SERVO1_KEMBALI
+        self._servo2.angle = SERVO2_KEMBALI
 
     def start(self, label: str) -> str:
         if self._pi is None:
@@ -255,7 +256,7 @@ class SortMotion:
         if self._pi is None:
             return
         self._servo1.angle = SERVO1_KEMBALI
-        self._servo2.angle = SERVO1_KEMBALI
+        self._servo2.angle = SERVO2_KEMBALI
         time.sleep(0.4)
         self._servo1.detach()
         self._servo2.detach()

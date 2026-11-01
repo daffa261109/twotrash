@@ -28,6 +28,7 @@ from trash2trace.settings import (
     PREVIEW_EVERY_S,
     SHOW_MONITOR,
     SERVO1_KEMBALI,
+    SERVO2_KEMBALI,
     SETTLE_AFTER_DETECT_S,
     WELCOME_TITLE,
     Station,
@@ -75,7 +76,7 @@ class Sorter:
         self.servo = StableServo(self._pi, SERVO_PIN)
         self.tilt = StableServo(self._pi, SERVO_TILT_PIN)
         self.servo.angle = SERVO1_KEMBALI
-        self.tilt.angle = SERVO1_KEMBALI
+        self.tilt.angle = SERVO2_KEMBALI
         self.illumination = LED(ILLUMINATION_PIN, pin_factory=lamp_pins)
         self.monitor = Monitor(None)
         try:
@@ -340,7 +341,7 @@ class Sorter:
     def _rest(self, message: str) -> None:
         self._alert_off()
         self.servo.angle = SERVO1_KEMBALI
-        self.tilt.angle = SERVO1_KEMBALI
+        self.tilt.angle = SERVO2_KEMBALI
         print(f"[AI] {self.station.title} {message}")
         self._show_idle()
 
@@ -349,7 +350,7 @@ class Sorter:
         self.illumination.off()
         self.buzzer.off()
         self.servo.angle = SERVO1_KEMBALI
-        self.tilt.angle = SERVO1_KEMBALI
+        self.tilt.angle = SERVO2_KEMBALI
         time.sleep(0.2)
         self.servo.detach()
         self.tilt.detach()
