@@ -10,6 +10,7 @@
     python3 scripts/test_parts.py servo1_kembali --sudut -60
     python3 scripts/test_parts.py servo1_kanan90
     python3 scripts/test_parts.py servo2 --sudut 150
+    python3 scripts/test_parts.py servo2_kembali --sudut 150
     python3 scripts/test_parts.py urut_kiri [--sudut 45] [--turun -45]
     python3 scripts/test_parts.py urut_kanan [--sudut 45] [--turun -45]
     python3 scripts/test_parts.py oled
@@ -325,7 +326,8 @@ def test_servo2(sudut: float | None = None) -> None:
     awal = SERVO2_KEMBALI
     tujuan = awal if sudut is None else sudut
     print(f"Servo 2 pelan ke {tujuan:+.0f}° dan ditahan di situ. Sinyal GPIO 13 / pin 33.")
-    print("Kecepatan dari SERVO_KECEPATAN. Ctrl+C berhenti. Contoh: --sudut 150")
+    print(f"Tidak kembali. Untuk pulang ke {awal:+.0f}°: servo2_kembali --sudut {tujuan:.0f}")
+    print("Ctrl+C berhenti. Catu 6 V dinyalakan setelah Pi hidup.")
     pi = connect_pigpio()
     if pi is None:
         return
@@ -339,6 +341,33 @@ def test_servo2(sudut: float | None = None) -> None:
             time.sleep(0.5)
     except KeyboardInterrupt:
         print(f"\nTetap di {tujuan:+.0f}°.")
+    finally:
+        servo.detach()
+        pi.stop()
+
+
+def test_servo2_kembali(dari: float | None = None) -> None:
+    """Pulangkan servo 2 pelan ke SERVO2_KEMBALI. Kecepatan dari SERVO_KECEPATAN."""
+    awal = SERVO2_KEMBALI
+    print(f"Servo 2 pelan kembali ke {awal:+.0f}° (SERVO2_KEMBALI). Sinyal GPIO 13 / pin 33.")
+    print("Kecepatan dari SERVO_KECEPATAN. Ctrl+C berhenti.")
+    pi = connect_pigpio()
+    if pi is None:
+        return
+    servo = StableServo(pi, SERVO_TILT_PIN)
+    try:
+        if dari is None:
+            print(f"  langsung ke {awal:+.0f}°")
+            servo.angle = awal
+        else:
+            servo.angle = dari
+            print(f"  dari {dari:+.0f}° pelan ke {awal:+.0f}°")
+            geser(servo, awal)
+        print(f"  ditahan di {awal:+.0f}°")
+        while True:
+            time.sleep(0.5)
+    except KeyboardInterrupt:
+        print(f"\nBerhenti di {awal:+.0f}°.")
     finally:
         servo.detach()
         pi.stop()
@@ -867,7 +896,7 @@ def test_cek() -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Uji satu komponen.")
-    parser.add_argument("bagian", choices=("buzzer", "hc", "ir", "infrared", "led", "lamp", "servo", "servo1", "servo1_kembali", "servo1_kanan90", "servo2", "urut_kiri", "urut_kanan", "oled", "ring", "camera", "webcam", "api", "cek"))
+    parser.add_argument("bagian", choices=("buzzer", "hc", "ir", "infrared", "led", "lamp", "servo", "servo1", "servo1_kembali", "servo1_kanan90", "servo2", "servo2_kembali", "urut_kiri", "urut_kanan", "oled", "ring", "camera", "webcam", "api", "cek"))
     parser.add_argument("--sudut", type=float, default=None, help="derajat servo, contoh --sudut -60 atau --sudut 150")
     parser.add_argument("--turun", type=float, default=TILT_DOWN_DEG, help="sudut servo 2 saat turun")
     parser.add_argument("--device", type=int, default=0, help="nomor webcam USB, biasanya 0")
@@ -879,6 +908,9 @@ def main() -> None:
         return
     if args.bagian == "servo2":
         test_servo2(args.sudut)
+        return
+    if args.bagian == "servo2_kembali":
+        test_servo2_kembali(args.sudut)
         return
     if args.bagian == "servo1_kembali":
         test_servo1_kembali(args.sudut)
