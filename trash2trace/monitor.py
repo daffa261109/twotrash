@@ -161,6 +161,10 @@ class Monitor:
         name = socket.gethostname()
         print(f"[MONITOR] http://{name}.local:{self.port}")
 
+    def hold_camera(self, camera) -> None:
+        """Kamera untuk satu foto. Tanpa aliran layar dan tanpa jendela."""
+        self._camera = camera
+
     def attach_camera(self, camera) -> None:
         self._camera = camera
         if camera is None or self._pump is not None:

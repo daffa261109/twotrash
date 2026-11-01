@@ -6,7 +6,6 @@ import math
 import time
 from datetime import datetime
 
-import cv2
 from gpiozero import Buzzer, Device, DistanceSensor, LED
 from trash2trace.camera import open_camera
 
@@ -27,6 +26,7 @@ from trash2trace.settings import (
     MOVE_FLAP,
     PLACE_WAIT_S,
     PREVIEW_EVERY_S,
+    SHOW_MONITOR,
     SERVO1_KEMBALI,
     SETTLE_AFTER_DETECT_S,
     WELCOME_TITLE,
@@ -48,7 +48,7 @@ class Sorter:
     def __init__(self, station: Station) -> None:
         self.station = station
         self.running = True
-        print(f"[INFO] Menyala sebagai {station.title}")
+        print(f"[INFO] Menyala sebagai {station.title}", flush=True)
         lamp_pins = Device.pin_factory
         # LED status dibuat pertama: merah menyala segera, hijau menunggu Wi-Fi.
         self.led_red = LED(LED_RED_PIN, pin_factory=lamp_pins)
@@ -79,10 +79,14 @@ class Sorter:
         self.illumination = LED(ILLUMINATION_PIN, pin_factory=lamp_pins)
         self.monitor = Monitor(None)
         try:
-            self.monitor.start()
-            self.monitor.open_fullscreen()
             self.camera = open_camera(CAMERA_SIZE)
-            self.monitor.attach_camera(self.camera)
+            if SHOW_MONITOR:
+                self.monitor.start()
+                self.monitor.open_fullscreen()
+                self.monitor.attach_camera(self.camera)
+            else:
+                self.monitor.hold_camera(self.camera)
+                print("[MONITOR] layar dimatikan", flush=True)
         except Exception:
             self.monitor.close()
             raise
@@ -266,6 +270,8 @@ class Sorter:
     def _save_frame(self, frame_bgr):
         CAPTURE_DIR.mkdir(parents=True, exist_ok=True)
         path = CAPTURE_DIR / f"{datetime.now():%Y%m%d-%H%M%S}.jpg"
+        import cv2
+
         ok = cv2.imwrite(str(path), frame_bgr)
         if not ok:
             raise RuntimeError(f"Gagal menyimpan {path}")

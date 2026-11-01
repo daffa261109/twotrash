@@ -95,6 +95,13 @@ def load_bridge_config() -> BridgeConfig:
     return config
 
 
+def _env_flag(name: str, default: bool) -> bool:
+    raw = os.environ.get(name, "").strip().lower()
+    if not raw:
+        return default
+    return raw in {"1", "true", "ya", "yes", "on"}
+
+
 def _env_float(name: str, default: float) -> float:
     raw = os.environ.get(name, "").strip()
     if not raw:
@@ -131,6 +138,8 @@ def load_station(name: str | None) -> Station:
 # Setelah jawaban API: servo 1 ke tempat sampah, jeda, servo 2 buang, jeda, lalu keduanya kembali.
 # Kecepatan dalam derajat per detik. Angka di .env supaya bisa diubah tanpa menyentuh kode.
 _load_env_file(ENV_PATH)
+# Jendela monitor di Pi Zero berat. SHOW_MONITOR=1 di .env kalau ingin dinyalakan lagi.
+SHOW_MONITOR = _env_flag("SHOW_MONITOR", False)
 SERVO_KECEPATAN = _env_float("SERVO_KECEPATAN", 45.0)
 SERVO1_WAIT_S = _env_float("SERVO1_TUNGGU", 2.0)
 SERVO2_WAIT_S = _env_float("SERVO2_TUNGGU", 3.0)

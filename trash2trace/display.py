@@ -14,16 +14,6 @@ from trash2trace.settings import (
     WELCOME_TITLE,
 )
 
-try:
-    import adafruit_ssd1306
-    import board
-    import busio
-    from PIL import Image, ImageDraw, ImageFont
-
-    _LIBRARY_READY = True
-except Exception:
-    _LIBRARY_READY = False
-
 SCROLL_STEP_PX = 4
 SCROLL_DELAY_S = 0.03
 
@@ -36,8 +26,16 @@ class Display:
         self._busy = False
         self._idle_thread: threading.Thread | None = None
         self._idle_stop = threading.Event()
-        if not _LIBRARY_READY:
-            print("[WARN] Library OLED tidak ada. Tampilan dilewati.")
+        global Image, ImageDraw, ImageFont
+        try:
+            import adafruit_ssd1306
+            import board
+            import busio
+            from PIL import Image as Image
+            from PIL import ImageDraw as ImageDraw
+            from PIL import ImageFont as ImageFont
+        except Exception as exc:
+            print(f"[WARN] Library OLED tidak ada. Tampilan dilewati: {exc}", flush=True)
             return
         try:
             i2c = busio.I2C(board.SCL, board.SDA)
@@ -47,7 +45,7 @@ class Display:
             self._font = _load_font()
             self.clear()
         except Exception as exc:
-            print(f"[WARN] OLED gagal dimulai: {exc}")
+            print(f"[WARN] OLED gagal dimulai: {exc}", flush=True)
             self._panel = None
 
     def clear(self) -> None:

@@ -6,7 +6,34 @@ import argparse
 import signal
 
 from trash2trace.settings import STATIONS, load_station
-from trash2trace.sorter import Sorter
+
+
+def _nyalakan_led_awal():
+    """Merah nyala sebelum impor berat, supaya lampu hidup begitu proses mulai."""
+    print("[INFO] trash2trace mulai", flush=True)
+    try:
+        from gpiozero import LED
+        from servo.pins import LED_GREEN_PIN, LED_RED_PIN
+
+        hijau = LED(LED_GREEN_PIN)
+        merah = LED(LED_RED_PIN)
+        hijau.off()
+        merah.on()
+        print("[LED] merah nyala", flush=True)
+        return merah, hijau
+    except Exception as exc:
+        print(f"[WARN] LED: {exc}", flush=True)
+        return None
+
+
+def _lepas_led_awal(lampu) -> None:
+    if not lampu:
+        return
+    for led in lampu:
+        try:
+            led.close()
+        except Exception:
+            pass
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -14,6 +41,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--station", choices=sorted(STATIONS), help="flap1 atau flap2")
     args = parser.parse_args(argv)
 
+    lampu = _nyalakan_led_awal()
+    from trash2trace.sorter import Sorter
+
+    _lepas_led_awal(lampu)
     sorter = Sorter(load_station(args.station))
 
     def stop(signum, frame) -> None:
